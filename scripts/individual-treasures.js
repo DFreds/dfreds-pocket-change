@@ -1,6 +1,10 @@
+import log from './logger.js';
+
 export default class IndividualTreasures {
   populateTreasureForActor(data, actor) {
     if (!this._validate(data, actor)) return;
+
+    log(`Generating treasure for ${data.name}`);
 
     let currencyData;
 
@@ -14,37 +18,49 @@ export default class IndividualTreasures {
       currencyData = this._treasureForChallengeRating17andUp(actor);
     }
 
-    console.log(`Generating currency`);
     setProperty(data, 'actorData.data.currency', currencyData);
   }
 
   _validate(data, actor) {
+    if (!this._isEnabled()) {
+      log("Refuse to generate treasure because you don't want me to");
+      return false;
+    }
+
     if (this._isLootSheetNpc5e(actor)) {
-      console.log('cannot generate treasure for loot sheets');
+      log('Refuse to generate treasure for existing loot sheets');
       return false;
     }
 
     if (this._isLinked(data)) {
-      console.log('will not generate treasure for linked characters');
+      log('Refuse to generate treasure for linked characters');
       return false;
     }
 
     if (this._isHumanoidsOnly() && !this._isHumanoid(actor)) {
-      console.log('set to humanoids only, but this actor was not a humanoid');
+      log('Refuse to generate treasure for non-humanoid');
       return false;
     }
 
     if (!this._isActorNpc(actor) || this._hasPlayerOwner(actor)) {
-      console.log('cannot generate treasure for owned or non-npc actors');
+      log('Refuse to generate treasure for non-npc actors');
       return false;
     }
 
+    if (this._hasPlayerOwner(actor)) {
+      log('Refuse to generate treasure for player owned actors')
+    }
+
     if (!this._isGm()) {
-      console.log('cannot generate treasure, not the GM');
+      log('Refuse to generate treasure on the behest of mere players');
       return false;
     }
 
     return true;
+  }
+
+  _isEnabled() {
+    return game.settings.get('dfreds-individual-treasures', 'enabled');
   }
 
   _rollDice(formula) {
@@ -78,7 +94,8 @@ export default class IndividualTreasures {
   }
 
   _isHumanoid(actor) {
-    return actor.data.data.details.type.toLowerCase().includes('humanoid');
+    let type = actor.data.data.details.type;
+    return type && type.toLowerCase().includes('humanoid');
   }
 
   _isWithinChallengeRating(actor, lowerCr, upperCr) {
@@ -130,7 +147,7 @@ export default class IndividualTreasures {
       currency.sp.value = this._rollDice('6d6*10');
       currency.gp.value = this._rollDice('2d6*10');
     } else if (roll >= 61 && roll <= 70) {
-      currency.ep.value = this._rollDice('1d6*100');
+      currency.ep.value = this._rollDice('3d6*10');
       currency.gp.value = this._rollDice('2d6*10');
     } else if (roll >= 71 && roll <= 95) {
       currency.gp.value = this._rollDice('4d6*10');

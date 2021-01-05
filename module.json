@@ -1,12 +1,22 @@
 {
+	"systems": ["dnd5e"],
   "author": "DFreds",
   "compatibleCoreVersion": "0.7.9",
-  "description": "<p>Automatically adds money to NPC character sheets when dropped on the canvas based on the DMG's individual treasures table.</p>",
+  "description": "<p>Automatically adds money to NPC character sheets when dropped on the canvas based on the DMG's individual treasures table.</p><p>This is best used with Loot Sheet NPC 5e.</p>",
   "download": "",
-  "esmodules": ["main.js"],
+  "esmodules": ["./scripts/main.js"],
   "manifest": "",
   "minimumCoreVersion": "0.7.5",
   "name": "dfreds-individual-treasures",
+  "packs": [
+    {
+      "name": "dfreds-individual-treasures-macros",
+      "label": "DFreds Individual Treasures Macros",
+      "path": "packs/macros.db",
+      "module": "dfreds-individual-treasures",
+      "entity": "Macro"
+    }
+  ],
   "title": "DFreds Individual Treasures",
   "type": "module",
   "url": "https://github.com/DFreds/dfreds-individual-treasures",
