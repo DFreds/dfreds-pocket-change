@@ -19,8 +19,8 @@
 	"systems": ["dnd5e"],
   "url": "https://github.com/DFreds/dfreds-pocket-change",
   "bugs": "https://github.com/DFreds/dfreds-pocket-change/issues",
-  "manifest": "",
-  "download": "",
+  "manifest": "https://raw.githubusercontent.com/DFreds/dfreds-pocket-change/main/module.json",
+  "download": "https://github.com/DFreds/dfreds-pocket-change/archive/1.0.0.zip",
   "license": "https://raw.githubusercontent.com/DFreds/dfreds-pocket-change/main/LICENSE",
   "readme": "https://raw.githubusercontent.com/DFreds/dfreds-pocket-change/main/README.md"
 }
