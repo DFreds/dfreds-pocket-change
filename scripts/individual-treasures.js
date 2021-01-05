@@ -27,6 +27,13 @@ export default class IndividualTreasures {
       return false;
     }
 
+    if (this._isPercentageLower()) {
+      log(
+        'Refuse to generate treasure because it did not pass the percent threshold'
+      );
+      return false;
+    }
+
     if (this._isLootSheetNpc5e(actor)) {
       log('Refuse to generate treasure for existing loot sheets');
       return false;
@@ -48,7 +55,7 @@ export default class IndividualTreasures {
     }
 
     if (this._hasPlayerOwner(actor)) {
-      log('Refuse to generate treasure for player owned actors')
+      log('Refuse to generate treasure for player owned actors');
     }
 
     if (!this._isGm()) {
@@ -61,6 +68,15 @@ export default class IndividualTreasures {
 
   _isEnabled() {
     return game.settings.get('dfreds-individual-treasures', 'enabled');
+  }
+
+  _isPercentageLower() {
+    const randomChance = Math.random();
+    const chanceOfNoCurrency = game.settings.get(
+      'dfreds-individual-treasures',
+      'chanceOfNoCurrency'
+    );
+    return randomChance < chanceOfNoCurrency;
   }
 
   _isLootSheetNpc5e(actor) {
@@ -98,15 +114,8 @@ export default class IndividualTreasures {
   }
 
   _treasureForChallengeRating0to4(actor) {
+    let currency = this._buildCurrencyObject(actor);
     let roll = this._rollDice('1d100');
-
-    let currency = {
-      cp: { value: actor.data.data.currency.cp.value },
-      sp: { value: actor.data.data.currency.sp.value },
-      ep: { value: actor.data.data.currency.ep.value },
-      gp: { value: actor.data.data.currency.gp.value },
-      pp: { value: actor.data.data.currency.pp.value }
-    };
 
     if (roll >= 1 && roll <= 30) {
       currency.cp.value = this._rollDice('5d6');
@@ -124,15 +133,8 @@ export default class IndividualTreasures {
   }
 
   _treasureForChallengeRating5to10(actor) {
+    let currency = this._buildCurrencyObject(actor);
     let roll = this._rollDice('1d100');
-
-    let currency = {
-      cp: { value: actor.data.data.currency.cp.value },
-      sp: { value: actor.data.data.currency.sp.value },
-      ep: { value: actor.data.data.currency.ep.value },
-      gp: { value: actor.data.data.currency.gp.value },
-      pp: { value: actor.data.data.currency.pp.value }
-    };
 
     if (roll >= 1 && roll <= 30) {
       currency.cp.value = this._rollDice('4d6*100');
@@ -154,15 +156,8 @@ export default class IndividualTreasures {
   }
 
   _treasureForChallengeRating11to16(actor) {
+    let currency = this._buildCurrencyObject(actor);
     let roll = this._rollDice('1d100');
-
-    let currency = {
-      cp: { value: actor.data.data.currency.cp.value },
-      sp: { value: actor.data.data.currency.sp.value },
-      ep: { value: actor.data.data.currency.ep.value },
-      gp: { value: actor.data.data.currency.gp.value },
-      pp: { value: actor.data.data.currency.pp.value }
-    };
 
     if (roll >= 1 && roll <= 20) {
       currency.sp.value = this._rollDice('4d6*100');
@@ -182,15 +177,8 @@ export default class IndividualTreasures {
   }
 
   _treasureForChallengeRating17andUp(actor) {
+    let currency = this._buildCurrencyObject(actor);
     let roll = this._rollDice('1d100');
-
-    let currency = {
-      cp: { value: actor.data.data.currency.cp.value },
-      sp: { value: actor.data.data.currency.sp.value },
-      ep: { value: actor.data.data.currency.ep.value },
-      gp: { value: actor.data.data.currency.gp.value },
-      pp: { value: actor.data.data.currency.pp.value },
-    };
 
     if (roll >= 1 && roll <= 15) {
       currency.ep.value = this._rollDice('2d6*1000');
@@ -204,6 +192,20 @@ export default class IndividualTreasures {
     }
 
     return currency;
+  }
+
+  _generateElectrum(formula) {
+    // TODO for use with electrum replacer in settings
+  }
+
+  _buildCurrencyObject(actor) {
+    return {
+      cp: { value: actor.data.data.currency.cp.value || 0 },
+      sp: { value: actor.data.data.currency.sp.value || 0 },
+      ep: { value: actor.data.data.currency.ep.value || 0 },
+      gp: { value: actor.data.data.currency.gp.value || 0 },
+      pp: { value: actor.data.data.currency.pp.value || 0 },
+    };
   }
 
   _rollDice(formula) {
