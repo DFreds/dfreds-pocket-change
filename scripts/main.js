@@ -36,22 +36,19 @@ Hooks.once('init', () => {
     type: Number,
   });
 
-  // game.settings.register('dfreds-individual-treasures', 'electrumReplacer', {
-  //   name: 'Electrum replacer',
-  //   hint:
-  //     'This will replace any electrum generation with the selected currency.',
-  //   scope: 'world',
-  //   config: true,
-  //   default: 'electrum',
-  //   choices: {
-  //     copper: 'Copper',
-  //     silver: 'Silver',
-  //     electrum: 'Electrum',
-  //     gold: 'Gold',
-  //     platinum: 'Platinum',
-  //   },
-  //   type: String,
-  // });
+  game.settings.register(
+    'dfreds-individual-treasures',
+    'replaceElectrumWithSilver',
+    {
+      name: 'Replace electrum with silver',
+      hint:
+        'If enabled, all electrum pieces will be replaced with silver pieces.',
+      scope: 'world',
+      config: true,
+      default: false,
+      type: Boolean,
+    }
+  );
 });
 
 Hooks.on('preCreateToken', (scene, data, options, userId) => {

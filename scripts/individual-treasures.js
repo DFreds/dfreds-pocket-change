@@ -118,15 +118,15 @@ export default class IndividualTreasures {
     let roll = this._rollDice('1d100');
 
     if (roll >= 1 && roll <= 30) {
-      currency.cp.value = this._rollDice('5d6');
+      this._addCopper(currency, '5d6');
     } else if (roll >= 31 && roll <= 60) {
-      currency.sp.value = this._rollDice('4d6');
+      this._addSilver(currency, '4d6');
     } else if (roll >= 61 && roll <= 70) {
-      currency.ep.value = this._rollDice('3d6');
+      this._addElectrum(currency, '3d6');
     } else if (roll >= 71 && roll <= 95) {
-      currency.gp.value = this._rollDice('3d6');
+      this._addGold(currency, '3d6');
     } else {
-      currency.pp.value = this._rollDice('1d6');
+      this._addPlatinum(currency, '1d6');
     }
 
     return currency;
@@ -137,19 +137,19 @@ export default class IndividualTreasures {
     let roll = this._rollDice('1d100');
 
     if (roll >= 1 && roll <= 30) {
-      currency.cp.value = this._rollDice('4d6*100');
-      currency.ep.value = this._rollDice('1d6*10');
+      this._addCopper(currency, '4d6*100');
+      this._addElectrum(currency, '1d6*10');
     } else if (roll >= 31 && roll <= 60) {
-      currency.sp.value = this._rollDice('6d6*10');
-      currency.gp.value = this._rollDice('2d6*10');
+      this._addSilver(currency, '6d6*10');
+      this._addGold(currency, '2d6*10');
     } else if (roll >= 61 && roll <= 70) {
-      currency.ep.value = this._rollDice('3d6*10');
-      currency.gp.value = this._rollDice('2d6*10');
+      this._addElectrum(currency, '3d6*10');
+      this._addGold(currency, '2d6*10');
     } else if (roll >= 71 && roll <= 95) {
-      currency.gp.value = this._rollDice('4d6*10');
+      this._addGold(currency, '4d6*10');
     } else {
-      currency.gp.value = this._rollDice('2d6*10');
-      currency.pp.value = this._rollDice('3d6');
+      this._addGold(currency, '2d6*10');
+      this._addPlatinum(currency, '3d6');
     }
 
     return currency;
@@ -160,17 +160,17 @@ export default class IndividualTreasures {
     let roll = this._rollDice('1d100');
 
     if (roll >= 1 && roll <= 20) {
-      currency.sp.value = this._rollDice('4d6*100');
-      currency.gp.value = this._rollDice('1d6*100');
+      this._addSilver(currency, '4d6*100');
+      this._addGold(currency, '1d6*100');
     } else if (roll >= 21 && roll <= 35) {
-      currency.ep.value = this._rollDice('1d6*100');
-      currency.gp.value = this._rollDice('1d6*100');
+      this._addElectrum(currency, '1d6*100');
+      this._addGold(currency, '1d6*100');
     } else if (roll >= 36 && roll <= 75) {
-      currency.gp.value = this._rollDice('2d6*100');
-      currency.pp.value = this._rollDice('1d6*10');
+      this._addGold(currency, '2d6*100');
+      this._addPlatinum(currency, '1d6*10');
     } else {
-      currency.gp.value = this._rollDice('2d6*100');
-      currency.pp.value = this._rollDice('2d6*10');
+      this._addGold(currency, '2d6*100');
+      this._addPlatinum(currency, '2d6*10');
     }
 
     return currency;
@@ -181,21 +181,48 @@ export default class IndividualTreasures {
     let roll = this._rollDice('1d100');
 
     if (roll >= 1 && roll <= 15) {
-      currency.ep.value = this._rollDice('2d6*1000');
-      currency.gp.value = this._rollDice('8d6*100');
+      this._addElectrum(currency, '2d6*1000');
+      this._addGold(currency, '8d6*100');
     } else if (roll >= 16 && roll <= 55) {
-      currency.gp.value = this._rollDice('1d6*1000');
-      currency.pp.value = this._rollDice('1d6*100');
+      this._addGold(currency, '1d6*1000');
+      this._addPlatinum(currency, '1d6*100');
     } else {
-      currency.gp.value = this._rollDice('1d6*1000');
-      currency.pp.value = this._rollDice('2d6*100');
+      this._addGold(currency, '1d6*1000');
+      this._addPlatinum(currency, '2d6*100');
     }
 
     return currency;
   }
 
-  _generateElectrum(formula) {
-    // TODO for use with electrum replacer in settings
+  _addCopper(currencyObject, formula) {
+    currencyObject.cp.value += this._rollDice(formula);
+  }
+
+  _addSilver(currencyObject, formula) {
+    currencyObject.sp.value += this._rollDice(formula);
+  }
+
+  _addElectrum(currencyObject, formula) {
+    const shouldReplace = game.settings.get(
+      'dfreds-individual-treasures',
+      'replaceElectrumWithSilver'
+    );
+
+    const electrum = this._rollDice(formula);
+
+    if (shouldReplace) {
+      currencyObject.sp.value += electrum * 5;
+    } else {
+      currencyObject.ep.value += this._rollDice(formula);
+    }
+  }
+
+  _addGold(currencyObject, formula) {
+    currencyObject.gp.value += this._rollDice(formula);
+  }
+
+  _addPlatinum(currencyObject, formula) {
+    currencyObject.pp.value += this._rollDice(formula);
   }
 
   _buildCurrencyObject(actor) {
