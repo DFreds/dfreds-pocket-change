@@ -58,8 +58,8 @@ Stops your players from being murder hobos. Also, it doesn't actually provide an
 
 ## Installation
 
-1. Copy this link and use it in Foundry's Module Manager to install the Module
+1. Copy this link and paste it in Foundry's Module Manager
 
     > https://raw.githubusercontent.com/dfreds/dfreds-pocket-change/main/module.json
 
-2. Enable the Module in your World's Module Settingss
+2. Enable the module in your world's module settings
