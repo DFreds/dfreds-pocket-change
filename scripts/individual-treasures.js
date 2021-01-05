@@ -42,7 +42,7 @@ export default class IndividualTreasures {
       return false;
     }
 
-    if (!this._isActorNpc(actor) || this._hasPlayerOwner(actor)) {
+    if (!this._isActorNpc(actor)) {
       log('Refuse to generate treasure for non-npc actors');
       return false;
     }
@@ -63,39 +63,33 @@ export default class IndividualTreasures {
     return game.settings.get('dfreds-individual-treasures', 'enabled');
   }
 
-  _rollDice(formula) {
-    const roll = new Roll(formula);
-    roll.roll();
-    return roll.total;
+  _isLootSheetNpc5e(actor) {
+    return actor.sheet.template.includes('lootsheetnpc5e');
   }
 
   _isLinked(data) {
     return data.actorLink;
   }
 
-  _isGm() {
-    return game.user.isGM;
-  }
-
   _isHumanoidsOnly() {
     return game.settings.get('dfreds-individual-treasures', 'humanoidsOnly');
+  }
+
+  _isHumanoid(actor) {
+    let type = actor.data.data.details.type;
+    return type && type.toLowerCase().includes('humanoid');
   }
 
   _isActorNpc(actor) {
     return actor.data.type == 'npc';
   }
 
-  _isLootSheetNpc5e(actor) {
-    return actor.sheet.template.includes('lootsheetnpc5e');
-  }
-
   _hasPlayerOwner(actor) {
     return actor.data.hasPlayerOwner;
   }
 
-  _isHumanoid(actor) {
-    let type = actor.data.data.details.type;
-    return type && type.toLowerCase().includes('humanoid');
+  _isGm() {
+    return game.user.isGM;
   }
 
   _isWithinChallengeRating(actor, lowerCr, upperCr) {
@@ -210,5 +204,11 @@ export default class IndividualTreasures {
     }
 
     return currency;
+  }
+
+  _rollDice(formula) {
+    const roll = new Roll(formula);
+    roll.roll();
+    return roll.total;
   }
 }
