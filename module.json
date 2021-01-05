@@ -1,24 +1,26 @@
 {
-	"systems": ["dnd5e"],
+  "name": "dfreds-pocket-change",
+  "title": "DFreds Pocket Change",
+  "description": "Automatically adds money to NPC character sheets when dropped on the canvas based on the DMG's individual treasures table. This is best used with Loot Sheet NPC 5e.",
+  "version": "1.0.0",
   "author": "DFreds",
-  "compatibleCoreVersion": "0.7.9",
-  "description": "<p>Automatically adds money to NPC character sheets when dropped on the canvas based on the DMG's individual treasures table.</p><p>This is best used with Loot Sheet NPC 5e.</p>",
-  "download": "",
-  "esmodules": ["./scripts/main.js"],
-  "manifest": "",
   "minimumCoreVersion": "0.7.5",
-  "name": "dfreds-individual-treasures",
+  "compatibleCoreVersion": "0.7.9",
+  "esmodules": ["./scripts/main.js"],
   "packs": [
     {
-      "name": "dfreds-individual-treasures-macros",
-      "label": "DFreds Individual Treasures Macros",
+      "name": "dfreds-pocket-change-macros",
+      "label": "DFreds Pocket Change Macros",
       "path": "packs/macros.db",
-      "module": "dfreds-individual-treasures",
+      "module": "dfreds-pocket-change",
       "entity": "Macro"
     }
   ],
-  "title": "DFreds Individual Treasures",
-  "type": "module",
-  "url": "https://github.com/DFreds/dfreds-individual-treasures",
-  "version": "0.0.1"
+	"systems": ["dnd5e"],
+  "url": "https://github.com/DFreds/dfreds-pocket-change",
+  "bugs": "https://github.com/DFreds/dfreds-pocket-change/issues",
+  "manifest": "",
+  "download": "",
+  "license": "https://raw.githubusercontent.com/DFreds/dfreds-pocket-change/main/LICENSE",
+  "readme": "https://raw.githubusercontent.com/DFreds/dfreds-pocket-change/main/README.md"
 }

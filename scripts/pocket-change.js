@@ -1,6 +1,6 @@
 import log from './logger.js';
 
-export default class IndividualTreasures {
+export default class PocketChange {
   populateTreasureForActor(data, actor) {
     if (!this._validate(data, actor)) return;
 
@@ -67,13 +67,13 @@ export default class IndividualTreasures {
   }
 
   _isEnabled() {
-    return game.settings.get('dfreds-individual-treasures', 'enabled');
+    return game.settings.get('dfreds-pocket-change', 'enabled');
   }
 
   _isPercentageLower() {
     const randomChance = Math.random();
     const chanceOfNoCurrency = game.settings.get(
-      'dfreds-individual-treasures',
+      'dfreds-pocket-change',
       'chanceOfNoCurrency'
     );
     return randomChance < chanceOfNoCurrency;
@@ -88,7 +88,7 @@ export default class IndividualTreasures {
   }
 
   _isHumanoidsOnly() {
-    return game.settings.get('dfreds-individual-treasures', 'humanoidsOnly');
+    return game.settings.get('dfreds-pocket-change', 'humanoidsOnly');
   }
 
   _isHumanoid(actor) {
@@ -204,7 +204,7 @@ export default class IndividualTreasures {
 
   _addElectrum(currencyObject, formula) {
     const shouldReplace = game.settings.get(
-      'dfreds-individual-treasures',
+      'dfreds-pocket-change',
       'replaceElectrumWithSilver'
     );
 
