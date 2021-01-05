@@ -14,7 +14,7 @@ On the drop of a token onto a scene, Pocket Change generates currency for the to
 
 You can configure some stuff:
 
-![Module Configuration](https://github.com/dfreds/dfreds-pocket-change/assets/module-settings.png)
+![Module Configuration](https://i.imgur.com/zAXjnQe.png)
 
 ## When it Generates Currency
 
