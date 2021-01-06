@@ -2,7 +2,7 @@
   "name": "dfreds-pocket-change",
   "title": "DFreds Pocket Change",
   "description": "Automatically adds money to NPC character sheets when dropped on the canvas based on the DMG's individual treasures table. This is best used with Loot Sheet NPC 5e.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "DFreds",
   "minimumCoreVersion": "0.7.5",
   "compatibleCoreVersion": "0.7.9",
@@ -20,7 +20,7 @@
   "url": "https://github.com/DFreds/dfreds-pocket-change",
   "bugs": "https://github.com/DFreds/dfreds-pocket-change/issues",
   "manifest": "https://raw.githubusercontent.com/DFreds/dfreds-pocket-change/main/module.json",
-  "download": "https://github.com/DFreds/dfreds-pocket-change/archive/1.0.0.zip",
+  "download": "https://github.com/DFreds/dfreds-pocket-change/archive/1.0.1.zip",
   "license": "https://raw.githubusercontent.com/DFreds/dfreds-pocket-change/main/LICENSE",
   "readme": "https://raw.githubusercontent.com/DFreds/dfreds-pocket-change/main/README.md"
 }
