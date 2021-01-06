@@ -197,11 +197,11 @@ export default class PocketChange {
   }
 
   _addCopper(currencyObject, formula) {
-    currencyObject.cp.value += this._rollDice(formula);
+    currencyObject.cp.value += this._multiplyByCurrencyMultiplier(formula);
   }
 
   _addSilver(currencyObject, formula) {
-    currencyObject.sp.value += this._rollDice(formula);
+    currencyObject.sp.value += this._multiplyByCurrencyMultiplier(formula);
   }
 
   _addElectrum(currencyObject, formula) {
@@ -210,21 +210,30 @@ export default class PocketChange {
       'replaceElectrumWithSilver'
     );
 
-    const electrum = this._rollDice(formula);
+    const electrum = this._multiplyByCurrencyMultiplier(formula);
 
     if (shouldReplace) {
       currencyObject.sp.value += electrum * 5;
     } else {
-      currencyObject.ep.value += this._rollDice(formula);
+      currencyObject.ep.value += electrum;
     }
   }
 
   _addGold(currencyObject, formula) {
-    currencyObject.gp.value += this._rollDice(formula);
+    currencyObject.gp.value += this._multiplyByCurrencyMultiplier(formula);
   }
 
   _addPlatinum(currencyObject, formula) {
-    currencyObject.pp.value += this._rollDice(formula);
+    currencyObject.pp.value += this._multiplyByCurrencyMultiplier(formula);
+  }
+
+  _multiplyByCurrencyMultiplier(formula) {
+    const currencyMultiplier = game.settings.get(
+      'dfreds-pocket-change',
+      'currencyMultiplier'
+    );
+    
+    return Math.floor(this._rollDice(formula) * currencyMultiplier);
   }
 
   _buildCurrencyObject(actor) {

@@ -36,6 +36,21 @@ Hooks.once('init', () => {
     type: Number,
   });
 
+  game.settings.register('dfreds-pocket-change', 'currencyMultiplier', {
+    name: 'Currency multiplier',
+    hint:
+      'This multiplies the generated currency by the given number.',
+    scope: 'world',
+    config: true,
+    default: 1,
+    range: {
+      min: 0,
+      max: 2,
+      step: 0.1,
+    },
+    type: Number,
+  });
+
   game.settings.register('dfreds-pocket-change', 'replaceElectrumWithSilver', {
     name: 'Replace electrum with silver',
     hint:
