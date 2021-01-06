@@ -4,7 +4,7 @@ export default class PocketChange {
   populateTreasureForActor(data, actor) {
     if (!this._validate(data, actor)) return;
 
-    log(`Generating treasure for ${data.name}`);
+    log('Generating treasure');
 
     let currencyData;
 
@@ -22,6 +22,8 @@ export default class PocketChange {
   }
 
   _validate(data, actor) {
+    if (!actor) return false;
+
     if (!this._isEnabled()) {
       log("Refuse to generate treasure because you don't want me to");
       return false;
