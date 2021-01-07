@@ -38,8 +38,7 @@ Hooks.once('init', () => {
 
   game.settings.register('dfreds-pocket-change', 'currencyMultiplier', {
     name: 'Currency multiplier',
-    hint:
-      'This multiplies the generated currency by the given number.',
+    hint: 'This multiplies the generated currency by the given number.',
     scope: 'world',
     config: true,
     default: 1,
@@ -51,14 +50,22 @@ Hooks.once('init', () => {
     type: Number,
   });
 
-  game.settings.register('dfreds-pocket-change', 'replaceElectrumWithSilver', {
-    name: 'Replace electrum with silver',
+  game.settings.register('dfreds-pocket-change', 'currencyStandard', {
+    name: 'Currency standard',
     hint:
-      'If enabled, all electrum pieces will be replaced with silver pieces.',
+      'This controls what type of currency is generated. ' +
+      "'Normal' generates all types of currency. " + 
+      "'Silver standard' replaces all platinum, gold, electrum, and copper with silver, with copper leftovers remaining copper. " + 
+      "'No electrum' replaces all electrum pieces with silver.",
     scope: 'world',
     config: true,
-    default: false,
-    type: Boolean,
+    default: 'normal',
+    choices: {
+      normal: 'Normal',
+      silverStandard: 'Silver standard',
+      noElectrum: 'No electrum',
+    },
+    type: String,
   });
 });
 

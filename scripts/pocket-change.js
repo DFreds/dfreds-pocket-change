@@ -18,6 +18,8 @@ export default class PocketChange {
       currencyData = this._treasureForChallengeRating17andUp(actor);
     }
 
+    this._replaceCurrencyBasedOnStandard(currencyData);
+
     setProperty(data, 'actorData.data.currency', currencyData);
   }
 
@@ -205,18 +207,7 @@ export default class PocketChange {
   }
 
   _addElectrum(currencyObject, formula) {
-    const shouldReplace = game.settings.get(
-      'dfreds-pocket-change',
-      'replaceElectrumWithSilver'
-    );
-
-    const electrum = this._multiplyByCurrencyMultiplier(formula);
-
-    if (shouldReplace) {
-      currencyObject.sp.value += electrum * 5;
-    } else {
-      currencyObject.ep.value += electrum;
-    }
+    currencyObject.ep.value += this._multiplyByCurrencyMultiplier(formula);
   }
 
   _addGold(currencyObject, formula) {
@@ -232,7 +223,7 @@ export default class PocketChange {
       'dfreds-pocket-change',
       'currencyMultiplier'
     );
-    
+
     return Math.floor(this._rollDice(formula) * currencyMultiplier);
   }
 
@@ -250,5 +241,32 @@ export default class PocketChange {
     const roll = new Roll(formula);
     roll.roll();
     return roll.total;
+  }
+
+  _replaceCurrencyBasedOnStandard(currencyObject) {
+    const currencyStandard = game.settings.get(
+      'dfreds-pocket-change',
+      'currencyStandard'
+    );
+
+    if (currencyStandard == 'normal') return;
+
+    // Convert ep to sp
+    currencyObject.sp.value += currencyObject.ep.value * 5;
+    currencyObject.ep.value = 0;
+
+    if (currencyStandard == 'silverStandard') {
+      // Convert gp to sp
+      currencyObject.sp.value += currencyObject.gp.value * 10;
+      currencyObject.gp.value = 0;
+
+      // Convert pp to sp
+      currencyObject.sp.value += currencyObject.pp.value * 100;
+      currencyObject.pp.value = 0;
+
+      // Convert cp to sp, keep cp change
+      currencyObject.sp.value += Math.floor(currencyObject.cp.value / 10);
+      currencyObject.cp.value = currencyObject.cp.value % 10;
+    }
   }
 }
