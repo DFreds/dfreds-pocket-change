@@ -11,9 +11,9 @@ Have you ever watched as the peaceful NPCs of the town you've lovingly crafted g
 
 Oh yeah. This module is useless without [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) by ChalkOne. So get that bad boy.
 
-### Friggin' Cool Macro
+### Friggin' Cool Macros
 
-This module also includes a sweet macro (Make Token Lootable). Basically, for the currently selected token, the macro changes their actor sheet to LootSheetNPC, deletes all their Feat items, sets token observer privileges for players, and adds a treasure overlay icon to the body. Asks for confirmation because of the deletions.
+This module also includes sweet macros (Make Token(s) Lootable). Basically, for selected tokens, the macros change their actor sheet to LootSheetNPC, delete all their Feat items, set token observer privileges for players, and add a treasure overlay icon to the bodies. Asks for confirmation because of the deletions.
 
 This allows players to steal that sweet cash straight from the dead dude.
 
@@ -63,7 +63,7 @@ It only generates currency if all of the following are true:
 
 ## What This Module Doesn't Do
 
-Stops your players from being murder hobos. Also, it doesn't actually provide anyway for you to actually let the players steal that lovable NPC's life savings. That's what [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) does for you in conjunction with my included macro (Make Token Lootable).
+Stops your players from being murder hobos. Also, it doesn't actually provide anyway for you to actually let the players steal that lovable NPC's life savings. That's what [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) does for you in conjunction with my included macros.
 
 ## Installation
 
