@@ -20,7 +20,7 @@ On the drop of a token onto a scene, Pocket Change generates currency for the to
 
 You can configure some stuff:
 
-![Module Configuration](https://i.imgur.com/QWEd3Ed.png)
+![Module Configuration](https://i.imgur.com/YaZHGNo.png)
 
 ## When it Generates Currency
 
