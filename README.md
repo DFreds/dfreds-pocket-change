@@ -1,5 +1,8 @@
 # DFreds Pocket Change
 
+![Foundry Version](https://img.shields.io/badge/Foundry-v0.7.9-informational)
+![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https://forge-vtt.com/api/bazaar/package/dfreds-pocket-change&colorB=4aa94a)
+
 __DFreds Pocket Change__ is a FoundryVTT module which automatically adds currency to actors based on the [DMG Individual Treasure Tables by Challenge Rating](https://dungeonmastertools.github.io/treasure.html).
 
 ## Let Me Sell You This
