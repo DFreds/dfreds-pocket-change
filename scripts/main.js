@@ -11,14 +11,14 @@ Hooks.once('init', () => {
     type: Boolean,
   });
 
-  game.settings.register('dfreds-pocket-change', 'humanoidsOnly', {
-    name: 'Humanoids only',
+  game.settings.register('dfreds-pocket-change', 'creatureTypes', {
+    name: 'Creature types',
     hint:
-      "If enabled, currency will only be generated for NPCs that have a type of 'Humanoid'.",
+      "These are the types of creatures that will generate currency, separated via semi-colons. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Gnome;Elf",
     scope: 'world',
     config: true,
-    default: true,
-    type: Boolean,
+    default: 'Humanoid',
+    type: String,
   });
 
   game.settings.register('dfreds-pocket-change', 'chanceOfNoCurrency', {

@@ -48,8 +48,8 @@ export default class PocketChange {
       return false;
     }
 
-    if (this._isHumanoidsOnly() && !this._isHumanoid(actor)) {
-      log('Refuse to generate treasure for non-humanoid');
+    if (!this._isMatchingType(actor)) {
+      log('Refuse to generate treasure for non-matching type');
       return false;
     }
 
@@ -91,13 +91,17 @@ export default class PocketChange {
     return data.actorLink;
   }
 
-  _isHumanoidsOnly() {
-    return game.settings.get('dfreds-pocket-change', 'humanoidsOnly');
-  }
+  _isMatchingType(actor) {
+    const creatureTypes = game.settings
+      .get('dfreds-pocket-change', 'creatureTypes')
+      .split(';')
+      .map(type => type.toLowerCase().trim())
+      .filter(type => type);
 
-  _isHumanoid(actor) {
-    let type = actor.data.data.details.type;
-    return type && type.toLowerCase().includes('humanoid');
+    if (creatureTypes.length == 0) return true;
+
+    let actorType = actor.data.data.details.type.toLowerCase().trim();
+    return actorType && creatureTypes.includes(actorType);
   }
 
   _isActorNpc(actor) {
