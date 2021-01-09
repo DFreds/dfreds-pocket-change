@@ -15,7 +15,7 @@ Hooks.once('init', () => {
   game.settings.register('dfreds-pocket-change', 'creatureTypes', {
     name: 'Creature types',
     hint:
-      "These are the types of creatures that will generate currency, separated via semi-colons. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Gnome;Elf",
+      'These are the types of creatures that will generate currency, separated via semi-colons. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Gnome;Elf',
     scope: 'world',
     config: true,
     default: 'Humanoid',
@@ -55,8 +55,8 @@ Hooks.once('init', () => {
     name: 'Currency standard',
     hint:
       'This controls what type of currency is generated. ' +
-      "'Normal' generates all types of currency. " + 
-      "'Silver standard' replaces all platinum, gold, electrum, and copper with silver, with copper leftovers remaining copper. " + 
+      "'Normal' generates all types of currency. " +
+      "'Silver standard' replaces all platinum, gold, electrum, and copper with silver, with copper leftovers remaining copper. " +
       "'No electrum' replaces all electrum pieces with silver.",
     scope: 'world',
     config: true,
