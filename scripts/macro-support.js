@@ -1,8 +1,8 @@
 export default class MacroSupport {
   generateCurrencyAndConvertToLootForSelectedTokens() {
     new Dialog({
-      title: 'Currency Generator',
-      content: `Generate currency for all selected tokens?`,
+      title: 'Currency Generator and Loot Converter',
+      content: `Generate currency for all selected tokens and convert them to loot?`,
       buttons: {
         no: {
           icon: '<i class="fas fa-ban"></i>',
@@ -10,7 +10,7 @@ export default class MacroSupport {
         },
         yes: {
           icon: '<i class="fas fa-thumbs-up"></i>',
-          label: 'Generate',
+          label: 'Generate and Convert',
           callback: (html) => {
             if (canvas.tokens.controlled.length == 0) {
               ui.notifications.error(
