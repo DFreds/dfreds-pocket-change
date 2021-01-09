@@ -67,11 +67,11 @@ Hooks.once('init', () => {
     },
     type: String,
   });
+
+  game['PocketChange'] = PocketChange;
 });
 
-Hooks.on('preCreateToken', (scene, data, options, userId) => {
-  const actor = game.actors.get(data.actorId);
-  const pocketChange = new PocketChange();
-
-  pocketChange.populateTreasureForActor(data, actor);
+Hooks.on('preCreateToken', (scene, tokenData, options, userId) => {
+  const pocketChange = new game.PocketChange();
+  pocketChange.populateTreasureForToken(tokenData);
 });
