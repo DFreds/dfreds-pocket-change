@@ -1,4 +1,5 @@
 import PocketChange from './pocket-change.js';
+import MacroSupport from './macro-support.js';
 
 Hooks.once('init', () => {
   game.settings.register('dfreds-pocket-change', 'enabled', {
@@ -68,10 +69,12 @@ Hooks.once('init', () => {
     type: String,
   });
 
-  game['PocketChange'] = PocketChange;
+  game.dfreds = game.dfreds || {};
+  game.dfreds.PocketChange = PocketChange;
+  game.dfreds.MacroSupport = MacroSupport;
 });
 
 Hooks.on('preCreateToken', (scene, tokenData, options, userId) => {
-  const pocketChange = new game.PocketChange();
+  const pocketChange = new game.dfreds.PocketChange();
   pocketChange.populateTreasureForToken(tokenData);
 });
