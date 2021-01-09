@@ -11,12 +11,6 @@ Have you ever watched as the peaceful NPCs of the town you've lovingly crafted g
 
 Oh yeah. This module is useless without [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) by ChalkOne. So get that bad boy.
 
-### Friggin' Cool Macros
-
-This module also includes sweet macros (Make Token(s) Lootable). Basically, for selected tokens, the macros change their actor sheet to LootSheetNPC, delete all their Feat items, set token observer privileges for players, and add a treasure overlay icon to the bodies. Asks for confirmation because of the deletions.
-
-This allows players to steal that sweet cash straight from the dead dude.
-
 ## What This Module Does
 
 On the drop of a token onto a scene, Pocket Change generates currency for the token based on its challenge rating using the Individual Treasure Tables by Challenge Rating from the DMG.
@@ -24,6 +18,14 @@ On the drop of a token onto a scene, Pocket Change generates currency for the to
 You can configure some stuff:
 
 ![Module Configuration](https://i.imgur.com/7O8jcFY.png)
+
+### Friggin' Cool Macros
+
+This module also includes sweet macros. Basically, we got three of these bangers that work for selected tokens:
+
+1. __Generate Currency for Selected Tokens__ - Useful for when you want to disable the automatic generation and do it all on demand (you overachiever you).
+1. __Convert Selected Tokens to Loot__ - This macro takes each token and changes their actor sheet to LootSheetNPC, deletes all their Feat items, sets token privileges to Observer for players, and add a treasure overlay icon to the bodies. This allows players to steal that sweet cash straight from the dead dude. Careful with this one because it's actually deleting stuff from that instance of the actor (not the prototype).
+1. __Generate Currency and Convert to Loot for Selected Tokens__ - Combo of those first two rad mofos.
 
 ## When it Generates Currency
 
