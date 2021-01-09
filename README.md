@@ -23,7 +23,7 @@ On the drop of a token onto a scene, Pocket Change generates currency for the to
 
 You can configure some stuff:
 
-![Module Configuration](https://i.imgur.com/YaZHGNo.png)
+![Module Configuration](https://i.imgur.com/7O8jcFY.png)
 
 ## When it Generates Currency
 
@@ -45,9 +45,9 @@ It only generates currency if all of the following are true:
 
   > Now the big bad evil guy won't be randomly receiving cash! I bet he would be less evil if he did, though.
 
-* The actor has a type of humanoid and the module is configured to only allow generation for humanoids.
+* The actor has a type that matches the configuration provided in the settings.
 
-  > It would be a bit weird if that wolf your players slew had some coins shoved up its nether regions.
+  > It would be a bit weird if that wolf your players slew had some coins shoved up its nether regions. But hey, maybe that sounds fun, too. Go nuts!
 
 * The actor is an NPC. This avoids messing with any data related to player characters.
 
