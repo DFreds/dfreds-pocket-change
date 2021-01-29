@@ -154,8 +154,7 @@ export default class MacroSupport {
     await token.actor.setFlag('core', 'sheetClass', 'dnd5e.LootSheet5eNPC');
     await token.update({
       'actorData.permission.default': ENTITY_PERMISSIONS.OBSERVER,
-      effects: ['icons/containers/bags/pouch-simple-brown.webp'],
-      // overlayEffect: 'icons/containers/bags/pouch-simple-brown.webp'
+      overlayEffect: `icons/svg/chest.svg`,
     });
     await token.actor.update({ items: newItems });
   }
