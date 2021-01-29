@@ -42,16 +42,21 @@ function convertSelectedTokensToLoot() {
           });
           filtered.forEach(async (token) => {
             // Remove natural weapons, natural armor, class features, spells, and feats.
-            let newItems = token.actor.data.items.filter((item) => {
-              if (item.type == 'weapon') {
-                return item.data.weaponType != 'natural';
-              }
-              if (item.type == 'equipment') {
-                if (!item.data.armor) return true;
-                return item.data.armor.type != 'natural';
-              }
-              return !['class', 'spell', 'feat'].includes(item.type);
-            });
+            let newItems = token.actor.data.items
+              .filter((item) => {
+                if (item.type == 'weapon') {
+                  return item.data.weaponType != 'natural';
+                }
+                if (item.type == 'equipment') {
+                  if (!item.data.armor) return true;
+                  return item.data.armor.type != 'natural';
+                }
+                return !['class', 'spell', 'feat'].includes(item.type);
+              })
+              .map((item) => {
+                item.data.equipped = false;
+                return item;
+              });
 
             let newCurrencyData = {};
 
