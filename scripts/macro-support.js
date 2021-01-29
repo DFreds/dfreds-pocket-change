@@ -108,57 +108,6 @@ export default class MacroSupport {
     }).render(true);
   }
 
-  async _generateCurrencyForToken(token) {
-    const actor = game.actors.get(token.data.actorId);
-
-    const pocketChange = new game.dfreds.PocketChange();
-    const currency = pocketChange.generateCurrency(actor);
-    let newCurrencyData = {};
-    newCurrencyData['data.currency'] = currency;
-
-    await token.actor.update(newCurrencyData);
-  }
-
-  async _convertTokenToLoot(token) {
-    // Remove natural weapons, natural armor, class features, spells, and feats.
-    let newItems = token.actor.data.items
-      .filter((item) => {
-        if (item.type == 'weapon') {
-          return item.data.weaponType != 'natural';
-        }
-        if (item.type == 'equipment') {
-          if (!item.data.armor) return true;
-          return item.data.armor.type != 'natural';
-        }
-        return !['class', 'spell', 'feat'].includes(item.type);
-      })
-      .map((item) => {
-        item.data.equipped = false;
-        return item;
-      });
-
-    let newCurrencyData = {};
-
-    // Handles if they already have currency set somehow
-    if (typeof token.actor.data.data.currency.cp === 'number') {
-      newCurrencyData['data.currency'] = {
-        cp: { value: token.actor.data.data.currency.cp },
-        ep: { value: token.actor.data.data.currency.ep },
-        gp: { value: token.actor.data.data.currency.gp },
-        pp: { value: token.actor.data.data.currency.pp },
-        sp: { value: token.actor.data.data.currency.sp },
-      };
-    }
-
-    await token.actor.update(newCurrencyData);
-    await token.actor.setFlag('core', 'sheetClass', 'dnd5e.LootSheet5eNPC');
-    await token.update({
-      'actorData.permission.default': ENTITY_PERMISSIONS.OBSERVER,
-      overlayEffect: `icons/svg/chest.svg`,
-    });
-    await token.actor.update({ items: newItems });
-  }
-
   _isTokenValid(token) {
     if (token.actor.hasPlayerOwner) {
       ui.notifications.warn(`Cannot modify player owned token ${token.name}`);
@@ -176,5 +125,105 @@ export default class MacroSupport {
     }
 
     return true;
+  }
+
+  async _generateCurrencyForToken(token) {
+    const actor = game.actors.get(token.data.actorId);
+
+    const pocketChange = new game.dfreds.PocketChange();
+    const currency = pocketChange.generateCurrency(actor);
+    let newCurrencyData = {};
+    newCurrencyData['data.currency'] = currency;
+
+    await token.actor.update(newCurrencyData);
+  }
+
+  async _convertTokenToLoot(token) {
+    await this._removeCubConditions(token);
+    await token.actor.update({ items: this._unequipItems(this._getLootableItems(token)) });
+    await token.actor.update(this._getNewActorData(token));
+    await token.update({
+      overlayEffect: 'icons/svg/chest.svg',
+      actorData: {
+        actor: {
+          flags: {
+            loot: {
+              playersPermission: ENTITY_PERMISSIONS.OBSERVER,
+            },
+          },
+        },
+        permission: this._getUpdatedUserPermissions(token),
+      },
+    });
+  }
+
+  // Remove natural weapons, natural armor, class features, spells, and feats.
+  _getLootableItems(token) {
+    return token.actor.data.items
+      .filter((item) => {
+        if (item.type == 'weapon') {
+          return item.data.weaponType != 'natural';
+        }
+        if (item.type == 'equipment') {
+          if (!item.data.armor) return true;
+          return item.data.armor.type != 'natural';
+        }
+        return !['class', 'spell', 'feat'].includes(item.type);
+      });
+  }
+
+  _unequipItems(items) {
+    return items.map((item) => {
+      item.data.equipped = false;
+      return item;
+    });
+  }
+
+  async _removeCubConditions(token) {
+    if (game.modules.get('combat-utility-belt')?.active) {
+      await game.cub.removeAllConditions(token);
+    }
+  }
+
+  _getNewActorData(token) {
+    let newActorData = {
+      flags: {
+        core: {
+          sheetClass: 'dnd5e.LootSheet5eNPC',
+        },
+        lootsheetnpc5e: {
+          lootsheettype: 'Loot',
+        },
+      },
+    };
+
+    // Handles if they already have currency set somehow
+    if (typeof token.actor.data.data.currency.cp === 'number') {
+      let oldCurrencyData = token.actor.data.data.currency;
+      newActorData['data.currency'] = {
+        cp: { value: oldCurrencyData.cp },
+        ep: { value: oldCurrencyData.ep },
+        gp: { value: oldCurrencyData.gp },
+        pp: { value: oldCurrencyData.pp },
+        sp: { value: oldCurrencyData.sp },
+      };
+    }
+
+    return newActorData;
+  }
+
+  _getUpdatedUserPermissions(token) {
+    let lootingUsers = game.users.entries.filter((user) => {
+      return user.role == USER_ROLES.PLAYER || user.role == USER_ROLES.TRUSTED;
+    });
+
+    let permissions = {};
+    Object.assign(permissions, token.actor.data.permission);
+
+    lootingUsers.forEach((user) => {
+      permissions[user.data._id] = ENTITY_PERMISSIONS.OBSERVER;
+    });
+
+    return permissions;
   }
 }

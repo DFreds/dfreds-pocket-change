@@ -58,31 +58,62 @@ function convertSelectedTokensToLoot() {
                 return item;
               });
 
-            let newCurrencyData = {};
+            await token.actor.update({ items: newItems });
+
+            let newActorData = {
+              flags: {
+                core: {
+                  sheetClass: 'dnd5e.LootSheet5eNPC',
+                },
+                lootsheetnpc5e: {
+                  lootsheettype: 'Loot',
+                },
+              },
+            };
 
             // Handles if they already have currency set somehow
             if (typeof token.actor.data.data.currency.cp === 'number') {
-              newCurrencyData['data.currency'] = {
-                cp: { value: token.actor.data.data.currency.cp },
-                ep: { value: token.actor.data.data.currency.ep },
-                gp: { value: token.actor.data.data.currency.gp },
-                pp: { value: token.actor.data.data.currency.pp },
-                sp: { value: token.actor.data.data.currency.sp },
+              let oldCurrencyData = token.actor.data.data.currency;
+              newActorData['data.currency'] = {
+                cp: { value: oldCurrencyData.cp },
+                ep: { value: oldCurrencyData.ep },
+                gp: { value: oldCurrencyData.gp },
+                pp: { value: oldCurrencyData.pp },
+                sp: { value: oldCurrencyData.sp },
               };
             }
+            await token.actor.update(newActorData);
 
-            await token.actor.update(newCurrencyData);
-            await token.actor.setFlag(
-              'core',
-              'sheetClass',
-              'dnd5e.LootSheet5eNPC'
-            );
-            await token.update({
-              'actorData.permission.default': ENTITY_PERMISSIONS.OBSERVER,
-              overlayEffect: `icons/svg/chest.svg`,
-              // effects: ['icons/containers/bags/pouch-simple-brown.webp'],
+            if (game.modules.get('combat-utility-belt')?.active) {
+              await game.cub.removeAllConditions(token);
+            }
+
+            let lootingUsers = game.users.entries.filter((user) => {
+              return (
+                user.role == USER_ROLES.PLAYER ||
+                user.role == USER_ROLES.TRUSTED
+              );
             });
-            await token.actor.update({ items: newItems });
+            let permissions = {};
+            Object.assign(permissions, token.actor.data.permission);
+            lootingUsers.forEach((user) => {
+              permissions[user.data._id] = ENTITY_PERMISSIONS.OBSERVER;
+            });
+
+            await token.update({
+              overlayEffect: 'icons/svg/chest.svg',
+              // effects: ['icons/containers/bags/pouch-simple-brown.webp'],
+              actorData: {
+                actor: {
+                  flags: {
+                    loot: {
+                      playersPermission: ENTITY_PERMISSIONS.OBSERVER,
+                    },
+                  },
+                },
+                permission: permissions,
+              },
+            });
           });
           ui.notifications.info(`Converted ${filtered.length} tokens to loot`);
         },
