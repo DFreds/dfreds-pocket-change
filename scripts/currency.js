@@ -18,7 +18,7 @@ export default class Currency {
    * @param {Number} amount - The amount of copper to add
    */
   addCopper(amount) {
-    this._cp += Math.floor(amount * this._getCurrencyMultiplier());
+    this._cp += Math.floor(amount * Settings.currencyMultiplier);
   }
 
   /**
@@ -27,7 +27,7 @@ export default class Currency {
    * @param {Number} amount - The amount of silver to add
    */
   addSilver(amount) {
-    this._sp += Math.floor(amount * this._getCurrencyMultiplier());
+    this._sp += Math.floor(amount * Settings.currencyMultiplier);
   }
 
   /**
@@ -36,7 +36,7 @@ export default class Currency {
    * @param {Number} amount - The amount of electrum to add
    */
   addElectrum(amount) {
-    this._ep += Math.floor(amount * this._getCurrencyMultiplier());
+    this._ep += Math.floor(amount * Settings.currencyMultiplier);
   }
 
   /**
@@ -45,7 +45,7 @@ export default class Currency {
    * @param {Number} amount - The amount of gold to add
    */
   addGold(amount) {
-    this._gp += Math.floor(amount * this._getCurrencyMultiplier());
+    this._gp += Math.floor(amount * Settings.currencyMultiplier);
   }
 
   /**
@@ -54,7 +54,7 @@ export default class Currency {
    * @param {Number} amount - The amount of platinum to add
    */
   addPlatinum(amount) {
-    this._pp += Math.floor(amount * this._getCurrencyMultiplier());
+    this._pp += Math.floor(amount * Settings.currencyMultiplier);
   }
 
   /**
@@ -64,24 +64,19 @@ export default class Currency {
    * and gold are disabled.
    */
   convertCurrencies() {
-    const useSilver = game.settings.get('dfreds-pocket-change', 'useSilver');
-    const useElectrum = game.settings.get('dfreds-pocket-change', 'useElectrum');
-    const useGold = game.settings.get('dfreds-pocket-change', 'useGold');
-    const usePlatinum = game.settings.get('dfreds-pocket-change', 'usePlatinum');
-
-    if (!usePlatinum) {
+    if (!Settings.usePlatinum) {
       this._convertPlatinumToGold();
     }
 
-    if (!useGold) {
+    if (!Settings.useGold) {
       this._convertGoldToElectrum();
     }
 
-    if (!useElectrum) {
+    if (!Settings.useElectrum) {
       this._convertElectrumToSilver();
     }
 
-    if (!useSilver)  {
+    if (!Settings.useSilver)  {
       this._convertSilverToCopper();
     }
   }
@@ -119,9 +114,5 @@ export default class Currency {
       gp: { value: this._gp },
       pp: { value: this._pp },
     };
-  }
-
-  _getCurrencyMultiplier() {
-    return game.settings.get('dfreds-pocket-change', 'currencyMultiplier');
   }
 }

@@ -16,7 +16,7 @@ export default class Validator {
   isValid() {
     if (!this._actor) return false;
 
-    if (!this._isEnabled()) {
+    if (!Settings.enabled) {
       log("Refuse to generate treasure because you don't want me to");
       return false;
     }
@@ -61,17 +61,8 @@ export default class Validator {
     return true;
   }
 
-  _isEnabled() {
-    return game.settings.get('dfreds-pocket-change', 'enabled');
-  }
-
   _isPercentageLower() {
-    const randomChance = Math.random();
-    const chanceOfNoCurrency = game.settings.get(
-      'dfreds-pocket-change',
-      'chanceOfNoCurrency'
-    );
-    return randomChance < chanceOfNoCurrency;
+    return Math.random() < Settings.chanceOfNoCurrency;
   }
 
   _isLootSheetNpc5e() {
