@@ -58,13 +58,60 @@ export default class Currency {
   }
 
   /**
+   * Converts currencies down a type if they are not enabled in the settings.
+   * 
+   * Example: Platinum converts to gold converts to electrum if both platinum
+   * and gold are disabled.
+   */
+  convertCurrencies() {
+    const useSilver = game.settings.get('dfreds-pocket-change', 'useSilver');
+    const useElectrum = game.settings.get('dfreds-pocket-change', 'useElectrum');
+    const useGold = game.settings.get('dfreds-pocket-change', 'useGold');
+    const usePlatinum = game.settings.get('dfreds-pocket-change', 'usePlatinum');
+
+    if (!usePlatinum) {
+      this._convertPlatinumToGold();
+    }
+
+    if (!useGold) {
+      this._convertGoldToElectrum();
+    }
+
+    if (!useElectrum) {
+      this._convertElectrumToSilver();
+    }
+
+    if (!useSilver)  {
+      this._convertSilverToCopper();
+    }
+  }
+
+  _convertPlatinumToGold() {
+    this._gp += this._pp * 10;
+    this._pp = 0;
+  }
+
+  _convertGoldToElectrum() {
+    this._ep += this._gp * 2;
+    this._gp = 0;
+  }
+  
+  _convertElectrumToSilver() {
+    this._sp += this._ep * 5;
+    this._ep = 0;
+  }
+
+  _convertSilverToCopper() {
+    this._cp += this._sp * 10;
+    this._sp = 0;
+  }
+
+  /**
    * Converts the currency data to a format acceptable by LootSheetNPC5e
    *
    * @returns {Object} An object containing the currencies
    */
   convertToLootSheetCurrency() {
-    this._replaceCurrencyBasedOnStandard();
-
     return {
       cp: { value: this._cp },
       sp: { value: this._sp },
@@ -76,32 +123,5 @@ export default class Currency {
 
   _getCurrencyMultiplier() {
     return game.settings.get('dfreds-pocket-change', 'currencyMultiplier');
-  }
-
-  _replaceCurrencyBasedOnStandard() {
-    const currencyStandard = game.settings.get(
-      'dfreds-pocket-change',
-      'currencyStandard'
-    );
-
-    if (currencyStandard == 'normal') return;
-
-    // Convert ep to sp
-    this._sp += this._ep * 5;
-    this._ep = 0;
-
-    if (currencyStandard == 'silverStandard') {
-      // Convert gp to sp
-      this._sp += this._gp * 10;
-      this._gp = 0;
-
-      // Convert pp to sp
-      this._sp += this._pp * 100;
-      this._pp = 0;
-
-      // Convert cp to sp, keep cp change
-      this._sp += Math.floor(this._cp / 10);
-      this._cp = this._cp % 10;
-    }
   }
 }

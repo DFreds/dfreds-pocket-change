@@ -52,22 +52,40 @@ export default class Settings {
       type: Number,
     });
 
-    game.settings.register('dfreds-pocket-change', 'currencyStandard', {
-      name: 'Currency standard',
-      hint:
-        'This controls what type of currency is generated. ' +
-        "'Normal' generates all types of currency. " +
-        "'Silver standard' replaces all platinum, gold, electrum, and copper with silver, with copper leftovers remaining copper. " +
-        "'No electrum' replaces all electrum pieces with silver.",
+    game.settings.register('dfreds-pocket-change', 'useSilver', {
+      name: 'Use Silver',
+      hint: 'If enabled, generated currency could include silver. Copper is always included.',
       scope: 'world',
       config: true,
-      default: 'normal',
-      choices: {
-        normal: 'Normal',
-        silverStandard: 'Silver standard',
-        noElectrum: 'No electrum',
-      },
-      type: String,
+      default: true,
+      type: Boolean,
+    });
+
+    game.settings.register('dfreds-pocket-change', 'useElectrum', {
+      name: 'Use Electrum',
+      hint: 'If enabled, generated currency could include electrum. Copper is always included.',
+      scope: 'world',
+      config: true,
+      default: true,
+      type: Boolean,
+    });
+
+    game.settings.register('dfreds-pocket-change', 'useGold', {
+      name: 'Use Gold',
+      hint: 'If enabled, generated currency could include gold. Copper is always included.',
+      scope: 'world',
+      config: true,
+      default: true,
+      type: Boolean,
+    });
+
+    game.settings.register('dfreds-pocket-change', 'usePlatinum', {
+      name: 'Use Platinum',
+      hint: 'If enabled, generated currency could include platinum. Copper is always included.',
+      scope: 'world',
+      config: true,
+      default: true,
+      type: Boolean,
     });
   }
 }

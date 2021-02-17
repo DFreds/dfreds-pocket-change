@@ -37,6 +37,8 @@ export default class PocketChange {
       currency = this._treasureForChallengeRating17andUp(actor);
     }
 
+    currency.convertCurrencies();
+
     return currency.convertToLootSheetCurrency();
   }
 
