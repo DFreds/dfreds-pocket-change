@@ -31,13 +31,13 @@ export default class Validator {
       return false;
     }
 
-    if (!this._isMatchingType()) {
-      log('Refuse to generate treasure for non-matching type');
+    if (!this._isActorNpc()) {
+      log('Refuse to generate treasure for non-npc actors');
       return false;
     }
 
-    if (!this._isActorNpc()) {
-      log('Refuse to generate treasure for non-npc actors');
+    if (!this._isMatchingType()) {
+      log('Refuse to generate treasure for non-matching type');
       return false;
     }
 
