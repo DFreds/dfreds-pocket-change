@@ -2,11 +2,8 @@ import log from './logger.js';
 import Settings from './settings.js';
 
 export default class Validator {
-  constructor(token, actor) {
+  constructor() {
     this._settings = new Settings();
-
-    this._token = token;
-    this._actor = actor;
   }
 
   /**
@@ -16,8 +13,8 @@ export default class Validator {
    * @returns {Boolean} true if it can have currency genereated for it or be
    * converted to loot
    */
-  isValid() {
-    if (!this._actor) return false;
+  isValid(token, actor) {
+    if (!actor) return false;
 
     if (!this._settings.enabled) {
       log("Refuse to generate treasure because you don't want me to");
@@ -31,27 +28,27 @@ export default class Validator {
       return false;
     }
 
-    if (this._isLootSheetNpc5e()) {
+    if (this._isLootSheetNpc5e(actor)) {
       log('Refuse to generate treasure for existing loot sheets');
       return false;
     }
 
-    if (this._isLinked()) {
+    if (this._isLinked(token)) {
       log('Refuse to generate treasure for linked characters');
       return false;
     }
 
-    if (!this._isActorNpc()) {
+    if (!this._isActorNpc(actor)) {
       log('Refuse to generate treasure for non-npc actors');
       return false;
     }
 
-    if (!this._isMatchingType()) {
+    if (!this._isMatchingType(actor)) {
       log('Refuse to generate treasure for non-matching type');
       return false;
     }
 
-    if (this._hasPlayerOwner()) {
+    if (this._hasPlayerOwner(actor)) {
       log('Refuse to generate treasure for player owned actors');
       return false;
     }
@@ -68,33 +65,32 @@ export default class Validator {
     return Math.random() < this._settings.chanceOfNoCurrency;
   }
 
-  _isLootSheetNpc5e() {
-    return this._actor.sheet.template.includes('lootsheetnpc5e');
+  _isLootSheetNpc5e(actor) {
+    return actor.sheet.template.includes('lootsheetnpc5e');
   }
 
-  _isLinked() {
-    return this._token.actorLink;
+  _isLinked(token) {
+    return token.actorLink;
   }
 
-  _isMatchingType() {
-    const creatureTypes = game.settings
-      .get('dfreds-pocket-change', 'creatureTypes')
+  _isActorNpc(actor) {
+    return actor.data.type == 'npc';
+  }
+
+  _isMatchingType(actor) {
+    const creatureTypes = this._settings.creatureTypes
       .split(';')
       .map((type) => type.toLowerCase().trim())
       .filter((type) => type);
 
     if (creatureTypes.length == 0) return true;
 
-    let actorType = this._actor.data.data.details.type.toLowerCase().trim();
+    let actorType = actor.data.data.details.type.toLowerCase().trim();
     return actorType && creatureTypes.includes(actorType);
   }
 
-  _isActorNpc() {
-    return this._actor.data.type == 'npc';
-  }
-
-  _hasPlayerOwner() {
-    return this._actor.data.hasPlayerOwner;
+  _hasPlayerOwner(actor) {
+    return actor.data.hasPlayerOwner;
   }
 
   _isGm() {

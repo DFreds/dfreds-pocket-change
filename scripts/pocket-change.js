@@ -3,6 +3,9 @@ import log from './logger.js';
 import Validator from './validator.js';
 
 export default class PocketChange {
+  constructor() {
+    this._validator = new Validator();
+  }
   /**
    * Takes the provided token and adds currency to it if it is valid
    *
@@ -10,9 +13,8 @@ export default class PocketChange {
    */
   populateTreasureForToken(token) {
     const actor = game.actors.get(token.actorId);
-    const validator = new Validator(token, actor);
 
-    if (!validator.isValid()) return;
+    if (!this._validator.isValid(token, actor)) return;
 
     log('Generating treasure');
 
