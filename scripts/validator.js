@@ -1,7 +1,10 @@
 import log from './logger.js';
+import Settings from './settings.js';
 
 export default class Validator {
   constructor(token, actor) {
+    this._settings = new Settings();
+
     this._token = token;
     this._actor = actor;
   }
@@ -16,7 +19,7 @@ export default class Validator {
   isValid() {
     if (!this._actor) return false;
 
-    if (!Settings.enabled) {
+    if (!this._settings.enabled) {
       log("Refuse to generate treasure because you don't want me to");
       return false;
     }
@@ -62,7 +65,7 @@ export default class Validator {
   }
 
   _isPercentageLower() {
-    return Math.random() < Settings.chanceOfNoCurrency;
+    return Math.random() < this._settings.chanceOfNoCurrency;
   }
 
   _isLootSheetNpc5e() {

@@ -1,3 +1,5 @@
+import Settings from "./settings.js";
+
 export default class Currency {
   /**
    * Creates a new currency class
@@ -5,6 +7,8 @@ export default class Currency {
    * @param {Actor} actor - The actor used to initialize the currency
    */
   constructor(actor) {
+    this._settings = new Settings();
+
     this._cp = actor.data.data.currency.cp.value || 0;
     this._sp = actor.data.data.currency.cp.value || 0;
     this._ep = actor.data.data.currency.cp.value || 0;
@@ -18,7 +22,7 @@ export default class Currency {
    * @param {Number} amount - The amount of copper to add
    */
   addCopper(amount) {
-    this._cp += Math.floor(amount * Settings.currencyMultiplier);
+    this._cp += Math.floor(amount * this._settings.currencyMultiplier);
   }
 
   /**
@@ -27,7 +31,7 @@ export default class Currency {
    * @param {Number} amount - The amount of silver to add
    */
   addSilver(amount) {
-    this._sp += Math.floor(amount * Settings.currencyMultiplier);
+    this._sp += Math.floor(amount * this._settings.currencyMultiplier);
   }
 
   /**
@@ -36,7 +40,7 @@ export default class Currency {
    * @param {Number} amount - The amount of electrum to add
    */
   addElectrum(amount) {
-    this._ep += Math.floor(amount * Settings.currencyMultiplier);
+    this._ep += Math.floor(amount * this._settings.currencyMultiplier);
   }
 
   /**
@@ -45,7 +49,7 @@ export default class Currency {
    * @param {Number} amount - The amount of gold to add
    */
   addGold(amount) {
-    this._gp += Math.floor(amount * Settings.currencyMultiplier);
+    this._gp += Math.floor(amount * this._settings.currencyMultiplier);
   }
 
   /**
@@ -54,7 +58,7 @@ export default class Currency {
    * @param {Number} amount - The amount of platinum to add
    */
   addPlatinum(amount) {
-    this._pp += Math.floor(amount * Settings.currencyMultiplier);
+    this._pp += Math.floor(amount * this._settings.currencyMultiplier);
   }
 
   /**
@@ -64,19 +68,19 @@ export default class Currency {
    * and gold are disabled.
    */
   convertCurrencies() {
-    if (!Settings.usePlatinum) {
+    if (!this._settings.usePlatinum) {
       this._convertPlatinumToGold();
     }
 
-    if (!Settings.useGold) {
+    if (!this._settings.useGold) {
       this._convertGoldToElectrum();
     }
 
-    if (!Settings.useElectrum) {
+    if (!this._settings.useElectrum) {
       this._convertElectrumToSilver();
     }
 
-    if (!Settings.useSilver)  {
+    if (!this._settings.useSilver)  {
       this._convertSilverToCopper();
     }
   }

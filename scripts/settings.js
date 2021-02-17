@@ -110,7 +110,7 @@ export default class Settings {
    *
    * @returns {Boolean} true if currency should be generated on token drop
    */
-  static get enabled() {
+  get enabled() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.ENABLED);
   }
 
@@ -120,7 +120,7 @@ export default class Settings {
    * @returns {String} a string separated by a semi-colon for the types of
    * creatures to generate currency for
    */
-  static get creatureTypes() {
+  get creatureTypes() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.CREATURE_TYPES);
   }
 
@@ -130,7 +130,7 @@ export default class Settings {
    * @returns {Number} a number between 0 and 1 with 0.1 steps, representing
    * the percent change that currency will not be generated
    */
-  static get chanceOfNoCurrency() {
+  get chanceOfNoCurrency() {
     return game.settings.get(
       Settings.PACKAGE_NAME,
       Settings.CHANCE_OF_NO_CURRENCY
@@ -143,7 +143,7 @@ export default class Settings {
    * @returns {Number} a number between 0 and 2 with 0.1 steps, representing
    * the amount to multiply the currency by
    */
-  static get currencyMultiplier() {
+  get currencyMultiplier() {
     return game.settings.get(
       Settings.PACKAGE_NAME,
       Settings.CURRENCY_MULTIPLIER
@@ -155,7 +155,7 @@ export default class Settings {
    *
    * @returns {Boolean} true if silver can be used
    */
-  static get useSilver() {
+  get useSilver() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_SILVER);
   }
 
@@ -164,7 +164,7 @@ export default class Settings {
    *
    * @returns {Boolean} true if electrum can be used
    */
-  static get useElectrum() {
+  get useElectrum() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_ELECTRUM);
   }
 
@@ -173,7 +173,7 @@ export default class Settings {
    *
    * @returns {Boolean} true if gold can be used
    */
-  static get useGold() {
+  get useGold() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_GOLD);
   }
 
@@ -182,7 +182,7 @@ export default class Settings {
    *
    * @returns {Boolean} true if platinum can be used
    */
-  static get usePlatinum() {
+  get usePlatinum() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_PLATINUM);
   }
 }
