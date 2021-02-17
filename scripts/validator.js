@@ -50,6 +50,7 @@ export default class Validator {
 
     if (this._hasPlayerOwner()) {
       log('Refuse to generate treasure for player owned actors');
+      return false;
     }
 
     if (!this._isGm()) {
