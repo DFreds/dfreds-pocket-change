@@ -1,4 +1,9 @@
 export default class Currency {
+  /**
+   * Creates a new currency class
+   *
+   * @param {Actor} actor - The actor used to initialize the currency
+   */
   constructor(actor) {
     this._cp = actor.data.data.currency.cp.value || 0;
     this._sp = actor.data.data.currency.cp.value || 0;
@@ -7,26 +12,56 @@ export default class Currency {
     this._pp = actor.data.data.currency.cp.value || 0;
   }
 
+  /**
+   * Adds copper to the currency object
+   *
+   * @param {Number} amount - The amount of copper to add
+   */
   addCopper(amount) {
     this._cp += Math.floor(amount * this._getCurrencyMultiplier());
   }
 
+  /**
+   * Adds silver to the currency object
+   *
+   * @param {Number} amount - The amount of silver to add
+   */
   addSilver(amount) {
     this._sp += Math.floor(amount * this._getCurrencyMultiplier());
   }
 
+  /**
+   * Adds electrum to the currency object
+   *
+   * @param {Number} amount - The amount of electrum to add
+   */
   addElectrum(amount) {
     this._ep += Math.floor(amount * this._getCurrencyMultiplier());
   }
 
+  /**
+   * Adds gold to the currency object
+   *
+   * @param {Number} amount - The amount of gold to add
+   */
   addGold(amount) {
     this._gp += Math.floor(amount * this._getCurrencyMultiplier());
   }
 
+  /**
+   * Adds platinum to the currency object
+   *
+   * @param {Number} amount - The amount of platinum to add
+   */
   addPlatinum(amount) {
     this._pp += Math.floor(amount * this._getCurrencyMultiplier());
   }
 
+  /**
+   * Converts the currency data to a format acceptable by LootSheetNPC5e
+   *
+   * @returns {Object} An object containing the currencies
+   */
   convertToLootSheetCurrency() {
     this._replaceCurrencyBasedOnStandard();
 

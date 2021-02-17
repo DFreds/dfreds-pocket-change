@@ -3,21 +3,27 @@ import log from './logger.js';
 import Validator from './validator.js';
 
 export default class PocketChange {
-  populateTreasureForToken(tokenData) {
-    const actor = game.actors.get(tokenData.actorId);
-    const validator = new Validator(tokenData, actor);
+  /**
+   * Takes the provided token and adds currency to it if it is valid
+   *
+   * @param {Token} tokenData - The token data
+   */
+  populateTreasureForToken(token) {
+    const actor = game.actors.get(token.actorId);
+    const validator = new Validator(token, actor);
 
     if (!validator.isValid()) return;
 
     log('Generating treasure');
 
-    setProperty(
-      tokenData,
-      'actorData.data.currency',
-      this.generateCurrency(actor)
-    );
+    setProperty(token, 'actorData.data.currency', this.generateCurrency(actor));
   }
 
+  /**
+   * Generates currency for the provided actor based on its challenge rating
+   *
+   * @param {Actor} actor - The relevant actor for the token
+   */
   generateCurrency(actor) {
     let currency;
 

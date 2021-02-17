@@ -1,4 +1,8 @@
 export default class MacroSupport {
+  /**
+   * For all selected tokens, generate currency for them and convert them to
+   * lootable sheets
+   */
   generateCurrencyAndConvertToLootForSelectedTokens() {
     new Dialog({
       title: 'Currency Generator and Loot Converter',
@@ -36,6 +40,9 @@ export default class MacroSupport {
     }).render(true);
   }
 
+  /**
+   * For all selected tokens, generate currency for them
+   */
   generateCurrencyForSelectedTokens() {
     new Dialog({
       title: 'Currency Generator',
@@ -72,6 +79,9 @@ export default class MacroSupport {
     }).render(true);
   }
 
+  /**
+   * For all selected tokens, convert them to lootable sheets
+   */
   convertSelectedTokensToLoot() {
     new Dialog({
       title: 'Loot Converter',
@@ -140,7 +150,9 @@ export default class MacroSupport {
 
   async _convertTokenToLoot(token) {
     await this._removeCubConditions(token);
-    await token.actor.update({ items: this._unequipItems(this._getLootableItems(token)) });
+    await token.actor.update({
+      items: this._unequipItems(this._getLootableItems(token)),
+    });
     await token.actor.update(this._getNewActorData(token));
     await token.update({
       overlayEffect: 'icons/svg/chest.svg',
@@ -159,17 +171,16 @@ export default class MacroSupport {
 
   // Remove natural weapons, natural armor, class features, spells, and feats.
   _getLootableItems(token) {
-    return token.actor.data.items
-      .filter((item) => {
-        if (item.type == 'weapon') {
-          return item.data.weaponType != 'natural';
-        }
-        if (item.type == 'equipment') {
-          if (!item.data.armor) return true;
-          return item.data.armor.type != 'natural';
-        }
-        return !['class', 'spell', 'feat'].includes(item.type);
-      });
+    return token.actor.data.items.filter((item) => {
+      if (item.type == 'weapon') {
+        return item.data.weaponType != 'natural';
+      }
+      if (item.type == 'equipment') {
+        if (!item.data.armor) return true;
+        return item.data.armor.type != 'natural';
+      }
+      return !['class', 'spell', 'feat'].includes(item.type);
+    });
   }
 
   _unequipItems(items) {

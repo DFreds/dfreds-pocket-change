@@ -1,11 +1,18 @@
 import log from './logger.js';
 
 export default class Validator {
-  constructor(tokenData, actor) {
-    this._tokenData = tokenData;
+  constructor(token, actor) {
+    this._token = token;
     this._actor = actor;
   }
 
+  /**
+   * Checks if the provided token and actor can have currency generated for it
+   * or can be converted to loot.
+   *
+   * @returns {Boolean} true if it can have currency genereated for it or be
+   * converted to loot
+   */
   isValid() {
     if (!this._actor) return false;
 
@@ -71,7 +78,7 @@ export default class Validator {
   }
 
   _isLinked() {
-    return this._tokenData.actorLink;
+    return this._token.actorLink;
   }
 
   _isMatchingType() {
