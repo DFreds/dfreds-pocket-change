@@ -9,6 +9,9 @@ export default class Validator {
   /**
    * Checks if the provided token and actor can have currency generated for it
    * or can be converted to loot.
+   * 
+   * @param {Token} token - the token to check
+   * @param {Actor} actor - the corresponding actor to check
    *
    * @returns {Boolean} true if it can have currency genereated for it or be
    * converted to loot

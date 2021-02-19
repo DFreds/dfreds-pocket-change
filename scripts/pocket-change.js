@@ -6,6 +6,7 @@ export default class PocketChange {
   constructor() {
     this._validator = new Validator();
   }
+
   /**
    * Takes the provided token and adds currency to it if it is valid
    *
