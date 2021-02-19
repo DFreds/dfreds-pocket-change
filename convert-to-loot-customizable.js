@@ -53,11 +53,39 @@ function convertSelectedTokensToLoot() {
                 }
                 return !['class', 'spell', 'feat'].includes(item.type);
               })
+              .filter((item) => {
+                // Determine if item is damaged
+                const chanceOfDamagedItems = game.settings.get(
+                  'dfreds-pocket-change',
+                  'chanceOfDamagedItems'
+                );
+                const removeDamagedItems = game.settings.get(
+                  'dfreds-pocket-change',
+                  'removeDamagedItems'
+                );
+                const damagedItemsMultiplier = game.settings.get(
+                  'dfreds-pocket-change',
+                  'damagedItemsMultiplier'
+                );
+
+                if (
+                  item.data.rarity === 'Common' &&
+                  Math.random() < chanceOfDamagedItems
+                ) {
+                  if (removeDamagedItems) return false;
+
+                  item.name += ' (Damaged)';
+                  item.data.price *= damagedItemsMultiplier;
+                }
+
+                return true;
+              })
               .map((item) => {
                 item.data.equipped = false;
                 return item;
               });
 
+            await token.actor.update({ items: [] });
             await token.actor.update({ items: newItems });
 
             let newActorData = {
