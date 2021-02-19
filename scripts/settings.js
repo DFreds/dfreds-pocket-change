@@ -81,7 +81,7 @@ export default class Settings {
       {
         name: 'Chance of damaged items',
         hint:
-          'This is the percent chance that item will be damaged when a token is converted to loot.',
+          'This is the percent chance that a Common item will be damaged when a token is converted to loot. A damaged item has its value reduced and appends (Damaged) to the name. Set this to 0 if you want to disable damaged items.',
         scope: 'world',
         config: true,
         default: 0.25,
@@ -100,7 +100,7 @@ export default class Settings {
       {
         name: 'Damaged items multiplier',
         hint:
-          'This multiplies the price of damaged items by the given number, lowering their value.',
+          'This multiplies the price of of a damaged item by the given number, lowering its values.',
         scope: 'world',
         config: true,
         default: 0.25,
@@ -240,12 +240,15 @@ export default class Settings {
   }
 
   /**
-   * Returns the game setting for removeDamagedItems 
+   * Returns the game setting for removeDamagedItems
    *
-   * @returns {Boolean} true if damaged items should be removed 
+   * @returns {Boolean} true if damaged items should be removed
    */
   get removeDamagedItems() {
-    return game.settings.get(Settings.PACKAGE_NAME, Settings.REMOVE_DAMAGED_ITEMS);
+    return game.settings.get(
+      Settings.PACKAGE_NAME,
+      Settings.REMOVE_DAMAGED_ITEMS
+    );
   }
 
   /**
