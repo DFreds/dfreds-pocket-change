@@ -19,14 +19,14 @@ On the drop of a token onto a scene, Pocket Change generates currency for the to
 
 You can configure some stuff:
 
-![Module Configuration](https://i.imgur.com/7O8jcFY.png)
+![Module Configuration](https://i.imgur.com/maVT0Qk.png)
 
 ### Friggin' Cool Macros
 
 This module also includes sweet macros. Basically, we got three of these bangers that work for selected tokens:
 
 1. __Generate Currency for Selected Tokens__ - Useful for when you want to disable the automatic generation and do it all on demand (you overachiever you). This is the __officially supported__ way to do this, by yours truly.
-1. __Convert Selected Tokens to Loot__ - This macro takes each token and changes their actor sheet to LootSheetNPC, deletes all their Feat items, optionally applies damage to items, sets token privileges to Observer for players, and add a treasure overlay icon to the bodies. This allows players to steal that sweet cash straight from the dead dude. Careful with this one because it's actually deleting stuff from that instance of the actor (not the prototype). This is the __officially supported__ way to do this, by yours truly.
+1. __Convert Selected Tokens to Loot__ - This macro takes each token and changes their actor sheet to LootSheetNPC, deletes all their Feat items, optionally applies damage to items (based on the settings), sets token privileges to Observer for players, and add a treasure overlay icon to the bodies. This allows players to steal that sweet cash straight from the dead dude. Careful with this one because it's actually deleting stuff from that instance of the actor (not the prototype). This is the __officially supported__ way to do this, by yours truly.
 1. __Generate Currency and Convert to Loot for Selected Tokens__ - Combo of those first two rad mofos.
 1. __Generate Currency for Selected Tokens (Customizable)__ - This lets you customize and break the corresponding macro to your hearts content
 1. __Convert Selected Tokens to Loot (Customizable)__ - This lets you customize and break the corresponding macro to your hearts content
