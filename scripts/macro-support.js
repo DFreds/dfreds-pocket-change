@@ -1,4 +1,10 @@
+import Settings from "./settings.js";
+
 export default class MacroSupport {
+  constructor() {
+    this._settings = new Settings();
+  }
+
   /**
    * For all selected tokens, generate currency for them and convert them to
    * lootable sheets
@@ -150,9 +156,15 @@ export default class MacroSupport {
 
   async _convertTokenToLoot(token) {
     await this._removeCubConditions(token);
+
+    // Force
+    await token.actor.update({
+      items: [],
+    });
     await token.actor.update({
       items: this._unequipItems(this._getLootableItems(token)),
     });
+
     await token.actor.update(this._getNewActorData(token));
     await token.update({
       overlayEffect: 'icons/svg/chest.svg',
@@ -180,7 +192,21 @@ export default class MacroSupport {
         return item.data.armor.type != 'natural';
       }
       return !['class', 'spell', 'feat'].includes(item.type);
+    }).map((item) => {
+      if (this._isItemDamaged(item)) {
+        item.name += " (Damaged)";
+        item.data.price *= this._settings.damagedItemsMultiplier;
+      }
+
+      return item;
     });
+  }
+
+  _isItemDamaged(item) {
+    // Never consider items above common rarity breakable
+    if (item.data.rarity !== "Common") return false;
+
+    return Math.random() < this._settings.chanceOfDamagedItems;
   }
 
   _unequipItems(items) {

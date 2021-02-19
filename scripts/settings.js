@@ -6,6 +6,8 @@ export default class Settings {
   static CREATURE_TYPES = 'creatureTypes';
   static CHANCE_OF_NO_CURRENCY = 'chanceOfNoCurrency';
   static CURRENCY_MULTIPLIER = 'currencyMultiplier';
+  static CHANCE_OF_DAMAGED_ITEMS = 'chanceOfDamagedItems';
+  static DAMAGED_ITEMS_MULTIPLIER = 'damagedItemsMultiplier';
   static USE_SILVER = 'useSilver';
   static USE_ELECTRUM = 'useElectrum';
   static USE_GOLD = 'useGold';
@@ -35,34 +37,80 @@ export default class Settings {
       type: String,
     });
 
-    game.settings.register(Settings.PACKAGE_NAME, 'chanceOfNoCurrency', {
-      name: 'Chance of no currency',
-      hint:
-        'This is the percent chance that no money will be generated for a token.',
-      scope: 'world',
-      config: true,
-      default: 0.25,
-      range: {
-        min: 0,
-        max: 1,
-        step: 0.05,
-      },
-      type: Number,
-    });
+    game.settings.register(
+      Settings.PACKAGE_NAME,
+      Settings.CHANCE_OF_NO_CURRENCY,
+      {
+        name: 'Chance of no currency',
+        hint:
+          'This is the percent chance that no money will be generated for a token.',
+        scope: 'world',
+        config: true,
+        default: 0.25,
+        range: {
+          min: 0,
+          max: 1,
+          step: 0.05,
+        },
+        type: Number,
+      }
+    );
 
-    game.settings.register(Settings.PACKAGE_NAME, 'currencyMultiplier', {
-      name: 'Currency multiplier',
-      hint: 'This multiplies the generated currency by the given number.',
-      scope: 'world',
-      config: true,
-      default: 1,
-      range: {
-        min: 0,
-        max: 2,
-        step: 0.1,
-      },
-      type: Number,
-    });
+    game.settings.register(
+      Settings.PACKAGE_NAME,
+      Settings.CURRENCY_MULTIPLIER,
+      {
+        name: 'Currency multiplier',
+        hint: 'This multiplies the generated currency by the given number.',
+        scope: 'world',
+        config: true,
+        default: 1,
+        range: {
+          min: 0,
+          max: 2,
+          step: 0.1,
+        },
+        type: Number,
+      }
+    );
+
+    game.settings.register(
+      Settings.PACKAGE_NAME,
+      Settings.CHANCE_OF_DAMAGED_ITEMS,
+      {
+        name: 'Chance of damaged items',
+        hint:
+          'This is the percent chance that item will be damaged when a token is converted to loot.',
+        scope: 'world',
+        config: true,
+        default: 0.25,
+        range: {
+          min: 0,
+          max: 1,
+          step: 0.05,
+        },
+        type: Number,
+      }
+    );
+
+    game.settings.register(
+      Settings.PACKAGE_NAME,
+      Settings.DAMAGED_ITEMS_MULTIPLIER,
+      {
+        name: 'Damaged items multiplier',
+        hint:
+          'This multiplies the price of damaged items by the given number, lowering their value.',
+        scope: 'world',
+        config: true,
+        default: 0.25,
+        range: {
+          min: 0,
+          max: 1,
+          step: 0.05,
+        },
+        type: Number,
+      }
+    );
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.USE_SILVER, {
       name: 'Use Silver',
@@ -128,7 +176,7 @@ export default class Settings {
    * Returns the game setting for chanceOfNoCurrency
    *
    * @returns {Number} a number between 0 and 1 with 0.1 steps, representing
-   * the percent change that currency will not be generated
+   * the percent chance that currency will not be generated
    */
   get chanceOfNoCurrency() {
     return game.settings.get(
@@ -147,6 +195,32 @@ export default class Settings {
     return game.settings.get(
       Settings.PACKAGE_NAME,
       Settings.CURRENCY_MULTIPLIER
+    );
+  }
+
+  /**
+   * Returns the game setting for chanceOfDamagedItems
+   *
+   * @returns {Number} a number between 0 and 1 with 0.1 steps, representing
+   * the percent chance that an item will be damaged
+   */
+  get chanceOfDamagedItems() {
+    return game.settings.get(
+      Settings.PACKAGE_NAME,
+      Settings.CHANCE_OF_DAMAGED_ITEMS
+    );
+  }
+
+  /**
+   * Returns the game setting for damagedItemsMultiplier
+   *
+   * @returns {Number} a number between 0 and 1 with 0.1 steps, representing
+   * the amount to multiply the price of damaged items by
+   */
+  get damagedItemsMultiplier() {
+    return game.settings.get(
+      Settings.PACKAGE_NAME,
+      Settings.DAMAGED_ITEMS_MULTIPLIER
     );
   }
 
