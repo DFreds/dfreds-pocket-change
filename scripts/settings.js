@@ -8,6 +8,7 @@ export default class Settings {
   static CURRENCY_MULTIPLIER = 'currencyMultiplier';
   static CHANCE_OF_DAMAGED_ITEMS = 'chanceOfDamagedItems';
   static DAMAGED_ITEMS_MULTIPLIER = 'damagedItemsMultiplier';
+  static REMOVE_DAMAGED_ITEMS = 'removeDamagedItems';
   static USE_SILVER = 'useSilver';
   static USE_ELECTRUM = 'useElectrum';
   static USE_GOLD = 'useGold';
@@ -109,6 +110,20 @@ export default class Settings {
           step: 0.05,
         },
         type: Number,
+      }
+    );
+
+    game.settings.register(
+      Settings.PACKAGE_NAME,
+      Settings.REMOVE_DAMAGED_ITEMS,
+      {
+        name: 'Remove damaged items',
+        hint:
+          'If enabled, this will remove items that are damaged from tokens that are converted to loot.',
+        scope: 'world',
+        config: true,
+        default: false,
+        type: Boolean,
       }
     );
 
@@ -222,6 +237,15 @@ export default class Settings {
       Settings.PACKAGE_NAME,
       Settings.DAMAGED_ITEMS_MULTIPLIER
     );
+  }
+
+  /**
+   * Returns the game setting for removeDamagedItems 
+   *
+   * @returns {Boolean} true if damaged items should be removed 
+   */
+  get removeDamagedItems() {
+    return game.settings.get(Settings.PACKAGE_NAME, Settings.REMOVE_DAMAGED_ITEMS);
   }
 
   /**

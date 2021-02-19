@@ -1,4 +1,4 @@
-import Settings from "./settings.js";
+import Settings from './settings.js';
 
 export default class MacroSupport {
   constructor() {
@@ -157,12 +157,14 @@ export default class MacroSupport {
   async _convertTokenToLoot(token) {
     await this._removeCubConditions(token);
 
-    // Force
+    const lootableItems = this._unequipItems(this._getLootableItems(token));
+
+    // Force an update of all the items
     await token.actor.update({
       items: [],
     });
     await token.actor.update({
-      items: this._unequipItems(this._getLootableItems(token)),
+      items: lootableItems,
     });
 
     await token.actor.update(this._getNewActorData(token));
@@ -183,28 +185,34 @@ export default class MacroSupport {
 
   // Remove natural weapons, natural armor, class features, spells, and feats.
   _getLootableItems(token) {
-    return token.actor.data.items.filter((item) => {
-      if (item.type == 'weapon') {
-        return item.data.weaponType != 'natural';
-      }
-      if (item.type == 'equipment') {
-        if (!item.data.armor) return true;
-        return item.data.armor.type != 'natural';
-      }
-      return !['class', 'spell', 'feat'].includes(item.type);
-    }).map((item) => {
-      if (this._isItemDamaged(item)) {
-        item.name += " (Damaged)";
-        item.data.price *= this._settings.damagedItemsMultiplier;
-      }
+    return token.actor.data.items
+      .filter((item) => {
+        if (item.type == 'weapon') {
+          return item.data.weaponType != 'natural';
+        }
 
-      return item;
-    });
+        if (item.type == 'equipment') {
+          if (!item.data.armor) return true;
+          return item.data.armor.type != 'natural';
+        }
+
+        return !['class', 'spell', 'feat'].includes(item.type);
+      })
+      .filter((item) => {
+        if (this._isItemDamaged(item)) {
+          if (this._settings.removeDamagedItems) return false;
+
+          item.name += ' (Damaged)';
+          item.data.price *= this._settings.damagedItemsMultiplier;
+        }
+
+        return true;
+      });
   }
 
   _isItemDamaged(item) {
     // Never consider items above common rarity breakable
-    if (item.data.rarity !== "Common") return false;
+    if (item.data.rarity !== 'Common') return false;
 
     return Math.random() < this._settings.chanceOfDamagedItems;
   }
