@@ -100,7 +100,7 @@ export default class Settings {
       {
         name: 'Damaged items multiplier',
         hint:
-          'This multiplies the price of of a damaged item by the given number, lowering its values.',
+          'This multiplies the price of of a damaged item by the given number, lowering its value.',
         scope: 'world',
         config: true,
         default: 0.25,
