@@ -69,7 +69,8 @@ function convertSelectedTokensToLoot() {
                 );
 
                 if (
-                  item.data.rarity === 'Common' &&
+                  (item.data.rarity === 'Common' ||
+                  item.data.rarity === 'None') &&
                   Math.random() < chanceOfDamagedItems
                 ) {
                   if (removeDamagedItems) return false;

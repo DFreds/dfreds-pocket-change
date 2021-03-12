@@ -211,8 +211,14 @@ export default class MacroSupport {
   }
 
   _isItemDamaged(item) {
+    if (!item.data.rarity) return false;
+
     // Never consider items above common rarity breakable
-    if (item.data.rarity !== 'Common') return false;
+    if (
+      item.data.rarity.toLowerCase() !== 'common' &&
+      item.data.rarity.toLowerCase() !== 'none'
+    )
+      return false;
 
     return Math.random() < this._settings.chanceOfDamagedItems;
   }
