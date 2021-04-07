@@ -81,6 +81,10 @@ export default class Validator {
   }
 
   _isMatchingType(actor) {
+    let actorType = actor.data.data.details.type.toLowerCase().trim();
+
+    if (!actorType) return false;
+
     const creatureTypes = this._settings.creatureTypes
       .split(';')
       .map((type) => type.toLowerCase().trim())
@@ -88,8 +92,8 @@ export default class Validator {
 
     if (creatureTypes.length == 0) return true;
 
-    let actorType = actor.data.data.details.type.toLowerCase().trim();
-    return actorType && creatureTypes.includes(actorType);
+    const matchingTypes = creatureTypes.filter((type) => actorType.startsWith(type));
+    return matchingTypes.length != 0;
   }
 
   _hasPlayerOwner(actor) {
