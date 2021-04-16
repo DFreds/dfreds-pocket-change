@@ -1,4 +1,4 @@
-import Settings from "./settings.js";
+import Settings from './settings.js';
 
 export default class Currency {
   /**
@@ -63,7 +63,7 @@ export default class Currency {
 
   /**
    * Converts currencies down a type if they are not enabled in the settings.
-   * 
+   *
    * Example: Platinum converts to gold converts to electrum if both platinum
    * and gold are disabled.
    */
@@ -80,7 +80,7 @@ export default class Currency {
       this._convertElectrumToSilver();
     }
 
-    if (!this._settings.useSilver)  {
+    if (!this._settings.useSilver) {
       this._convertSilverToCopper();
     }
   }
@@ -94,7 +94,7 @@ export default class Currency {
     this._ep += this._gp * 2;
     this._gp = 0;
   }
-  
+
   _convertElectrumToSilver() {
     this._sp += this._ep * 5;
     this._ep = 0;
