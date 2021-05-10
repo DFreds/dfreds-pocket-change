@@ -70,11 +70,3 @@ It only generates currency if all of the following are true:
 ## What This Module Doesn't Do
 
 Stops your players from being murder hobos. Also, it doesn't actually provide anyway for you to actually let the players steal that lovable NPC's life savings. That's what [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) does for you in conjunction with my included macros.
-
-## Installation
-
-1. Copy this link and paste it in Foundry's Module Manager
-
-    > https://raw.githubusercontent.com/dfreds/dfreds-pocket-change/main/module.json
-
-2. Enable the module in your world's module settings
