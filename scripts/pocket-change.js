@@ -133,7 +133,9 @@ export default class PocketChange {
 
   _rollDice(formula) {
     const roll = new Roll(formula);
-    roll.roll();
+    roll.evaluate({
+      async: false // TODO eventually, this will be asynchronous and will need to handle it
+    }); 
     return roll.total;
   }
 }

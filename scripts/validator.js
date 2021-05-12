@@ -81,7 +81,7 @@ export default class Validator {
   }
 
   _isMatchingType(actor) {
-    let actorType = actor.data.data.details.type.toLowerCase().trim();
+    let actorType = actor.data.data.details.type.value.toLowerCase().trim();
 
     if (!actorType) return false;
 
