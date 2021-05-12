@@ -1,6 +1,6 @@
 # DFreds Pocket Change
 
-![Foundry Version](https://img.shields.io/badge/Foundry-v0.7.9-informational)
+![Foundry Version](https://img.shields.io/badge/Foundry-v0.8.3-informational)
 ![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https://forge-vtt.com/api/bazaar/package/dfreds-pocket-change&colorB=4aa94a)
 ![Latest Release Download Count](https://img.shields.io/github/downloads/dfreds/dfreds-pocket-change/latest/dfreds-pocket-change.zip)
 ![All Downloads](https://img.shields.io/github/downloads/dfreds/dfreds-pocket-change/total)
@@ -23,13 +23,10 @@ You can configure some stuff:
 
 ### Friggin' Cool Macros
 
-This module also includes sweet macros. Basically, we got three of these bangers that work for selected tokens:
+This module also includes sweet macros. Basically, we got two of these bangers that work for selected tokens:
 
-1. __Generate Currency for Selected Tokens__ - Useful for when you want to disable the automatic generation and do it all on demand (you overachiever you). This is the __officially supported__ way to do this, by yours truly.
-1. __Convert Selected Tokens to Loot__ - This macro takes each token and changes their actor sheet to LootSheetNPC, deletes all their Feat items, optionally applies damage to items (based on the settings), sets token privileges to Observer for players, and add a treasure overlay icon to the bodies. This allows players to steal that sweet cash straight from the dead dude. Careful with this one because it's actually deleting stuff from that instance of the actor (not the prototype). This is the __officially supported__ way to do this, by yours truly.
-1. __Generate Currency and Convert to Loot for Selected Tokens__ - Combo of those first two rad mofos.
-1. __Generate Currency for Selected Tokens (Customizable)__ - This lets you customize and break the corresponding macro to your hearts content
-1. __Convert Selected Tokens to Loot (Customizable)__ - This lets you customize and break the corresponding macro to your hearts content
+1. __Generate Currency for Selected Tokens__ - Useful for when you want to disable the automatic generation and do it all on demand (you overachiever you).
+1. __Convert Selected Tokens to Loot__ - This macro takes each token and changes their actor sheet to LootSheetNPC, deletes all their Feat items, optionally applies damage to items, sets token privileges to Observer for players, and add a treasure overlay icon to the bodies. This allows players to steal that sweet cash straight from the dead dude. Careful with this one because it's actually deleting stuff from that instance of the actor (not the prototype).
 
 ## When it Generates Currency
 
