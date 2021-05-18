@@ -2,7 +2,6 @@
   "name": "dfreds-pocket-change",
   "title": "DFreds Pocket Change",
   "description": "Automatically adds money to NPC character sheets when dropped on the canvas based on the DMG's individual treasures table. This is best used with Loot Sheet NPC 5e.",
-  "version": "auto-set",
   "author": "DFreds",
   "authors": [
     {
@@ -11,24 +10,36 @@
       "discord": "DFreds#1238"
     }
   ],
-  "minimumCoreVersion": "0.7.5",
-  "compatibleCoreVersion": "0.7.9",
-  "esmodules": ["./scripts/main.js"],
+  "url": "https://github.com/DFreds/dfreds-pocket-change",
+  "license": "https://github.com/DFreds/dfreds-pocket-change/blob/main/LICENSE",
+  "readme": "https://github.com/DFreds/dfreds-pocket-change/blob/main/README.md",
+  "bugs": "https://github.com/DFreds/dfreds-pocket-change/issues",
+  "changelog": "https://github.com/DFreds/dfreds-pocket-change/releases",
+  "flags": {},
+  "version": "auto-set",
+  "minimumCoreVersion": "0.8.4",
+  "compatibleCoreVersion": "0.8.4",
+  "scripts": [],
+  "esmodules": [
+    "./scripts/main.js"
+  ],
+  "styles": [],
+  "languages": [],
   "packs": [
     {
       "name": "dfreds-pocket-change-macros",
       "label": "DFreds Pocket Change Macros",
       "path": "packs/macros.db",
       "module": "dfreds-pocket-change",
-      "entity": "Macro"
+      "entity": "Macro",
+      "private": false
     }
   ],
-	"systems": ["dnd5e"],
-  "url": "https://github.com/DFreds/dfreds-pocket-change",
-  "bugs": "https://github.com/DFreds/dfreds-pocket-change/issues",
+  "system": [],
+  "dependencies": [],
+  "socket": false,
   "manifest": "https://github.com/DFreds/dfreds-pocket-change/releases/latest/download/module.json",
-  "download": "https://github.com/DFreds/dfreds-pocket-change/releases/latest/download/dfreds-pocket-change.zip",
-  "license": "https://github.com/DFreds/dfreds-pocket-change/blob/main/LICENSE",
-  "readme": "https://github.com/DFreds/dfreds-pocket-change/blob/main/README.md",
-  "changelog": "https://github.com/DFreds/dfreds-pocket-change/releases"
+  "download": "https://github.com/DFreds/dfreds-pocket-change/releases/download/v1.6.2/dfreds-pocket-change.zip",
+  "protected": false,
+  "coreTranslation": false
 }
