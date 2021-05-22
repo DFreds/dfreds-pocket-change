@@ -12,14 +12,21 @@ export default class PocketChange {
    *
    * @param {Token} tokenData - The token data
    */
-  populateTreasureForToken(token) {
-    const actor = game.actors.get(token.actorId);
+  populateTreasureForToken(tokenDocument) {
+    const tokenData = tokenDocument.data;
+    const actor = tokenDocument.actor;
 
-    if (!this._validator.isValid(token, actor)) return;
+    if (!this._validator.isValid(tokenData, actor)) return;
 
     log('Generating treasure');
 
-    setProperty(token, 'actorData.data.currency', this.generateCurrency(actor));
+    tokenDocument.data.update({
+      actorData: {
+        data: {
+          currency: this.generateCurrency(actor)
+        }
+      }
+    });
   }
 
   /**
