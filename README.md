@@ -1,6 +1,6 @@
 # DFreds Pocket Change
 
-![Foundry Version](https://img.shields.io/badge/Foundry-v0.8.3-informational)
+![Foundry Version](https://img.shields.io/badge/Foundry-v0.8.5-informational)
 ![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https://forge-vtt.com/api/bazaar/package/dfreds-pocket-change&colorB=4aa94a)
 ![Latest Release Download Count](https://img.shields.io/github/downloads/dfreds/dfreds-pocket-change/latest/dfreds-pocket-change.zip)
 ![All Downloads](https://img.shields.io/github/downloads/dfreds/dfreds-pocket-change/total)
