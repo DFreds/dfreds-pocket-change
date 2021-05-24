@@ -121,10 +121,10 @@ export default class MacroSupport {
 
     const pocketChange = new game.dfreds.PocketChange();
     const currency = pocketChange.generateCurrency(actor);
-    let newCurrencyData = {};
-    newCurrencyData['data.currency'] = currency;
 
-    await token.actor.update(newCurrencyData);
+    await token.actor.data.update({
+      currency: currency,
+    });
   }
 
   async _convertTokenToLoot(
@@ -135,37 +135,48 @@ export default class MacroSupport {
   ) {
     await this._removeCubConditions(token);
 
-    const lootableItems = this._unequipItems(
-      this._getLootableItems(
-        token,
-        chanceOfDamagedItems,
-        damagedItemsMultiplier,
-        removeDamagedItems
-      )
+    const lootableItems = this._getLootableItems(
+      token,
+      chanceOfDamagedItems,
+      damagedItemsMultiplier,
+      removeDamagedItems
     );
 
-    // Force an update of all the items
-    await token.actor.update({
-      items: [],
-    });
-    await token.actor.update({
+    const newData = {
       items: lootableItems,
-    });
+      flags: {
+        core: {
+          sheetClass: 'dnd5e.LootSheet5eNPC',
+        },
+        lootsheetnpc5e: {
+          lootsheettype: 'Loot',
+        },
+      },
+    };
 
-    await token.actor.update(this._getNewActorData(token));
-    await token.update({
-      overlayEffect: 'icons/svg/chest.svg',
-      actorData: {
-        actor: {
-          flags: {
-            loot: {
-              playersPermission: CONST.ENTITY_PERMISSIONS.OBSERVER,
+    this._handleExisitingCurrency(token, newData);
+
+    // TODO shouldn't need to do this
+    const ids = token.actor.data.document.items.keys();
+    await token.actor.data.document.deleteEmbeddedDocuments('Item', Array.from(ids));
+
+    await token.actor.data.document.update(newData, { parent: canvas.scene });
+    await token.document.update(
+      {
+        overlayEffect: 'icons/svg/chest.svg',
+        actorData: {
+          actor: {
+            flags: {
+              loot: {
+                playersPermission: CONST.ENTITY_PERMISSIONS.OBSERVER,
+              },
             },
           },
+          permission: this._getUpdatedUserPermissions(token),
         },
-        permission: this._getUpdatedUserPermissions(token),
       },
-    });
+      { parent: canvas.scene }
+    );
   }
 
   // Remove natural weapons, natural armor, class features, spells, and feats.
@@ -200,6 +211,10 @@ export default class MacroSupport {
         }
 
         return true;
+      })
+      .map((item) => {
+        item.data.equipped = false;
+        return item;
       });
   }
 
@@ -214,35 +229,17 @@ export default class MacroSupport {
     return Math.random() < chanceOfDamagedItems;
   }
 
-  _unequipItems(items) {
-    return items.map((item) => {
-      item.data.equipped = false;
-      return item;
-    });
-  }
-
   async _removeCubConditions(token) {
     if (game.modules.get('combat-utility-belt')?.active) {
       await game.cub.removeAllConditions(token);
     }
   }
 
-  _getNewActorData(token) {
-    let newActorData = {
-      flags: {
-        core: {
-          sheetClass: 'dnd5e.LootSheet5eNPC',
-        },
-        lootsheetnpc5e: {
-          lootsheettype: 'Loot',
-        },
-      },
-    };
-
-    // Handles if they already have currency set somehow
+  _handleExisitingCurrency(token, data) {
+    // Handles if they already have currency set and it is not an object
     if (typeof token.actor.data.data.currency.cp === 'number') {
       let oldCurrencyData = token.actor.data.data.currency;
-      newActorData['data.currency'] = {
+      data.currency = {
         cp: { value: oldCurrencyData.cp },
         ep: { value: oldCurrencyData.ep },
         gp: { value: oldCurrencyData.gp },
@@ -250,12 +247,10 @@ export default class MacroSupport {
         sp: { value: oldCurrencyData.sp },
       };
     }
-
-    return newActorData;
   }
 
   _getUpdatedUserPermissions(token) {
-    let lootingUsers = game.users.entities.filter((user) => {
+    let lootingUsers = game.users.contents.filter((user) => {
       return (
         user.role == CONST.USER_ROLES.PLAYER ||
         user.role == CONST.USER_ROLES.TRUSTED
