@@ -10,7 +10,7 @@ Hooks.once('init', () => {
   game.dfreds.MacroSupport = MacroSupport;
 });
 
-Hooks.on('preCreateToken', (scene, tokenData, options, userId) => {
+Hooks.on('preCreateToken', (tokenDocument, tokenData, options, userId) => {
   const pocketChange = new game.dfreds.PocketChange();
-  pocketChange.populateTreasureForToken(tokenData);
+  pocketChange.populateTreasureForToken(tokenDocument);
 });
