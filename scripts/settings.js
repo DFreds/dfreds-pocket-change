@@ -31,7 +31,7 @@ export default class Settings {
     game.settings.register(Settings.PACKAGE_NAME, Settings.CREATURE_TYPES, {
       name: 'Creature types',
       hint:
-        'These are the types of creatures that will generate currency, separated via semi-colons. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Gnome;Elf',
+        'These are the types of creatures that will generate currency, separated via semi-colons. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity',
       scope: 'world',
       config: true,
       default: 'Humanoid',
