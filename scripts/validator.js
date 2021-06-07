@@ -81,19 +81,22 @@ export default class Validator {
   }
 
   _isMatchingType(actor) {
-    let actorType = actor.data.data.details.type.value.toLowerCase().trim();
-
-    if (!actorType) return false;
-
     const creatureTypes = this._settings.creatureTypes
       .split(';')
       .map((type) => type.toLowerCase().trim())
       .filter((type) => type);
 
-    if (creatureTypes.length == 0) return true;
+    // Handle blank creature types by always saying they are valid
+    if (creatureTypes.length === 0) return true;
 
-    const matchingTypes = creatureTypes.filter((type) => actorType.startsWith(type));
-    return matchingTypes.length != 0;
+    let actorType = actor.data.data.details?.type?.value?.toLowerCase().trim();
+    let actorSubtype = actor.data.data.details?.type?.subtype?.toLowerCase().trim();
+
+    if (actorType === 'custom') {
+      actorType = actor.data.data.details?.type?.custom?.toLowerCase().trim();
+    }
+
+    return creatureTypes.some(type => actorType.startsWith(type) || actorSubtype.startsWith(type));
   }
 
   _hasPlayerOwner(actor) {
