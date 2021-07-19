@@ -23,9 +23,9 @@ export default class PocketChange {
     tokenDocument.data.update({
       actorData: {
         data: {
-          currency: this.generateCurrency(actor)
-        }
-      }
+          currency: this.generateCurrency(actor),
+        },
+      },
     });
   }
 
@@ -141,8 +141,8 @@ export default class PocketChange {
   _rollDice(formula) {
     const roll = new Roll(formula);
     roll.evaluate({
-      async: false // TODO eventually, this will be asynchronous and will need to handle it
-    }); 
+      async: false, // TODO eventually, this will be asynchronous and will need to handle it
+    });
     return roll.total;
   }
 }

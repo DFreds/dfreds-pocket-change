@@ -158,7 +158,10 @@ export default class MacroSupport {
 
     // TODO shouldn't need to do this
     const ids = token.actor.data.document.items.keys();
-    await token.actor.data.document.deleteEmbeddedDocuments('Item', Array.from(ids));
+    await token.actor.data.document.deleteEmbeddedDocuments(
+      'Item',
+      Array.from(ids)
+    );
 
     await token.actor.data.document.update(newData, { parent: canvas.scene });
     await token.document.update(

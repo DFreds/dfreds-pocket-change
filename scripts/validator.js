@@ -1,6 +1,9 @@
 import log from './logger.js';
 import Settings from './settings.js';
 
+/**
+ * Ensures a token is a valid candidate for converting to loot or generating currency
+ */
 export default class Validator {
   constructor() {
     this._settings = new Settings();
@@ -9,7 +12,7 @@ export default class Validator {
   /**
    * Checks if the provided token and actor can have currency generated for it
    * or can be converted to loot.
-   * 
+   *
    * @param {Token} token - the token to check
    * @param {Actor} actor - the corresponding actor to check
    *
@@ -90,13 +93,17 @@ export default class Validator {
     if (creatureTypes.length === 0) return true;
 
     let actorType = actor.data.data.details?.type?.value?.toLowerCase().trim();
-    let actorSubtype = actor.data.data.details?.type?.subtype?.toLowerCase().trim();
+    let actorSubtype = actor.data.data.details?.type?.subtype
+      ?.toLowerCase()
+      .trim();
 
     if (actorType === 'custom') {
       actorType = actor.data.data.details?.type?.custom?.toLowerCase().trim();
     }
 
-    return creatureTypes.some(type => actorType.startsWith(type) || actorSubtype.startsWith(type));
+    return creatureTypes.some(
+      (type) => actorType.startsWith(type) || actorSubtype.startsWith(type)
+    );
   }
 
   _hasPlayerOwner(actor) {

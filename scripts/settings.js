@@ -1,3 +1,6 @@
+/**
+ * Handles registration and access of settings
+ */
 export default class Settings {
   static PACKAGE_NAME = 'dfreds-pocket-change';
 
@@ -20,8 +23,7 @@ export default class Settings {
   registerSettings() {
     game.settings.register(Settings.PACKAGE_NAME, Settings.ENABLED, {
       name: 'Enabled',
-      hint:
-        'If enabled, currency will be generated for tokens dropped in scenes.',
+      hint: 'If enabled, currency will be generated for tokens dropped in scenes.',
       scope: 'world',
       config: true,
       default: true,
@@ -30,8 +32,7 @@ export default class Settings {
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.CREATURE_TYPES, {
       name: 'Creature types',
-      hint:
-        'These are the types of creatures that will generate currency, separated via semi-colons. This will match on their type, subtype, and custom type. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity',
+      hint: 'These are the types of creatures that will generate currency, separated via semi-colons. This will match on their type, subtype, and custom type. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity',
       scope: 'world',
       config: true,
       default: 'Humanoid',
@@ -43,8 +44,7 @@ export default class Settings {
       Settings.CHANCE_OF_NO_CURRENCY,
       {
         name: 'Chance of no currency',
-        hint:
-          'This is the percent chance that no money will be generated for a token.',
+        hint: 'This is the percent chance that no money will be generated for a token.',
         scope: 'world',
         config: true,
         default: 0.25,
@@ -77,8 +77,7 @@ export default class Settings {
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.USE_SILVER, {
       name: 'Use Silver',
-      hint:
-        'If enabled, generated currency could include silver. Copper is always included.',
+      hint: 'If enabled, generated currency could include silver. Copper is always included.',
       scope: 'world',
       config: true,
       default: true,
@@ -87,8 +86,7 @@ export default class Settings {
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.USE_ELECTRUM, {
       name: 'Use Electrum',
-      hint:
-        'If enabled, generated currency could include electrum. Copper is always included.',
+      hint: 'If enabled, generated currency could include electrum. Copper is always included.',
       scope: 'world',
       config: true,
       default: true,
@@ -97,8 +95,7 @@ export default class Settings {
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.USE_GOLD, {
       name: 'Use Gold',
-      hint:
-        'If enabled, generated currency could include gold. Copper is always included.',
+      hint: 'If enabled, generated currency could include gold. Copper is always included.',
       scope: 'world',
       config: true,
       default: true,
@@ -107,8 +104,7 @@ export default class Settings {
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.USE_PLATINUM, {
       name: 'Use Platinum',
-      hint:
-        'If enabled, generated currency could include platinum. Copper is always included.',
+      hint: 'If enabled, generated currency could include platinum. Copper is always included.',
       scope: 'world',
       config: true,
       default: true,
