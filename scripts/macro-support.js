@@ -21,6 +21,7 @@ export default class MacroSupport {
           icon: '<i class="fas fa-thumbs-up"></i>',
           label: 'Generate',
           callback: (html) => {
+            // Notify if no tokens selected
             if (canvas.tokens.controlled.length == 0) {
               ui.notifications.error(
                 'Tokens must be selected to generate currency'
@@ -28,67 +29,17 @@ export default class MacroSupport {
               return;
             }
 
+            // Only affect valid tokens
             const filtered = canvas.tokens.controlled.filter((token) =>
               this._isTokenValid(token)
             );
             filtered.forEach(
               async (token) => await this._generateCurrencyForToken(token)
             );
+
+            // Notify number of tokens that were effected
             ui.notifications.info(
               `Generated currency for ${filtered.length} tokens`
-            );
-          },
-        },
-      },
-      default: 'no',
-    }).render(true);
-  }
-
-  /**
-   * For all selected tokens, convert them to lootable sheets
-   *
-   * @param {number} chanceOfDamagedItems A number between 0 and 1 that corresponds to the percent chance an item will be damaged
-   * @param {number} damagedItemsMultiplier A number between 0 and 1 that will lower a damaged items value
-   * @param {boolean} removeDamagedItems If true, damaged items will be removed from the token rather than marked as damaged
-   */
-  convertSelectedTokensToLoot(
-    chanceOfDamagedItems,
-    damagedItemsMultiplier,
-    removeDamagedItems
-  ) {
-    new Dialog({
-      title: 'Loot Converter',
-      content: `Convert all selected tokens to loot?`,
-      buttons: {
-        no: {
-          icon: '<i class="fas fa-ban"></i>',
-          label: 'Cancel',
-        },
-        yes: {
-          icon: '<i class="fas fa-thumbs-up"></i>',
-          label: 'Convert',
-          callback: (html) => {
-            if (canvas.tokens.controlled.length == 0) {
-              ui.notifications.error(
-                'Tokens must be selected to convert to loot'
-              );
-              return;
-            }
-
-            const filtered = canvas.tokens.controlled.filter((token) =>
-              this._isTokenValid(token)
-            );
-            filtered.forEach(
-              async (token) =>
-                await this._convertTokenToLoot(
-                  token,
-                  chanceOfDamagedItems,
-                  damagedItemsMultiplier,
-                  removeDamagedItems
-                )
-            );
-            ui.notifications.info(
-              `Converted ${filtered.length} tokens to loot`
             );
           },
         },
@@ -127,23 +78,107 @@ export default class MacroSupport {
     });
   }
 
+  /**
+   * For all selected tokens, convert them to lootable sheets
+   *
+   * @param {number} chanceOfDamagedItems A number between 0 and 1 that corresponds to the percent chance an item will be damaged
+   * @param {number} damagedItemsMultiplier A number between 0 and 1 that will lower a damaged items value
+   * @param {boolean} removeDamagedItems If true, damaged items will be removed from the token rather than marked as damaged
+   */
+  convertSelectedTokensToLoot(
+    chanceOfDamagedItems,
+    damagedItemsMultiplier,
+    removeDamagedItems
+  ) {
+    new Dialog({
+      title: 'Loot Converter',
+      content: `Convert all selected tokens to loot?`,
+      buttons: {
+        no: {
+          icon: '<i class="fas fa-ban"></i>',
+          label: 'Cancel',
+        },
+        yes: {
+          icon: '<i class="fas fa-thumbs-up"></i>',
+          label: 'Convert',
+          callback: (html) => {
+            // Notify if no tokens selected
+            if (canvas.tokens.controlled.length == 0) {
+              ui.notifications.error(
+                'Tokens must be selected to convert to loot'
+              );
+              return;
+            }
+
+            // Only affect valid tokens
+            const filtered = canvas.tokens.controlled.filter((token) =>
+              this._isTokenValid(token)
+            );
+            filtered.forEach(
+              async (token) =>
+                await this._convertTokenToLoot(
+                  token,
+                  chanceOfDamagedItems,
+                  damagedItemsMultiplier,
+                  removeDamagedItems
+                )
+            );
+
+            // Notify number of tokens that were effected
+            ui.notifications.info(
+              `Converted ${filtered.length} tokens to loot`
+            );
+          },
+        },
+      },
+      default: 'no',
+    }).render(true);
+  }
+
   async _convertTokenToLoot(
     token,
     chanceOfDamagedItems,
     damagedItemsMultiplier,
     removeDamagedItems
   ) {
-    await this._removeCubConditions(token);
-
-    const lootableItems = this._getLootableItems(
+    let newActorData = this._getLootSheetData();
+    newActorData.items = this._getLootableItems(
       token,
       chanceOfDamagedItems,
       damagedItemsMultiplier,
       removeDamagedItems
     );
 
-    const newData = {
-      items: lootableItems,
+    // Eventually, this might be removed when loot sheet supports regular schema
+    this._handleCurrencySchemaChange(token, newActorData);
+
+    // Delete all items first
+    await token.document.actor.deleteEmbeddedDocuments(
+      'Item',
+      Array.from(token.actor.items.keys())
+    );
+
+    // Update actor with the new sheet and items
+    await token.document.actor.update(newActorData);
+
+    // Update the document with the overlay icon and new permissions
+    await token.document.update({
+      overlayEffect: 'icons/svg/chest.svg',
+      actorData: {
+        actor: {
+          flags: {
+            loot: {
+              playersPermission: CONST.ENTITY_PERMISSIONS.OBSERVER,
+            },
+          },
+        },
+        permission: this._getUpdatedUserPermissions(token),
+      },
+    });
+  }
+
+  _getLootSheetData() {
+    return {
       flags: {
         core: {
           sheetClass: 'dnd5e.LootSheet5eNPC',
@@ -153,33 +188,6 @@ export default class MacroSupport {
         },
       },
     };
-
-    this._handleExisitingCurrency(token, newData);
-
-    // TODO shouldn't need to do this
-    const ids = token.actor.data.document.items.keys();
-    await token.actor.data.document.deleteEmbeddedDocuments(
-      'Item',
-      Array.from(ids)
-    );
-
-    await token.actor.data.document.update(newData, { parent: canvas.scene });
-    await token.document.update(
-      {
-        overlayEffect: 'icons/svg/chest.svg',
-        actorData: {
-          actor: {
-            flags: {
-              loot: {
-                playersPermission: CONST.ENTITY_PERMISSIONS.OBSERVER,
-              },
-            },
-          },
-          permission: this._getUpdatedUserPermissions(token),
-        },
-      },
-      { parent: canvas.scene }
-    );
   }
 
   // Remove natural weapons, natural armor, class features, spells, and feats.
@@ -232,17 +240,14 @@ export default class MacroSupport {
     return Math.random() < chanceOfDamagedItems;
   }
 
-  async _removeCubConditions(token) {
-    if (game.modules.get('combat-utility-belt')?.active) {
-      await game.cub.removeAllConditions(token);
-    }
-  }
-
-  _handleExisitingCurrency(token, data) {
-    // Handles if they already have currency set and it is not an object
+  // This is a workaround for the fact that the LootSheetNPC module
+  // currently uses an older currency schema, compared to current 5e expectations.
+  // Need to convert the actor's currency data to the LS schema here to avoid
+  // breakage. If there is already currency on the actor, it is retained.
+  _handleCurrencySchemaChange(token, newActorData) {
     if (typeof token.actor.data.data.currency.cp === 'number') {
       let oldCurrencyData = token.actor.data.data.currency;
-      data.currency = {
+      newActorData['data.currency'] = {
         cp: { value: oldCurrencyData.cp },
         ep: { value: oldCurrencyData.ep },
         gp: { value: oldCurrencyData.gp },
@@ -252,8 +257,9 @@ export default class MacroSupport {
     }
   }
 
+  // Update permissions to observer level, so players can loot
   _getUpdatedUserPermissions(token) {
-    let lootingUsers = game.users.contents.filter((user) => {
+    let lootingUsers = game.users.filter((user) => {
       return (
         user.role == CONST.USER_ROLES.PLAYER ||
         user.role == CONST.USER_ROLES.TRUSTED
