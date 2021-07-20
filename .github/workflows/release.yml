@@ -33,7 +33,7 @@ jobs:
         download: https://github.com/${{github.repository}}/releases/download/${{steps.get_version.outputs.version}}/dfreds-pocket-change.zip
 
     # Create a zip file with all files required by the module to add to the release
-    - run: zip -r ./dfreds-pocket-change.zip module.json scripts/ packs/ templates/
+    - run: zip -r ./dfreds-pocket-change.zip module.json scripts/ packs/ templates/ styles/
 
     # Create a release for this specific version
     - name: Update Release with Files
