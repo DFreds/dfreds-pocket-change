@@ -17,7 +17,12 @@ Hooks.on('preCreateToken', (tokenDocument, _tokenData, _options, _userId) => {
 });
 
 Hooks.on('renderActorSheet5eNPC', async (app, html, data) => {
-  if (app.template !== 'systems/dnd5e/templates/actors/npc-sheet.html') return; // TODO support tidy
+  const supportedTemplates = [
+    'systems/dnd5e/templates/actors/npc-sheet.html',
+    'modules/tidy5e-sheet/templates/actors/tidy5e-npc.html',
+  ];
+
+  if (!supportedTemplates.includes(app.template)) return;
 
   const npcSheetCurrency = new NpcSheetCurrency({ app, html, data });
   npcSheetCurrency.injectCurrencyRow();
