@@ -49,7 +49,6 @@ export default class PocketChange {
 
     currency.convertCurrencies();
 
-    // return currency.convertToLootSheetCurrency();
     return currency.convertToStandardCurrency();
   }
 
