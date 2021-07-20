@@ -143,6 +143,12 @@ export default class MacroSupport {
     damagedItemsMultiplier,
     removeDamagedItems
   ) {
+    const sheet = token.actor.sheet;
+    const priorState = sheet._state; // 0 for closed, 1 for open
+
+    // Close the old sheet if it's open
+    await sheet.close();
+
     let newActorData = this._getLootSheetData();
     newActorData.items = this._getLootableItems(
       token,
@@ -177,6 +183,15 @@ export default class MacroSupport {
         permission: this._getUpdatedUserPermissions(token),
       },
     });
+
+    // Deregister the old sheet class
+    token.actor._sheet = null;
+    delete token.actor.apps[sheet.appId];
+
+    if (priorState !== 0) {
+      // Re-draw the updated sheet if it was open
+      token.actor.sheet.render(true);
+    }
   }
 
   _getLootSheetData() {
