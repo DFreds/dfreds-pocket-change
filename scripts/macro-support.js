@@ -79,7 +79,9 @@ export default class MacroSupport {
   }
 
   /**
-   * For all selected tokens, convert them to lootable sheets
+   * For all selected tokens, convert them to lootable sheets.
+   *
+   * Adapted from the convert-to-lootable.js by @unsoluble, @Akaito, @honeybadger, @kekilla, and @cole.
    *
    * @param {number} chanceOfDamagedItems A number between 0 and 1 that corresponds to the percent chance an item will be damaged
    * @param {number} damagedItemsMultiplier A number between 0 and 1 that will lower a damaged items value
