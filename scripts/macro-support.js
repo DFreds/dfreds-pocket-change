@@ -73,8 +73,8 @@ export default class MacroSupport {
     const pocketChange = new game.dfreds.PocketChange();
     const currency = pocketChange.generateCurrency(actor);
 
-    await token.actor.data.update({
-      currency: currency,
+    await token.actor.update({
+      'data.currency': currency,
     });
   }
 
