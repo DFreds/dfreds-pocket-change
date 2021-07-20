@@ -119,20 +119,4 @@ export default class Currency {
       pp: this._pp,
     };
   }
-
-  /**
-   * Converts the currency data to a format acceptable by LootSheetNPC5e
-   *
-   * @returns {Object} An object containing the currencies
-   */
-  convertToLootSheetCurrency() {
-    // TODO removable?
-    return {
-      cp: { value: this._cp },
-      sp: { value: this._sp },
-      ep: { value: this._ep },
-      gp: { value: this._gp },
-      pp: { value: this._pp },
-    };
-  }
 }
