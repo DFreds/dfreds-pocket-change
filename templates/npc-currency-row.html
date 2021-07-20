@@ -1,0 +1,15 @@
+<ol class="currency flexrow">
+  <h3>
+    {{localize "DND5E.Currency"}}
+    <a class="currency-convert rollable" data-action="convertCurrency" title="{{localize 'DND5E.CurrencyConvert'}}">
+      <i class="fas fa-coins"></i>
+    </a>
+    <a class="currency-regenerate rollable" data-action="regenerateCurrency" title="Regnerate Currency">
+      <i class="fas fa-redo"></i>
+    </a>
+  </h3>
+  {{#each data.currency as |v k|}}
+  <label style="margin-left: 4px;" class="denomination {{k}}">{{lookup ../config.currencies k}}</label>
+  <input type="text" name="data.currency.{{k}}" value="{{v}}" data-dtype="Number" />
+  {{/each}}
+</ol>

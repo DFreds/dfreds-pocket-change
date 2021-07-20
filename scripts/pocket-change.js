@@ -49,7 +49,8 @@ export default class PocketChange {
 
     currency.convertCurrencies();
 
-    return currency.convertToLootSheetCurrency();
+    // return currency.convertToLootSheetCurrency();
+    return currency.convertToStandardCurrency();
   }
 
   _isWithinChallengeRating(actor, lowerCr, upperCr) {
