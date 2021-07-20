@@ -106,11 +106,27 @@ export default class Currency {
   }
 
   /**
+   * Converts the currency data to the standard format for an Actor sheet
+   *
+   * @returns {Object} An object containing the currencies
+   */
+  convertToStandardCurrency() {
+    return {
+      cp: this._cp,
+      sp: this._sp,
+      ep: this._ep,
+      gp: this._gp,
+      pp: this._pp,
+    };
+  }
+
+  /**
    * Converts the currency data to a format acceptable by LootSheetNPC5e
    *
    * @returns {Object} An object containing the currencies
    */
   convertToLootSheetCurrency() {
+    // TODO removable?
     return {
       cp: { value: this._cp },
       sp: { value: this._sp },
