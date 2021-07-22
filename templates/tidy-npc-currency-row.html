@@ -19,9 +19,11 @@
         <a style="margin-left: 4px;" class="currency-regenerate rollable" data-action="regenerateCurrency" title="Regenerate Currency">
           <i class="fas fa-redo"></i>
         </a>
+        {{#if config.hasToken}}
         <a style="margin-left: 4px;" class="currency-loot rollable" data-action="convertToLoot" title="Convert to Loot">
           <i class="fas fa-shopping-bag"></i>
         </a>
+        {{/if}}
       </li>
     </ul>
   </div>

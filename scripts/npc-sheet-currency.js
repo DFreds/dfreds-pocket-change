@@ -43,6 +43,7 @@ export default class NpcSheetCurrency {
       {
         data: this._data.data,
         config: {
+          hasToken: !!this._app.token,
           currencies: {
             pp: game.i18n.localize('DND5E.CurrencyPP'),
             gp: game.i18n.localize('DND5E.CurrencyGP'),
@@ -74,6 +75,7 @@ export default class NpcSheetCurrency {
       {
         data: this._data.data,
         config: {
+          hasToken: !!this._app.token,
           currencies: {
             pp: game.i18n.localize('TIDY5E.CurrencyAbbrPP'),
             gp: game.i18n.localize('TIDY5E.CurrencyAbbrGP'),
