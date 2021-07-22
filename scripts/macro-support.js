@@ -1,5 +1,6 @@
 import Settings from './settings.js';
 
+// TODO remove this entirely, fix macros
 export default class MacroSupport {
   constructor() {
     this._settings = new Settings();
