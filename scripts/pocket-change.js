@@ -3,13 +3,28 @@ import log from './logger.js';
 import Settings from './settings.js';
 import Validator from './validator.js';
 
+/**
+ * Handles generating coin and converting to loot
+ */
 export default class PocketChange {
+  /**
+   * Initializes dependencies
+   */
   constructor() {
     this._settings = new Settings();
     this._validator = new Validator();
   }
 
-  async convertToLootable({
+  /**
+   * Converts the provided token to a lootable sheet
+   *
+   * @param {object} options
+   * @param {Token5e} options.token - the token to convert
+   * @param {number} options.chanceOfDamagedItems - (optional) the chance an item is considered damaged from 0 to 1. Uses the setting if undefined
+   * @param {number} options.damagedItemsMultiplier - (optional) the amount to reduce the value of a damaged item by. Uses the setting if undefined
+   * @param {boolean} options.removeDamagedItems - (optional) if true, removes items that are damaged of common rarity
+   */
+  async convertToLoot({
     token,
     chanceOfDamagedItems,
     damagedItemsMultiplier,
@@ -30,12 +45,12 @@ export default class PocketChange {
     await sheet.close();
 
     let newActorData = this._getLootSheetData();
-    newActorData.items = this._getLootableItems(
+    newActorData.items = this._getLootableItems({
       token,
       chanceOfDamagedItems,
       damagedItemsMultiplier,
-      removeDamagedItems
-    );
+      removeDamagedItems,
+    });
 
     // Eventually, this might be removed when loot sheet supports regular schema
     this._handleCurrencySchemaChange(token, newActorData);
@@ -88,12 +103,12 @@ export default class PocketChange {
   }
 
   // Remove natural weapons, natural armor, class features, spells, and feats.
-  _getLootableItems(
+  _getLootableItems({
     token,
     chanceOfDamagedItems,
     damagedItemsMultiplier,
-    removeDamagedItems
-  ) {
+    removeDamagedItems,
+  }) {
     return token.actor.data.items
       .map((item) => {
         return item.toObject();
@@ -176,7 +191,7 @@ export default class PocketChange {
   /**
    * Takes the provided token and adds currency to it if it is valid
    *
-   * @param {Token} tokenData - The token data
+   * @param {TokenDocument5e} tokenDocument - The token document for the dropped actor
    */
   populateTreasureForToken(tokenDocument) {
     const tokenData = tokenDocument.data;
@@ -198,7 +213,7 @@ export default class PocketChange {
   /**
    * Generates currency for the provided actor based on its challenge rating
    *
-   * @param {Actor} actor - The relevant actor for the token
+   * @param {Actor5e} actor - The actor to base the coin generation off of
    */
   generateCurrency(actor) {
     let currency;

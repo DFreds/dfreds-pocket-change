@@ -1,11 +1,13 @@
 <ol class="currency flexrow">
   <h3>
-    {{localize "DND5E.Currency"}}
     <a class="currency-convert rollable" data-action="convertCurrency" title="{{localize 'DND5E.CurrencyConvert'}}">
       <i class="fas fa-coins"></i>
     </a>
-    <a class="currency-regenerate rollable" data-action="regenerateCurrency" title="Regnerate Currency">
+    <a style="margin-left: 4px;" class="currency-regenerate rollable" data-action="regenerateCurrency" title="Regenerate Currency">
       <i class="fas fa-redo"></i>
+    </a>
+    <a style="margin-left: 4px;" class="currency-loot rollable" data-action="convertToLoot" title="Convert to Loot">
+      <i class="fas fa-shopping-bag"></i>
     </a>
   </h3>
   {{#each data.currency as |v k|}}

@@ -130,7 +130,7 @@ export default class NpcSheetCurrency {
       yes: async () => {
         const token = this._app.token;
         const pocketChange = new game.dfreds.PocketChange();
-        await pocketChange.convertToLootable({ token: token.object });
+        await pocketChange.convertToLoot({ token: token.object });
       },
     });
   }
