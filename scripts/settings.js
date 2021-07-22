@@ -75,6 +75,55 @@ export default class Settings {
       }
     );
 
+    game.settings.register(
+      Settings.PACKAGE_NAME,
+      Settings.CHANCE_OF_DAMAGED_ITEMS,
+      {
+        name: 'Chance of damaged items',
+        hint: 'This is the percent chance that a Common item will be damaged when a token is converted to loot. A damaged item has its value reduced and appends (Damaged) to the name. Set this to 0 if you want to disable damaged items.',
+        scope: 'world',
+        config: true,
+        default: 0.25,
+        range: {
+          min: 0,
+          max: 1,
+          step: 0.05,
+        },
+        type: Number,
+      }
+    );
+
+    game.settings.register(
+      Settings.PACKAGE_NAME,
+      Settings.DAMAGED_ITEMS_MULTIPLIER,
+      {
+        name: 'Damaged items multiplier',
+        hint: 'This multiplies the price of of a damaged item by the given number, lowering its value.',
+        scope: 'world',
+        config: true,
+        default: 0.25,
+        range: {
+          min: 0,
+          max: 1,
+          step: 0.05,
+        },
+        type: Number,
+      }
+    );
+
+    game.settings.register(
+      Settings.PACKAGE_NAME,
+      Settings.REMOVE_DAMAGED_ITEMS,
+      {
+        name: 'Remove damaged items',
+        hint: 'If enabled, this will remove items that are damaged from tokens that are converted to loot.',
+        scope: 'world',
+        config: true,
+        default: false,
+        type: Boolean,
+      }
+    );
+
     game.settings.register(Settings.PACKAGE_NAME, Settings.USE_SILVER, {
       name: 'Use Silver',
       hint: 'If enabled, generated currency could include silver. Copper is always included.',
