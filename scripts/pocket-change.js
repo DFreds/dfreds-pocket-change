@@ -1,10 +1,176 @@
 import Currency from './currency.js';
 import log from './logger.js';
+import Settings from './settings.js';
 import Validator from './validator.js';
 
 export default class PocketChange {
   constructor() {
+    this._settings = new Settings();
     this._validator = new Validator();
+  }
+
+  async convertToLootable({
+    token,
+    chanceOfDamagedItems,
+    damagedItemsMultiplier,
+    removeDamagedItems,
+  }) {
+    chanceOfDamagedItems ??= this._settings.chanceOfDamagedItems;
+    damagedItemsMultiplier ??= this._settings.damagedItemsMultiplier;
+    removeDamagedItems ??= this._settings.removeDamagedItems;
+
+    const sheet = token.actor.sheet;
+
+    // -1 for opened before but now closed
+    // 0 for closed and never opened
+    // 1 for currently open
+    const priorState = sheet._state;
+
+    // Close the old sheet if it's open
+    await sheet.close();
+
+    let newActorData = this._getLootSheetData();
+    newActorData.items = this._getLootableItems(
+      token,
+      chanceOfDamagedItems,
+      damagedItemsMultiplier,
+      removeDamagedItems
+    );
+
+    // Eventually, this might be removed when loot sheet supports regular schema
+    this._handleCurrencySchemaChange(token, newActorData);
+
+    // Delete all items first
+    await token.document.actor.deleteEmbeddedDocuments(
+      'Item',
+      Array.from(token.actor.items.keys())
+    );
+
+    // Update actor with the new sheet and items
+    await token.document.actor.update(newActorData);
+
+    // Update the document with the overlay icon and new permissions
+    await token.document.update({
+      overlayEffect: 'icons/svg/chest.svg',
+      actorData: {
+        actor: {
+          flags: {
+            loot: {
+              playersPermission: CONST.ENTITY_PERMISSIONS.OBSERVER,
+            },
+          },
+        },
+        permission: this._getUpdatedUserPermissions(token),
+      },
+    });
+
+    // Deregister the old sheet class
+    token.actor._sheet = null;
+    delete token.actor.apps[sheet.appId];
+
+    if (priorState > 0) {
+      // Re-draw the updated sheet if it was open
+      token.actor.sheet.render(true);
+    }
+  }
+
+  _getLootSheetData() {
+    return {
+      flags: {
+        core: {
+          sheetClass: 'dnd5e.LootSheet5eNPC',
+        },
+        lootsheetnpc5e: {
+          lootsheettype: 'Loot',
+        },
+      },
+    };
+  }
+
+  // Remove natural weapons, natural armor, class features, spells, and feats.
+  _getLootableItems(
+    token,
+    chanceOfDamagedItems,
+    damagedItemsMultiplier,
+    removeDamagedItems
+  ) {
+    return token.actor.data.items
+      .map((item) => {
+        return item.toObject();
+      })
+      .filter((item) => {
+        if (item.type == 'weapon') {
+          return item.data.weaponType != 'natural';
+        }
+
+        if (item.type == 'equipment') {
+          if (!item.data.armor) return true;
+          return item.data.armor.type != 'natural';
+        }
+
+        return !['class', 'spell', 'feat'].includes(item.type);
+      })
+      .filter((item) => {
+        if (this._isItemDamaged(item, chanceOfDamagedItems)) {
+          if (removeDamagedItems) return false;
+
+          item.name += ' (Damaged)';
+          item.data.price *= damagedItemsMultiplier;
+        }
+
+        return true;
+      })
+      .map((item) => {
+        item.data.equipped = false;
+        return item;
+      });
+  }
+
+  _isItemDamaged(item, chanceOfDamagedItems) {
+    const rarity = item.data.rarity;
+    if (!rarity) return false;
+
+    // Never consider items above common rarity breakable
+    if (rarity.toLowerCase() !== 'common' && rarity.toLowerCase() !== 'none')
+      return false;
+
+    return Math.random() < chanceOfDamagedItems;
+  }
+
+  // This is a workaround for the fact that the LootSheetNPC module
+  // currently uses an older currency schema, compared to current 5e expectations.
+  // Need to convert the actor's currency data to the LS schema here to avoid
+  // breakage. If there is already currency on the actor, it is retained.
+  _handleCurrencySchemaChange(token, newActorData) {
+    if (typeof token.actor.data.data.currency.cp === 'number') {
+      let oldCurrencyData = token.actor.data.data.currency;
+      newActorData['data.currency'] = {
+        cp: { value: oldCurrencyData.cp },
+        ep: { value: oldCurrencyData.ep },
+        gp: { value: oldCurrencyData.gp },
+        pp: { value: oldCurrencyData.pp },
+        sp: { value: oldCurrencyData.sp },
+      };
+    }
+  }
+
+  // Update permissions to observer level, so players can loot
+  _getUpdatedUserPermissions(token) {
+    let lootingUsers = game.users.filter((user) => {
+      return (
+        user.role == CONST.USER_ROLES.PLAYER ||
+        user.role == CONST.USER_ROLES.TRUSTED
+      );
+    });
+
+    let permissions = {};
+    Object.assign(permissions, token.actor.data.permission);
+
+    lootingUsers.forEach((user) => {
+      permissions[user.data._id] = CONST.ENTITY_PERMISSIONS.OBSERVER;
+    });
+
+    return permissions;
   }
 
   /**

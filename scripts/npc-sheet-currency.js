@@ -91,24 +91,47 @@ export default class NpcSheetCurrency {
     const button = event.currentTarget;
     switch (button.dataset.action) {
       case 'convertCurrency':
-        await Dialog.confirm({
-          title: `${game.i18n.localize('DND5E.CurrencyConvert')}`,
-          content: `<p>${game.i18n.localize('DND5E.CurrencyConvertHint')}</p>`,
-          yes: () => this._app.actor.convertCurrency(),
-        });
+        await this._convertCurrency();
         break;
       case 'regenerateCurrency':
-        await Dialog.confirm({
-          title: 'Regenerate All Currency',
-          content: `<p>Regenerate all currency for this NPC. Be wary, this will remove all current coinage carried by the NPC and cannot be undone.</p>`,
-          yes: async () => {
-            const actor = this._app.actor;
-            const pocketChange = new game.dfreds.PocketChange();
-            const currency = pocketChange.generateCurrency(actor);
-            await actor.update({ 'data.currency': currency });
-          },
-        });
+        await this._regenerateCurrency();
+        break;
+      case 'convertToLoot':
+        await this._convertToLoot();
         break;
     }
+  }
+
+  async _convertCurrency() {
+    return Dialog.confirm({
+      title: `${game.i18n.localize('DND5E.CurrencyConvert')}`,
+      content: `<p>${game.i18n.localize('DND5E.CurrencyConvertHint')}</p>`,
+      yes: () => this._app.actor.convertCurrency(),
+    });
+  }
+
+  async _regenerateCurrency() {
+    return Dialog.confirm({
+      title: 'Regenerate All Currency',
+      content: `<p>Regenerate all currency for this NPC. Be wary, this will remove all current coinage carried by the NPC and cannot be undone.</p>`,
+      yes: async () => {
+        const actor = this._app.actor;
+        const pocketChange = new game.dfreds.PocketChange();
+        const currency = pocketChange.generateCurrency(actor);
+        await actor.update({ 'data.currency': currency });
+      },
+    });
+  }
+
+  async _convertToLoot() {
+    return Dialog.confirm({
+      title: 'Convert to Lootable',
+      content: `<p>Convert this token to a lootable sheet. Be wary, this will only keep items and convert the token to a loot sheet that players can interact with. This cannot be undone.</p>`,
+      yes: async () => {
+        const token = this._app.token;
+        const pocketChange = new game.dfreds.PocketChange();
+        await pocketChange.convertToLootable({ token: token.object });
+      },
+    });
   }
 }
