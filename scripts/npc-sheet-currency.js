@@ -104,11 +104,11 @@ export default class NpcSheetCurrency {
       case 'convertCurrency':
         await this._convertCurrency();
         break;
-      case 'regenerateCurrency':
-        await this._regenerateCurrency();
+      case 'generateCurrency':
+        await this._generateCurrency();
         break;
-      case 'convertToLoot':
-        await this._convertToLoot();
+      case 'convertToLootable':
+        await this._convertToLootable();
         break;
     }
   }
@@ -121,7 +121,7 @@ export default class NpcSheetCurrency {
     });
   }
 
-  async _regenerateCurrency() {
+  async _generateCurrency() {
     return Dialog.confirm({
       title: 'Generate Currency',
       content: `<p>Generate currency for this NPC. Be wary, this will replace all current coins carried by the NPC and cannot be undone.</p>`,
@@ -135,7 +135,7 @@ export default class NpcSheetCurrency {
     });
   }
 
-  async _convertToLoot() {
+  async _convertToLootable() {
     return Dialog.confirm({
       title: 'Convert to Lootable',
       content: `<p>Convert this token to a lootable sheet. Be wary, this will only keep items and convert the token to a loot sheet that players can interact with. This cannot be undone.</p>`,
