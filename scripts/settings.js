@@ -6,6 +6,7 @@ export default class Settings {
 
   // Settings keys
   static ENABLED = 'enabled';
+  static SHOW_CURRENCY_ON_NPCS = 'showCurrencyOnNpcs';
   static CREATURE_TYPES = 'creatureTypes';
   static CHANCE_OF_NO_CURRENCY = 'chanceOfNoCurrency';
   static CURRENCY_MULTIPLIER = 'currencyMultiplier';
@@ -29,6 +30,19 @@ export default class Settings {
       default: true,
       type: Boolean,
     });
+
+    game.settings.register(
+      Settings.PACKAGE_NAME,
+      Settings.SHOW_CURRENCY_ON_NPCS,
+      {
+        name: 'Show Currency on NPCs',
+        hint: 'If enabled, currency will be displayed on NPC actor sheets. Currently supports the default actor sheet and Tidy.',
+        scope: 'world',
+        config: true,
+        default: true,
+        type: Boolean,
+      }
+    );
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.CREATURE_TYPES, {
       name: 'Creature types',
@@ -168,6 +182,18 @@ export default class Settings {
    */
   get enabled() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.ENABLED);
+  }
+
+  /**
+   * Returns the game setting for showing currency on NPCs
+   *
+   * @returns {Boolean} true if currency should be displayed on NPCs
+   */
+  get showCurrencyOnNpcs() {
+    return game.settings.get(
+      Settings.PACKAGE_NAME,
+      Settings.SHOW_CURRENCY_ON_NPCS
+    );
   }
 
   /**
