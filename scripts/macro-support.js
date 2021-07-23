@@ -1,6 +1,5 @@
 import Settings from './settings.js';
 
-// TODO remove this entirely, fix macros
 export default class MacroSupport {
   constructor() {
     this._settings = new Settings();
@@ -10,43 +9,33 @@ export default class MacroSupport {
    * For all selected tokens, generate currency for them
    */
   generateCurrencyForSelectedTokens() {
-    new Dialog({
-      title: 'Currency Generator',
-      content: `Generate currency for all selected tokens?`,
-      buttons: {
-        no: {
-          icon: '<i class="fas fa-ban"></i>',
-          label: 'Cancel',
-        },
-        yes: {
-          icon: '<i class="fas fa-thumbs-up"></i>',
-          label: 'Generate',
-          callback: (html) => {
-            // Notify if no tokens selected
-            if (canvas.tokens.controlled.length == 0) {
-              ui.notifications.error(
-                'Tokens must be selected to generate currency'
-              );
-              return;
-            }
+    return Dialog.confirm({
+      title: 'Generate Currency',
+      content: `<p>Generate currency for this NPC. Be wary, this will replace all current coins carried by the NPC and cannot be undone.</p>`,
+      yes: async () => {
+        // Notify if no tokens selected
+        if (canvas.tokens.controlled.length == 0) {
+          ui.notifications.error(
+            'Tokens must be selected to generate currency'
+          );
+          return;
+        }
 
-            // Only affect valid tokens
-            const filtered = canvas.tokens.controlled.filter((token) =>
-              this._isTokenValid(token)
-            );
-            filtered.forEach(
-              async (token) => await this._generateCurrencyForToken(token)
-            );
+        // Only affect valid tokens
+        const filtered = canvas.tokens.controlled.filter((token) =>
+          this._isTokenValid(token)
+        );
+        filtered.forEach(
+          async (token) => await this._generateCurrencyForToken(token)
+        );
 
-            // Notify number of tokens that were effected
-            ui.notifications.info(
-              `Generated currency for ${filtered.length} tokens`
-            );
-          },
-        },
+        // Notify number of tokens that were effected
+        ui.notifications.info(
+          `Generated currency for ${filtered.length} tokens`
+        );
       },
-      default: 'no',
-    }).render(true);
+      defaultYes: false,
+    });
   }
 
   _isTokenValid(token) {
@@ -55,12 +44,7 @@ export default class MacroSupport {
       return false;
     }
 
-    if (token.actor.data.token.actorLink) {
-      ui.notifications.warn(`Cannot modify linked token ${token.name}`);
-      return false;
-    }
-
-    if (token.actor.data.type != 'npc') {
+    if (token.actor.data.type !== 'npc') {
       ui.notifications.warn(`Cannot modify non-NPC token ${token.name}`);
       return false;
     }
@@ -93,48 +77,36 @@ export default class MacroSupport {
     damagedItemsMultiplier,
     removeDamagedItems
   ) {
-    new Dialog({
-      title: 'Loot Converter',
-      content: `Convert all selected tokens to loot?`,
-      buttons: {
-        no: {
-          icon: '<i class="fas fa-ban"></i>',
-          label: 'Cancel',
-        },
-        yes: {
-          icon: '<i class="fas fa-thumbs-up"></i>',
-          label: 'Convert',
-          callback: (html) => {
-            // Notify if no tokens selected
-            if (canvas.tokens.controlled.length == 0) {
-              ui.notifications.error(
-                'Tokens must be selected to convert to loot'
-              );
-              return;
-            }
+    return Dialog.confirm({
+      title: 'Convert to Lootable',
+      content: `<p>Convert this token to a lootable sheet. Be wary, this will only keep items and convert the token to a loot sheet that players can interact with. This cannot be undone.</p>`,
+      yes: async () => {
+        // Notify if no tokens selected
+        if (canvas.tokens.controlled.length == 0) {
+          ui.notifications.error(
+            'Tokens must be selected to convert to lootable'
+          );
+          return;
+        }
 
-            // Only affect valid tokens
-            const filtered = canvas.tokens.controlled.filter((token) =>
-              this._isTokenValid(token)
-            );
-            filtered.forEach(async (token) => {
-              const pocketChange = new game.dfreds.PocketChange();
-              await pocketChange.convertToLootable({
-                token,
-                chanceOfDamagedItems,
-                damagedItemsMultiplier,
-                removeDamagedItems,
-              });
-            });
+        // Only affect valid tokens
+        const filtered = canvas.tokens.controlled.filter((token) =>
+          this._isTokenValid(token)
+        );
+        filtered.forEach(async (token) => {
+          const pocketChange = new game.dfreds.PocketChange();
+          await pocketChange.convertToLoot({
+            token,
+            chanceOfDamagedItems,
+            damagedItemsMultiplier,
+            removeDamagedItems,
+          });
+        });
 
-            // Notify number of tokens that were effected
-            ui.notifications.info(
-              `Converted ${filtered.length} tokens to loot`
-            );
-          },
-        },
+        // Notify number of tokens that were effected
+        ui.notifications.info(`Converted ${filtered.length} tokens to loot`);
       },
-      default: 'no',
-    }).render(true);
+      defaultYes: false,
+    });
   }
 }
