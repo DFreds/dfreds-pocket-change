@@ -194,10 +194,9 @@ export default class PocketChange {
    * @param {TokenDocument5e} tokenDocument - The token document for the dropped actor
    */
   populateTreasureForToken(tokenDocument) {
-    const tokenData = tokenDocument.data;
     const actor = tokenDocument.actor;
 
-    if (!this._validator.isValid(tokenData, actor)) return;
+    if (!this._validator.shouldAutoGenerateCurrency(actor)) return;
 
     log('Generating treasure');
 
