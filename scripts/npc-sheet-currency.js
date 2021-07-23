@@ -1,5 +1,8 @@
 import Settings from './settings.js';
 
+/**
+ * Handles injection of currency rows and actions in NPC sheets
+ */
 export default class NpcSheetCurrency {
   constructor({ app, html, data }) {
     this._app = app;
@@ -120,14 +123,15 @@ export default class NpcSheetCurrency {
 
   async _regenerateCurrency() {
     return Dialog.confirm({
-      title: 'Regenerate All Currency',
-      content: `<p>Regenerate all currency for this NPC. Be wary, this will remove all current coinage carried by the NPC and cannot be undone.</p>`,
+      title: 'Generate Currency',
+      content: `<p>Generate currency for this NPC. Be wary, this will replace all current coins carried by the NPC and cannot be undone.</p>`,
       yes: async () => {
         const actor = this._app.actor;
         const pocketChange = new game.dfreds.PocketChange();
         const currency = pocketChange.generateCurrency(actor);
         await actor.update({ 'data.currency': currency });
       },
+      defaultYes: false,
     });
   }
 
@@ -140,6 +144,7 @@ export default class NpcSheetCurrency {
         const pocketChange = new game.dfreds.PocketChange();
         await pocketChange.convertToLoot({ token: token.object });
       },
+      defaultYes: false,
     });
   }
 }
