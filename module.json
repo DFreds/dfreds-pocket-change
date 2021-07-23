@@ -22,7 +22,13 @@
   "scripts": [],
   "esmodules": ["./scripts/main.js"],
   "styles": [],
-  "languages": [],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
   "packs": [
     {
       "name": "dfreds-pocket-change-macros",
