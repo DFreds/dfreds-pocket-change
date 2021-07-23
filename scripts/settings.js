@@ -23,8 +23,8 @@ export default class Settings {
    */
   registerSettings() {
     game.settings.register(Settings.PACKAGE_NAME, Settings.ENABLED, {
-      name: 'Enabled',
-      hint: 'If enabled, currency will be generated for tokens dropped in scenes.',
+      name: game.i18n.localize('PocketChange.SettingEnabled'),
+      hint: game.i18n.localize('PocketChange.SettingEnabledHint'),
       scope: 'world',
       config: true,
       default: true,
@@ -35,8 +35,8 @@ export default class Settings {
       Settings.PACKAGE_NAME,
       Settings.SHOW_CURRENCY_ON_NPCS,
       {
-        name: 'Show Currency on NPCs',
-        hint: 'If enabled, currency will be displayed on NPC actor sheets. Currently supports the default actor sheet and Tidy.',
+        name: game.i18n.localize('PocketChange.SettingShowCurrencyOnNpcs'),
+        hint: game.i18n.localize('PocketChange.SettingShowCurrencyOnNpcsHint'),
         scope: 'world',
         config: true,
         default: true,
@@ -45,8 +45,8 @@ export default class Settings {
     );
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.CREATURE_TYPES, {
-      name: 'Creature types',
-      hint: 'These are the types of creatures that will generate currency, separated via semi-colons. This will match on their type, subtype, and custom type. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity',
+      name: game.i18n.localize('PocketChange.SettingCreatureTypes'),
+      hint: game.i18n.localize('PocketChange.SettingCreatureTypesHint'),
       scope: 'world',
       config: true,
       default: 'Humanoid',
@@ -57,8 +57,8 @@ export default class Settings {
       Settings.PACKAGE_NAME,
       Settings.CHANCE_OF_NO_CURRENCY,
       {
-        name: 'Chance of no currency',
-        hint: 'This is the percent chance that no money will be generated for a token.',
+        name: game.i18n.localize('PocketChange.SettingChanceOfNoCurrency'),
+        hint: game.i18n.localize('PocketChange.SettingChanceOfNoCurrencyHint'),
         scope: 'world',
         config: true,
         default: 0.25,
@@ -75,8 +75,8 @@ export default class Settings {
       Settings.PACKAGE_NAME,
       Settings.CURRENCY_MULTIPLIER,
       {
-        name: 'Currency multiplier',
-        hint: 'This multiplies the generated currency by the given number.',
+        name: game.i18n.localize('PocketChange.SettingCurrencyMultiplier'),
+        hint: game.i18n.localize('PocketChange.SettingCurrencyMultiplierHint'),
         scope: 'world',
         config: true,
         default: 1,
@@ -93,8 +93,10 @@ export default class Settings {
       Settings.PACKAGE_NAME,
       Settings.CHANCE_OF_DAMAGED_ITEMS,
       {
-        name: 'Chance of damaged items',
-        hint: 'This is the percent chance that a Common item will be damaged when a token is converted to loot. A damaged item has its value reduced and appends (Damaged) to the name. Set this to 0 if you want to disable damaged items.',
+        name: game.i18n.localize('PocketChange.SettingChanceOfDamagedItems'),
+        hint: game.i18n.localize(
+          'PocketChange.SettingChanceOfDamagedItemsHint'
+        ),
         scope: 'world',
         config: true,
         default: 0.25,
@@ -111,8 +113,10 @@ export default class Settings {
       Settings.PACKAGE_NAME,
       Settings.DAMAGED_ITEMS_MULTIPLIER,
       {
-        name: 'Damaged items multiplier',
-        hint: 'This multiplies the price of of a damaged item by the given number, lowering its value.',
+        name: game.i18n.localize('PocketChange.SettingDamagedItemsMultiplier'),
+        hint: game.i18n.localize(
+          'PocketChange.SettingDamagedItemsMultiplierHint'
+        ),
         scope: 'world',
         config: true,
         default: 0.25,
@@ -129,8 +133,8 @@ export default class Settings {
       Settings.PACKAGE_NAME,
       Settings.REMOVE_DAMAGED_ITEMS,
       {
-        name: 'Remove damaged items',
-        hint: 'If enabled, this will remove items that are damaged from tokens that are converted to loot.',
+        name: game.i18n.localize('PocketChange.SettingRemoveDamagedItems'),
+        hint: game.i18n.localize('PocketChange.SettingRemoveDamagedItemsHint'),
         scope: 'world',
         config: true,
         default: false,
@@ -139,8 +143,8 @@ export default class Settings {
     );
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.USE_SILVER, {
-      name: 'Use Silver',
-      hint: 'If enabled, generated currency could include silver. Copper is always included.',
+      name: game.i18n.localize('PocketChange.SettingUseSilver'),
+      hint: game.i18n.localize('PocketChange.SettingUseSilverHint'),
       scope: 'world',
       config: true,
       default: true,
@@ -148,8 +152,8 @@ export default class Settings {
     });
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.USE_ELECTRUM, {
-      name: 'Use Electrum',
-      hint: 'If enabled, generated currency could include electrum. Copper is always included.',
+      name: game.i18n.localize('PocketChange.SettingUseElectrum'),
+      hint: game.i18n.localize('PocketChange.SettingUseElectrumHint'),
       scope: 'world',
       config: true,
       default: true,
@@ -157,8 +161,8 @@ export default class Settings {
     });
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.USE_GOLD, {
-      name: 'Use Gold',
-      hint: 'If enabled, generated currency could include gold. Copper is always included.',
+      name: game.i18n.localize('PocketChange.SettingUseGold'),
+      hint: game.i18n.localize('PocketChange.SettingUseGoldHint'),
       scope: 'world',
       config: true,
       default: true,
@@ -166,8 +170,8 @@ export default class Settings {
     });
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.USE_PLATINUM, {
-      name: 'Use Platinum',
-      hint: 'If enabled, generated currency could include platinum. Copper is always included.',
+      name: game.i18n.localize('PocketChange.SettingUsePlatinum'),
+      hint: game.i18n.localize('PocketChange.SettingUsePlatinumHint'),
       scope: 'world',
       config: true,
       default: true,

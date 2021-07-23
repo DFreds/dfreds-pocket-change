@@ -1,14 +1,50 @@
 {
   "PocketChange.ConvertToLootable": "Convert to Lootable",
-  "PocketChange.ConvertToLootableWarning": "Convert this token to a lootable sheet. Be wary, this will only keep items and convert the token to a loot sheet that players can interact with. This cannot be undone.",
-  "PocketChange.ConvertToLootableErrorNoTokensSelected": "Tokens must be selected to convert to lootable",
-
   "PocketChange.ConvertToLootableConfirmation": "Converted {number} tokens to loot",
+  "PocketChange.ConvertToLootableErrorNoTokensSelected": "Tokens must be selected to convert to lootable",
+  "PocketChange.ConvertToLootableWarning": "Convert this token to a lootable sheet. Be wary, this will only keep items and convert the token to a loot sheet that players can interact with. This cannot be undone.",
 
-  "PocketChange.GenerateCurrencyErrorNoTokensSelected": "Tokens must be selected to generate currency",
   "PocketChange.GenerateCurrency": "Generate Currency",
   "PocketChange.GenerateCurrencyConfirmation": "Generated currency for {number} tokens",
+  "PocketChange.GenerateCurrencyErrorNoTokensSelected": "Tokens must be selected to generate currency",
   "PocketChange.GenerateCurrencyWarning": "Generate currency for this NPC. Be wary, this will replace all current coins carried by the NPC and cannot be undone.",
+
+  "PocketChange.SettingEnabled": "Enabled",
+  "PocketChange.SettingEnabledHint": "If enabled, currency will be generated for tokens dropped in scenes.",
+
+  "PocketChange.SettingShowCurrencyOnNpcs": "Show Currency on NPC sheets",
+  "PocketChange.SettingShowCurrencyOnNpcsHint": "If enabled, currency will be displayed on NPC actor sheets. Currently supports the default actor sheet and Tidy.",
+
+  "PocketChange.SettingCreatureTypes": "Creature Types",
+  "PocketChange.SettingCreatureTypesHint": "These are the types of creatures that will generate currency, separated via semi-colons. This will match on their type, subtype, and custom type. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity",
+
+  "PocketChange.SettingChanceOfNoCurrency": "Chance of No Currency",
+  "PocketChange.SettingChanceOfNoCurrencyHint": "This is the percent chance that no money will be generated for a token.",
+
+  "PocketChange.SettingCurrencyMultiplier": "Currency Multiplier",
+  "PocketChange.SettingCurrencyMultiplierHint": "This multiplies the generated currency by the given number.",
+
+  "PocketChange.SettingChanceOfDamagedItems": "Chance of Damaged Items",
+  "PocketChange.SettingChanceOfDamagedItemsHint": "This is the percent chance that a Common item will be damaged when a token is converted to loot. A damaged item has its value reduced and appends (Damaged) to the name. Set this to 0 if you want to disable damaged items.",
+
+  "PocketChange.SettingDamagedItemsMultiplier": "Damaged Items Multiplier",
+  "PocketChange.SettingDamagedItemsMultiplierHint": "This multiplies the price of of a damaged item by the given number, lowering its value.",
+
+  "PocketChange.SettingRemoveDamagedItems": "Remove Damaged Items",
+  "PocketChange.SettingRemoveDamagedItemsHint": "If enabled, this will remove items that are damaged from tokens that are converted to loot.",
+
+  "PocketChange.SettingUseSilver": "Use Silver",
+  "PocketChange.SettingUseSilverHint": "If enabled, generated currency could include silver. Copper is always included.",
+
+  "PocketChange.SettingUseElectrum": "Use Electrum",
+  "PocketChange.SettingUseElectrumHint": "If enabled, generated currency could include electrum. Copper is always included.",
+
+  "PocketChange.SettingUseGold": "Use Gold",
+  "PocketChange.SettingUseGoldHint": "If enabled, generated currency could include gold. Copper is always included.",
+
+  "PocketChange.SettingUsePlatinum": "Use Platinum",
+  "PocketChange.SettingUsePlatinumHint": "If enabled, generated currency could include platinum. Copper is always included.",
+
   "PocketChange.WarningModifyNonNpcToken": "Cannot modify non-NPC token {name}",
   "PocketChange.WarningModifyPlayerOwnedToken": "Cannot modify player owned token {name}"
 }
