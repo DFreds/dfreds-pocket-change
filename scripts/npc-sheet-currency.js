@@ -1,14 +1,20 @@
+import Settings from './settings.js';
+
 export default class NpcSheetCurrency {
   constructor({ app, html, data }) {
     this._app = app;
     this._html = html;
     this._data = data;
+
+    this._settings = new Settings();
   }
 
   /**
    * Injects the currency row into an NPC sheet
    */
   async injectCurrencyRow() {
+    if (!this._settings.showCurrencyOnNpcs) return;
+
     if (this._isDefaultSheet) {
       this._handleDefaultInjection();
     } else if (this._isTidySheet) {
