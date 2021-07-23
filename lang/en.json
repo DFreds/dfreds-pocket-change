@@ -45,6 +45,7 @@
   "PocketChange.SettingUsePlatinum": "Use Platinum",
   "PocketChange.SettingUsePlatinumHint": "If enabled, generated currency could include platinum. Copper is always included.",
 
+  "PocketChange.WarningModifyLootSheetToken": "Cannot modify existing loot sheet token {name}",
   "PocketChange.WarningModifyNonNpcToken": "Cannot modify non-NPC token {name}",
   "PocketChange.WarningModifyPlayerOwnedToken": "Cannot modify player owned token {name}"
 }

@@ -63,6 +63,15 @@ export default class MacroSupport {
       return false;
     }
 
+    if (token.actor.sheet.template.includes('lootsheetnpc5e')) {
+      ui.notifications.warn(
+        game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
+          name: token.name,
+        })
+      );
+      return false;
+    }
+
     return true;
   }
 
