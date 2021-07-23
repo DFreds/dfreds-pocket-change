@@ -12,15 +12,15 @@
       </li>
       {{/each}}
       <li class="currency-item convert">
-        <a class="currency-convert rollable" data-action="convertCurrency"
-          title="{{localize 'DND5E.CurrencyConvert'}}">
+        <a class="currency-convert rollable" data-action="convertCurrency" title="{{localize 'DND5E.CurrencyConvert'}}">
           <i class="fas fa-funnel-dollar"></i>
         </a>
-        <a style="margin-left: 4px;" class="currency-regenerate rollable" data-action="regenerateCurrency" title="Regenerate Currency">
+        <a style="margin-left: 4px;" class="currency-regenerate rollable" data-action="generateCurrency"
+          title="{{localize 'PocketChange.GenerateCurrency'}}">
           <i class="fas fa-redo"></i>
         </a>
         {{#if config.hasToken}}
-        <a style="margin-left: 4px;" class="currency-loot rollable" data-action="convertToLoot" title="Convert to Loot">
+        <a style="margin-left: 4px;" class="currency-loot rollable" data-action="convertToLootable" title="{{localize 'PocketChange.ConvertToLootable'}}">
           <i class="fas fa-shopping-bag"></i>
         </a>
         {{/if}}
