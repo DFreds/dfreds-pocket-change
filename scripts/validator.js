@@ -10,17 +10,15 @@ export default class Validator {
   }
 
   /**
-   * Checks if the provided token and actor can have currency generated for it
-   * or can be converted to loot.
+   * Checks if the provided token and actor can have currency generated for it.
    *
-   * @param {Token} token - the token to check
-   * @param {Actor} actor - the corresponding actor to check
-   *
-   * @returns {Boolean} true if it can have currency genereated for it or be
-   * converted to loot
+   * @param {Actor5e} actor - the actor to check
+   * @returns {Boolean} true if it can have currency genereated for it
    */
-  isValid(token, actor) {
+  async shouldAutoGenerateCurrency(actor) {
     if (!actor) return false;
+
+    const tokenData = await actor.getTokenData();
 
     if (!this._settings.enabled) {
       log("Refuse to generate treasure because you don't want me to");
@@ -39,7 +37,7 @@ export default class Validator {
       return false;
     }
 
-    if (this._isLinked(token)) {
+    if (this._isLinked(tokenData)) {
       log('Refuse to generate treasure for linked characters');
       return false;
     }
