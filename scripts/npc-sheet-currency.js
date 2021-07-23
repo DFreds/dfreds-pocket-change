@@ -123,8 +123,10 @@ export default class NpcSheetCurrency {
 
   async _generateCurrency() {
     return Dialog.confirm({
-      title: 'Generate Currency',
-      content: `<p>Generate currency for this NPC. Be wary, this will replace all current coins carried by the NPC and cannot be undone.</p>`,
+      title: game.i18n.localize('PocketChange.GenerateCurrency'),
+      content: `<p>${game.i18n.localize(
+        'PocketChange.GenerateCurrencyWarning'
+      )}</p>`,
       yes: async () => {
         const actor = this._app.actor;
         const pocketChange = new game.dfreds.PocketChange();
@@ -137,8 +139,10 @@ export default class NpcSheetCurrency {
 
   async _convertToLootable() {
     return Dialog.confirm({
-      title: 'Convert to Lootable',
-      content: `<p>Convert this token to a lootable sheet. Be wary, this will only keep items and convert the token to a loot sheet that players can interact with. This cannot be undone.</p>`,
+      title: game.i18n.localize('PocketChange.ConvertToLootable'),
+      content: `<p>${game.i18n.localize(
+        'PocketChange.ConvertToLootableWarning'
+      )}</p>`,
       yes: async () => {
         const token = this._app.token;
         const pocketChange = new game.dfreds.PocketChange();

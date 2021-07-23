@@ -10,13 +10,17 @@ export default class MacroSupport {
    */
   generateCurrencyForSelectedTokens() {
     return Dialog.confirm({
-      title: 'Generate Currency',
-      content: `<p>Generate currency for this NPC. Be wary, this will replace all current coins carried by the NPC and cannot be undone.</p>`,
+      title: game.i18n.localize('PocketChange.GenerateCurrency'),
+      content: `<p>${game.i18n.localize(
+        'PocketChange.GenerateCurrencyWarning'
+      )}</p>`,
       yes: async () => {
         // Notify if no tokens selected
         if (canvas.tokens.controlled.length == 0) {
           ui.notifications.error(
-            'Tokens must be selected to generate currency'
+            game.i18n.localize(
+              'PocketChange.GenerateCurrencyErrorNoTokensSelected'
+            )
           );
           return;
         }
@@ -31,7 +35,9 @@ export default class MacroSupport {
 
         // Notify number of tokens that were effected
         ui.notifications.info(
-          `Generated currency for ${filtered.length} tokens`
+          game.i18n.format('PocketChange.GenerateCurrencyConfirmation', {
+            number: filtered.length,
+          })
         );
       },
       defaultYes: false,
@@ -40,12 +46,20 @@ export default class MacroSupport {
 
   _isTokenValid(token) {
     if (token.actor.hasPlayerOwner) {
-      ui.notifications.warn(`Cannot modify player owned token ${token.name}`);
+      ui.notifications.warn(
+        game.i18n.format('PocketChange.WarningModifyPlayerOwnedToken', {
+          name: token.name,
+        })
+      );
       return false;
     }
 
     if (token.actor.data.type !== 'npc') {
-      ui.notifications.warn(`Cannot modify non-NPC token ${token.name}`);
+      ui.notifications.warn(
+        game.i18n.format('PocketChange.WarningModifyNonNpcToken', {
+          name: token.name,
+        })
+      );
       return false;
     }
 
@@ -78,13 +92,17 @@ export default class MacroSupport {
     removeDamagedItems
   ) {
     return Dialog.confirm({
-      title: 'Convert to Lootable',
-      content: `<p>Convert this token to a lootable sheet. Be wary, this will only keep items and convert the token to a loot sheet that players can interact with. This cannot be undone.</p>`,
+      title: game.i18n.localize('PocketChange.ConvertToLootable'),
+      content: `<p>${game.i18n.localize(
+        'PocketChange.ConvertToLootableWarning'
+      )}</p>`,
       yes: async () => {
         // Notify if no tokens selected
         if (canvas.tokens.controlled.length == 0) {
           ui.notifications.error(
-            'Tokens must be selected to convert to lootable'
+            game.i18n.localize(
+              'PocketChange.ConvertToLootableErrorNoTokensSelected'
+            )
           );
           return;
         }
@@ -104,7 +122,11 @@ export default class MacroSupport {
         });
 
         // Notify number of tokens that were effected
-        ui.notifications.info(`Converted ${filtered.length} tokens to loot`);
+        ui.notifications.info(
+          game.i18n.format('PocketChange.ConvertToLootableConfirmation', {
+            number: filtered.length,
+          })
+        );
       },
       defaultYes: false,
     });
