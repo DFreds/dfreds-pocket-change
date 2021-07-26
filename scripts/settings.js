@@ -7,6 +7,7 @@ export default class Settings {
   // Settings keys
   static ENABLED = 'enabled';
   static SHOW_CURRENCY_ON_NPCS = 'showCurrencyOnNpcs';
+  static SHOW_CHAT_MESSAGE = 'showChatMessage';
   static CREATURE_TYPES = 'creatureTypes';
   static CHANCE_OF_NO_CURRENCY = 'chanceOfNoCurrency';
   static CURRENCY_MULTIPLIER = 'currencyMultiplier';
@@ -43,6 +44,15 @@ export default class Settings {
         type: Boolean,
       }
     );
+
+    game.settings.register(Settings.PACKAGE_NAME, Settings.SHOW_CHAT_MESSAGE, {
+      name: game.i18n.localize('PocketChange.SettingShowChatMessage'),
+      hint: game.i18n.localize('PocketChange.SettingShowChatMessageHint'),
+      scope: 'world',
+      config: true,
+      default: false,
+      type: Boolean,
+    });
 
     game.settings.register(Settings.PACKAGE_NAME, Settings.CREATURE_TYPES, {
       name: game.i18n.localize('PocketChange.SettingCreatureTypes'),
@@ -198,6 +208,15 @@ export default class Settings {
       Settings.PACKAGE_NAME,
       Settings.SHOW_CURRENCY_ON_NPCS
     );
+  }
+
+  /**
+   * Returns the game setting for show chat message
+   *
+   * @returns {Boolean} true if a chat message should be displayed for dropped tokens
+   */
+  get showChatMessage() {
+    return game.settings.get(Settings.PACKAGE_NAME, Settings.SHOW_CHAT_MESSAGE);
   }
 
   /**

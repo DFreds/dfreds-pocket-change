@@ -15,6 +15,9 @@
   "PocketChange.SettingShowCurrencyOnNpcs": "Show Currency on NPC sheets",
   "PocketChange.SettingShowCurrencyOnNpcsHint": "If enabled, currency will be displayed on NPC actor sheets. Currently supports the default actor sheet and Tidy.",
 
+  "PocketChange.SettingShowChatMessage": "Show Chat Message",
+  "PocketChange.SettingShowChatMessageHint": "If enabled, a chat message will be created any time currency is generated.",
+
   "PocketChange.SettingCreatureTypes": "Creature Types",
   "PocketChange.SettingCreatureTypesHint": "These are the types of creatures that will generate currency, separated via semi-colons. This will match on their type, subtype, and custom type. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity",
 

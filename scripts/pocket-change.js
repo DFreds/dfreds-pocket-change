@@ -16,6 +16,178 @@ export default class PocketChange {
   }
 
   /**
+   * Takes the provided token and adds currency to it if it is valid
+   *
+   * @param {TokenDocument5e} tokenDocument - The token document for the dropped actor
+   */
+  populateTreasureForToken(tokenDocument) {
+    const actor = tokenDocument.actor;
+
+    if (!this._validator.shouldAutoGenerateCurrency(actor)) return;
+
+    log('Generating treasure');
+
+    tokenDocument.data.update({
+      actorData: {
+        data: {
+          currency: this.generateCurrency(actor),
+        },
+      },
+    });
+  }
+
+  /**
+   * Generates currency for the provided actor based on its challenge rating
+   *
+   * @param {Actor5e} actor - The actor to base the coin generation off of
+   */
+  generateCurrency(actor) {
+    let currency;
+
+    if (this._isWithinChallengeRating(actor, 0, 4)) {
+      currency = this._treasureForChallengeRating0to4(actor);
+    } else if (this._isWithinChallengeRating(actor, 5, 10)) {
+      currency = this._treasureForChallengeRating5to10(actor);
+    } else if (this._isWithinChallengeRating(actor, 11, 16)) {
+      currency = this._treasureForChallengeRating11to16(actor);
+    } else if (this._isWithinChallengeRating(actor, 17, 100)) {
+      currency = this._treasureForChallengeRating17andUp(actor);
+    }
+
+    currency.convertCurrencies();
+
+    const converted = currency.convertToStandardCurrency();
+    if (this._settings.showChatMessage) {
+      this._showChatMessage(actor, converted);
+    }
+
+    return converted;
+  }
+
+  _isWithinChallengeRating(actor, lowerCr, upperCr) {
+    let cr = actor.data.data.details.cr;
+    return cr >= lowerCr && cr <= upperCr;
+  }
+
+  _treasureForChallengeRating0to4(actor) {
+    let currency = new Currency(actor);
+    let roll = this._rollDice('1d100');
+
+    if (roll >= 1 && roll <= 30) {
+      currency.addCopper(this._rollDice('5d6'));
+    } else if (roll >= 31 && roll <= 60) {
+      currency.addSilver(this._rollDice('4d6'));
+    } else if (roll >= 61 && roll <= 70) {
+      currency.addElectrum(this._rollDice('3d6'));
+    } else if (roll >= 71 && roll <= 95) {
+      currency.addGold(this._rollDice('3d6'));
+    } else {
+      currency.addPlatinum(this._rollDice('1d6'));
+    }
+
+    return currency;
+  }
+
+  _treasureForChallengeRating5to10(actor) {
+    let currency = new Currency(actor);
+    let roll = this._rollDice('1d100');
+
+    if (roll >= 1 && roll <= 30) {
+      currency.addCopper(this._rollDice('4d6*100'));
+      currency.addElectrum(this._rollDice('1d6*10'));
+    } else if (roll >= 31 && roll <= 60) {
+      currency.addSilver(this._rollDice('6d6*10'));
+      currency.addGold(this._rollDice('2d6*10'));
+    } else if (roll >= 61 && roll <= 70) {
+      currency.addElectrum(this._rollDice('3d6*10'));
+      currency.addGold(this._rollDice('2d6*10'));
+    } else if (roll >= 71 && roll <= 95) {
+      currency.addGold(this._rollDice('4d6*10'));
+    } else {
+      currency.addGold(this._rollDice('2d6*10'));
+      currency.addPlatinum(this._rollDice('3d6'));
+    }
+
+    return currency;
+  }
+
+  _treasureForChallengeRating11to16(actor) {
+    let currency = new Currency(actor);
+    let roll = this._rollDice('1d100');
+
+    if (roll >= 1 && roll <= 20) {
+      currency.addSilver(this._rollDice('4d6*100'));
+      currency.addGold(this._rollDice('1d6*100'));
+    } else if (roll >= 21 && roll <= 35) {
+      currency.addElectrum(this._rollDice('1d6*100'));
+      currency.addGold(this._rollDice('1d6*100'));
+    } else if (roll >= 36 && roll <= 75) {
+      currency.addGold(this._rollDice('2d6*100'));
+      currency.addPlatinum(this._rollDice('1d6*10'));
+    } else {
+      currency.addGold(this._rollDice('2d6*100'));
+      currency.addPlatinum(this._rollDice('2d6*10'));
+    }
+
+    return currency;
+  }
+
+  _treasureForChallengeRating17andUp(actor) {
+    let currency = new Currency(actor);
+    let roll = this._rollDice('1d100');
+
+    if (roll >= 1 && roll <= 15) {
+      currency.addElectrum(this._rollDice('2d6*1000'));
+      currency.addGold(this._rollDice('8d6*100'));
+    } else if (roll >= 16 && roll <= 55) {
+      currency.addGold(this._rollDice('1d6*1000'));
+      currency.addPlatinum(this._rollDice('1d6*100'));
+    } else {
+      currency.addGold(this._rollDice('1d6*1000'));
+      currency.addPlatinum(this._rollDice('2d6*100'));
+    }
+
+    return currency;
+  }
+
+  _rollDice(formula) {
+    const roll = new Roll(formula);
+    roll.evaluate({
+      async: false, // TODO eventually, this will be asynchronous and will need to handle it
+    });
+    return roll.total;
+  }
+
+  _showChatMessage(actor, currency) {
+    ChatMessage.create({
+      user: game.userId,
+      whisper: game.users.filter((user) => user.isGM).map((gm) => gm.id),
+      flavor: `Currency generated for ${actor.name}`,
+      content: this._currencyToString(currency),
+    });
+  }
+
+  _currencyToString(currency) {
+    return `
+    <table>
+      <tr>
+        <th>PP</th>
+        <th>GP</th>
+        <th>EP</th>
+        <th>SP</th>
+        <th>CP</th>
+      </tr>
+      <tr>
+        <td>${currency.pp}</td>
+        <td>${currency.gp}</td>
+        <td>${currency.ep}</td>
+        <td>${currency.sp}</td>
+        <td>${currency.cp}</td>
+    </table>
+    `;
+  }
+
+  /**
    * Converts the provided token to a lootable sheet
    *
    * @param {object} options
@@ -186,143 +358,5 @@ export default class PocketChange {
     });
 
     return permissions;
-  }
-
-  /**
-   * Takes the provided token and adds currency to it if it is valid
-   *
-   * @param {TokenDocument5e} tokenDocument - The token document for the dropped actor
-   */
-  populateTreasureForToken(tokenDocument) {
-    const actor = tokenDocument.actor;
-
-    if (!this._validator.shouldAutoGenerateCurrency(actor)) return;
-
-    log('Generating treasure');
-
-    tokenDocument.data.update({
-      actorData: {
-        data: {
-          currency: this.generateCurrency(actor),
-        },
-      },
-    });
-  }
-
-  /**
-   * Generates currency for the provided actor based on its challenge rating
-   *
-   * @param {Actor5e} actor - The actor to base the coin generation off of
-   */
-  generateCurrency(actor) {
-    let currency;
-
-    if (this._isWithinChallengeRating(actor, 0, 4)) {
-      currency = this._treasureForChallengeRating0to4(actor);
-    } else if (this._isWithinChallengeRating(actor, 5, 10)) {
-      currency = this._treasureForChallengeRating5to10(actor);
-    } else if (this._isWithinChallengeRating(actor, 11, 16)) {
-      currency = this._treasureForChallengeRating11to16(actor);
-    } else if (this._isWithinChallengeRating(actor, 17, 100)) {
-      currency = this._treasureForChallengeRating17andUp(actor);
-    }
-
-    currency.convertCurrencies();
-
-    return currency.convertToStandardCurrency();
-  }
-
-  _isWithinChallengeRating(actor, lowerCr, upperCr) {
-    let cr = actor.data.data.details.cr;
-    return cr >= lowerCr && cr <= upperCr;
-  }
-
-  _treasureForChallengeRating0to4(actor) {
-    let currency = new Currency(actor);
-    let roll = this._rollDice('1d100');
-
-    if (roll >= 1 && roll <= 30) {
-      currency.addCopper(this._rollDice('5d6'));
-    } else if (roll >= 31 && roll <= 60) {
-      currency.addSilver(this._rollDice('4d6'));
-    } else if (roll >= 61 && roll <= 70) {
-      currency.addElectrum(this._rollDice('3d6'));
-    } else if (roll >= 71 && roll <= 95) {
-      currency.addGold(this._rollDice('3d6'));
-    } else {
-      currency.addPlatinum(this._rollDice('1d6'));
-    }
-
-    return currency;
-  }
-
-  _treasureForChallengeRating5to10(actor) {
-    let currency = new Currency(actor);
-    let roll = this._rollDice('1d100');
-
-    if (roll >= 1 && roll <= 30) {
-      currency.addCopper(this._rollDice('4d6*100'));
-      currency.addElectrum(this._rollDice('1d6*10'));
-    } else if (roll >= 31 && roll <= 60) {
-      currency.addSilver(this._rollDice('6d6*10'));
-      currency.addGold(this._rollDice('2d6*10'));
-    } else if (roll >= 61 && roll <= 70) {
-      currency.addElectrum(this._rollDice('3d6*10'));
-      currency.addGold(this._rollDice('2d6*10'));
-    } else if (roll >= 71 && roll <= 95) {
-      currency.addGold(this._rollDice('4d6*10'));
-    } else {
-      currency.addGold(this._rollDice('2d6*10'));
-      currency.addPlatinum(this._rollDice('3d6'));
-    }
-
-    return currency;
-  }
-
-  _treasureForChallengeRating11to16(actor) {
-    let currency = new Currency(actor);
-    let roll = this._rollDice('1d100');
-
-    if (roll >= 1 && roll <= 20) {
-      currency.addSilver(this._rollDice('4d6*100'));
-      currency.addGold(this._rollDice('1d6*100'));
-    } else if (roll >= 21 && roll <= 35) {
-      currency.addElectrum(this._rollDice('1d6*100'));
-      currency.addGold(this._rollDice('1d6*100'));
-    } else if (roll >= 36 && roll <= 75) {
-      currency.addGold(this._rollDice('2d6*100'));
-      currency.addPlatinum(this._rollDice('1d6*10'));
-    } else {
-      currency.addGold(this._rollDice('2d6*100'));
-      currency.addPlatinum(this._rollDice('2d6*10'));
-    }
-
-    return currency;
-  }
-
-  _treasureForChallengeRating17andUp(actor) {
-    let currency = new Currency(actor);
-    let roll = this._rollDice('1d100');
-
-    if (roll >= 1 && roll <= 15) {
-      currency.addElectrum(this._rollDice('2d6*1000'));
-      currency.addGold(this._rollDice('8d6*100'));
-    } else if (roll >= 16 && roll <= 55) {
-      currency.addGold(this._rollDice('1d6*1000'));
-      currency.addPlatinum(this._rollDice('1d6*100'));
-    } else {
-      currency.addGold(this._rollDice('1d6*1000'));
-      currency.addPlatinum(this._rollDice('2d6*100'));
-    }
-
-    return currency;
-  }
-
-  _rollDice(formula) {
-    const roll = new Roll(formula);
-    roll.evaluate({
-      async: false, // TODO eventually, this will be asynchronous and will need to handle it
-    });
-    return roll.total;
   }
 }
