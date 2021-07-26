@@ -13,12 +13,11 @@ export default class Validator {
    * Checks if the provided token and actor can have currency generated for it.
    *
    * @param {Actor5e} actor - the actor to check
+   * @param {Boolean} isLinked - if the actor is linked
    * @returns {Boolean} true if it can have currency genereated for it
    */
-  async shouldAutoGenerateCurrency(actor) {
+  shouldAutoGenerateCurrency(actor, isLinked) {
     if (!actor) return false;
-
-    const tokenData = await actor.getTokenData();
 
     if (!this._settings.enabled) {
       log("Refuse to generate treasure because you don't want me to");
@@ -37,7 +36,7 @@ export default class Validator {
       return false;
     }
 
-    if (this._isLinked(tokenData)) {
+    if (isLinked) {
       log('Refuse to generate treasure for linked characters');
       return false;
     }
@@ -71,10 +70,6 @@ export default class Validator {
 
   _isLootSheetNpc5e(actor) {
     return actor.sheet.template.includes('lootsheetnpc5e');
-  }
-
-  _isLinked(token) {
-    return token.actorLink;
   }
 
   _isActorNpc(actor) {
