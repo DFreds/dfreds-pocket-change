@@ -9,11 +9,11 @@ export default class Currency {
   constructor(actor) {
     this._settings = new Settings();
 
-    this._cp = actor.data.data.currency.cp.value || 0;
-    this._sp = actor.data.data.currency.cp.value || 0;
-    this._ep = actor.data.data.currency.cp.value || 0;
-    this._gp = actor.data.data.currency.cp.value || 0;
-    this._pp = actor.data.data.currency.cp.value || 0;
+    this._cp = actor.data?.data?.currency?.cp?.value || 0;
+    this._sp = actor.data?.data?.currency?.cp?.value || 0;
+    this._ep = actor.data?.data?.currency?.cp?.value || 0;
+    this._gp = actor.data?.data?.currency?.cp?.value || 0;
+    this._pp = actor.data?.data?.currency?.cp?.value || 0;
   }
 
   /**
