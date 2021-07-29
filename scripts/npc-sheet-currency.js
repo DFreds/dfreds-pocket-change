@@ -73,9 +73,9 @@ export default class NpcSheetCurrency {
       .on('click', this._onSheetAction.bind(this));
 
     const injectionPoint = this._html.find(
-      '.sheet-body .attributes .center-pane .spellbook-title'
+      '.sheet-body .attributes .center-pane .inventory-currency .currency'
     );
-    injectionPoint.before(content);
+    injectionPoint.append(content);
   }
 
   async _getTidyTemplate() {
@@ -85,13 +85,6 @@ export default class NpcSheetCurrency {
         data: this._data.data,
         config: {
           hasToken: !!this._app.token,
-          currencies: {
-            pp: game.i18n.localize('TIDY5E.CurrencyAbbrPP'),
-            gp: game.i18n.localize('TIDY5E.CurrencyAbbrGP'),
-            ep: game.i18n.localize('TIDY5E.CurrencyAbbrEP'),
-            sp: game.i18n.localize('TIDY5E.CurrencyAbbrSP'),
-            cp: game.i18n.localize('TIDY5E.CurrencyAbbrCP'),
-          },
         },
       }
     );
