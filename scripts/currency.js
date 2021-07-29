@@ -19,7 +19,7 @@ export default class Currency {
   /**
    * Adds copper to the currency object
    *
-   * @param {Number} amount - The amount of copper to add
+   * @param {number} amount - The amount of copper to add
    */
   addCopper(amount) {
     this._cp += Math.floor(amount * this._settings.currencyMultiplier);
@@ -28,7 +28,7 @@ export default class Currency {
   /**
    * Adds silver to the currency object
    *
-   * @param {Number} amount - The amount of silver to add
+   * @param {number} amount - The amount of silver to add
    */
   addSilver(amount) {
     this._sp += Math.floor(amount * this._settings.currencyMultiplier);
@@ -37,7 +37,7 @@ export default class Currency {
   /**
    * Adds electrum to the currency object
    *
-   * @param {Number} amount - The amount of electrum to add
+   * @param {number} amount - The amount of electrum to add
    */
   addElectrum(amount) {
     this._ep += Math.floor(amount * this._settings.currencyMultiplier);
@@ -46,7 +46,7 @@ export default class Currency {
   /**
    * Adds gold to the currency object
    *
-   * @param {Number} amount - The amount of gold to add
+   * @param {number} amount - The amount of gold to add
    */
   addGold(amount) {
     this._gp += Math.floor(amount * this._settings.currencyMultiplier);
@@ -55,7 +55,7 @@ export default class Currency {
   /**
    * Adds platinum to the currency object
    *
-   * @param {Number} amount - The amount of platinum to add
+   * @param {number} amount - The amount of platinum to add
    */
   addPlatinum(amount) {
     this._pp += Math.floor(amount * this._settings.currencyMultiplier);

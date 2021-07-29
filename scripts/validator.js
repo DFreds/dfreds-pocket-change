@@ -13,8 +13,8 @@ export default class Validator {
    * Checks if the provided token and actor can have currency generated for it.
    *
    * @param {Actor5e} actor - the actor to check
-   * @param {Boolean} isLinked - if the actor is linked
-   * @returns {Boolean} true if it can have currency genereated for it
+   * @param {boolean} isLinked - if the actor is linked
+   * @returns {boolean} true if it can have currency genereated for it
    */
   shouldAutoGenerateCurrency(actor, isLinked) {
     if (!actor) return false;

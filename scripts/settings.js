@@ -192,7 +192,7 @@ export default class Settings {
   /**
    * Returns the game setting for enabled
    *
-   * @returns {Boolean} true if currency should be generated on token drop
+   * @returns {boolean} true if currency should be generated on token drop
    */
   get enabled() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.ENABLED);
@@ -201,7 +201,7 @@ export default class Settings {
   /**
    * Returns the game setting for showing currency on NPCs
    *
-   * @returns {Boolean} true if currency should be displayed on NPCs
+   * @returns {boolean} true if currency should be displayed on NPCs
    */
   get showCurrencyOnNpcs() {
     return game.settings.get(
@@ -213,7 +213,7 @@ export default class Settings {
   /**
    * Returns the game setting for show chat message
    *
-   * @returns {Boolean} true if a chat message should be displayed for dropped tokens
+   * @returns {boolean} true if a chat message should be displayed for dropped tokens
    */
   get showChatMessage() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.SHOW_CHAT_MESSAGE);
@@ -222,7 +222,7 @@ export default class Settings {
   /**
    * Returns the game setting for creatureTypes
    *
-   * @returns {String} a string separated by a semi-colon for the types of
+   * @returns {string} a string separated by a semi-colon for the types of
    * creatures to generate currency for
    */
   get creatureTypes() {
@@ -232,7 +232,7 @@ export default class Settings {
   /**
    * Returns the game setting for chanceOfNoCurrency
    *
-   * @returns {Number} a number between 0 and 1 with 0.1 steps, representing
+   * @returns {number} a number between 0 and 1 with 0.1 steps, representing
    * the percent chance that currency will not be generated
    */
   get chanceOfNoCurrency() {
@@ -245,7 +245,7 @@ export default class Settings {
   /**
    * Returns the game setting for currencyMultiplier
    *
-   * @returns {Number} a number between 0 and 2 with 0.1 steps, representing
+   * @returns {number} a number between 0 and 2 with 0.1 steps, representing
    * the amount to multiply the currency by
    */
   get currencyMultiplier() {
@@ -258,7 +258,7 @@ export default class Settings {
   /**
    * Returns the game setting for chanceOfDamagedItems
    *
-   * @returns {Number} a number between 0 and 1 with 0.1 steps, representing
+   * @returns {number} a number between 0 and 1 with 0.1 steps, representing
    * the percent chance that an item will be damaged
    */
   get chanceOfDamagedItems() {
@@ -271,7 +271,7 @@ export default class Settings {
   /**
    * Returns the game setting for damagedItemsMultiplier
    *
-   * @returns {Number} a number between 0 and 1 with 0.1 steps, representing
+   * @returns {number} a number between 0 and 1 with 0.1 steps, representing
    * the amount to multiply the price of damaged items by
    */
   get damagedItemsMultiplier() {
@@ -284,7 +284,7 @@ export default class Settings {
   /**
    * Returns the game setting for removeDamagedItems
    *
-   * @returns {Boolean} true if damaged items should be removed
+   * @returns {boolean} true if damaged items should be removed
    */
   get removeDamagedItems() {
     return game.settings.get(
@@ -296,7 +296,7 @@ export default class Settings {
   /**
    * Returns the game setting for useSilver
    *
-   * @returns {Boolean} true if silver can be used
+   * @returns {boolean} true if silver can be used
    */
   get useSilver() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_SILVER);
@@ -305,7 +305,7 @@ export default class Settings {
   /**
    * Returns the game setting for useElectrum
    *
-   * @returns {Boolean} true if electrum can be used
+   * @returns {boolean} true if electrum can be used
    */
   get useElectrum() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_ELECTRUM);
@@ -314,7 +314,7 @@ export default class Settings {
   /**
    * Returns the game setting for useGold
    *
-   * @returns {Boolean} true if gold can be used
+   * @returns {boolean} true if gold can be used
    */
   get useGold() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_GOLD);
@@ -323,7 +323,7 @@ export default class Settings {
   /**
    * Returns the game setting for usePlatinum
    *
-   * @returns {Boolean} true if platinum can be used
+   * @returns {boolean} true if platinum can be used
    */
   get usePlatinum() {
     return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_PLATINUM);
