@@ -239,6 +239,7 @@ export default class PocketChange {
     // Update the document with the overlay icon and new permissions
     await token.document.update({
       overlayEffect: 'icons/svg/chest.svg',
+      vision: false,
       actorData: {
         actor: {
           flags: {
