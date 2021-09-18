@@ -21,6 +21,9 @@
   "PocketChange.SettingCreatureTypes": "Creature Types",
   "PocketChange.SettingCreatureTypesHint": "These are the types of creatures that will generate currency, separated via semi-colons. This will match on their type, subtype, and custom type. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity",
 
+  "PocketChange.SettingLootIcon": "Loot Icon",
+  "PocketChange.SettingLootIconHint": "This is the overlay icon that will be applied to a token when it is converted to loot. Leave it blank to disable adding an icon.",
+
   "PocketChange.SettingChanceOfNoCurrency": "Chance of No Currency",
   "PocketChange.SettingChanceOfNoCurrencyHint": "This is the percent chance that no money will be generated for a token.",
 
