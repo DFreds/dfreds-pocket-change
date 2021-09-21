@@ -85,7 +85,7 @@ export default class Validator {
     // Handle blank creature types by always saying they are valid
     if (creatureTypes.length === 0) return true;
 
-    let actorType = actor.data.data.details?.type?.value?.toLowerCase().trim();
+    let actorType = this._getActorType(actor);
     let actorSubtype = actor.data.data.details?.type?.subtype
       ?.toLowerCase()
       .trim();
@@ -95,8 +95,17 @@ export default class Validator {
     }
 
     return creatureTypes.some(
-      (type) => actorType.startsWith(type) || actorSubtype.startsWith(type)
+      (type) => actorType?.startsWith(type) || actorSubtype?.startsWith(type)
     );
+  }
+
+  _getActorType(actor) {
+    // Fixes issue with old characters having type set to a string
+    if (typeof actor.data.data.details?.type === 'string') {
+      return actor.data.data.details?.type;
+    }
+
+    return actor.data.data.details?.type?.value?.toLowerCase().trim();
   }
 
   _hasPlayerOwner(actor) {
