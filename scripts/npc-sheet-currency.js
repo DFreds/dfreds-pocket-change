@@ -19,9 +19,9 @@ export default class NpcSheetCurrency {
     if (!this._settings.showCurrencyOnNpcs) return;
 
     if (this._isDefaultSheet) {
-      this._handleDefaultInjection();
+      await this._handleDefaultInjection();
     } else if (this._isTidySheet) {
-      this._handleTidyInjection();
+      await this._handleTidyInjection();
     }
   }
 

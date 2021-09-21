@@ -11,10 +11,13 @@ Hooks.once('init', () => {
   game.dfreds.MacroSupport = MacroSupport;
 });
 
-Hooks.on('preCreateToken', (tokenDocument, _tokenData, _options, _userId) => {
-  const pocketChange = new game.dfreds.PocketChange();
-  pocketChange.populateTreasureForToken(tokenDocument);
-});
+Hooks.on(
+  'preCreateToken',
+  async (tokenDocument, _tokenData, _options, _userId) => {
+    const pocketChange = new game.dfreds.PocketChange();
+    await pocketChange.populateTreasureForToken(tokenDocument);
+  }
+);
 
 Hooks.on('renderActorSheet5eNPC', async (app, html, data) => {
   const supportedTemplates = [
@@ -25,5 +28,5 @@ Hooks.on('renderActorSheet5eNPC', async (app, html, data) => {
   if (!supportedTemplates.includes(app.template)) return;
 
   const npcSheetCurrency = new NpcSheetCurrency({ app, html, data });
-  npcSheetCurrency.injectCurrencyRow();
+  await npcSheetCurrency.injectCurrencyRow();
 });
