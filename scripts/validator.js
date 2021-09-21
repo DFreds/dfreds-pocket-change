@@ -10,14 +10,13 @@ export default class Validator {
   }
 
   /**
-   * Checks if the provided token and actor can have currency generated for it.
+   * Checks if the provided token can have currency generated for it.
    *
-   * @param {Actor5e} actor - the actor to check
-   * @param {boolean} isLinked - if the actor is linked
+   * @param {Actor5e} tokenDocument - the token to check
    * @returns {boolean} true if it can have currency genereated for it
    */
-  shouldAutoGenerateCurrency(actor, isLinked) {
-    if (!actor) return false;
+  shouldAutoGenerateCurrency(tokenDocument) {
+    if (!tokenDocument) return false;
 
     if (!this._settings.enabled) {
       log("Refuse to generate treasure because you don't want me to");
@@ -31,27 +30,27 @@ export default class Validator {
       return false;
     }
 
-    if (this._isLootSheetNpc5e(actor)) {
+    if (this._isLootSheetNpc5e(tokenDocument)) {
       log('Refuse to generate treasure for existing loot sheets');
       return false;
     }
 
-    if (isLinked) {
+    if (tokenDocument.isLinked) {
       log('Refuse to generate treasure for linked characters');
       return false;
     }
 
-    if (!this._isActorNpc(actor)) {
+    if (!this._isActorNpc(tokenDocument)) {
       log('Refuse to generate treasure for non-npc actors');
       return false;
     }
 
-    if (!this._isMatchingType(actor)) {
+    if (!this._isMatchingType(tokenDocument)) {
       log('Refuse to generate treasure for non-matching type');
       return false;
     }
 
-    if (this._hasPlayerOwner(actor)) {
+    if (tokenDocument.actor.hasPlayerOwner) {
       log('Refuse to generate treasure for player owned actors');
       return false;
     }
@@ -68,15 +67,17 @@ export default class Validator {
     return Math.random() < this._settings.chanceOfNoCurrency;
   }
 
-  _isLootSheetNpc5e(actor) {
-    return actor.sheet.template.includes('lootsheetnpc5e');
+  _isLootSheetNpc5e(tokenDocument) {
+    return tokenDocument.actor.sheet.template.includes('lootsheetnpc5e');
   }
 
-  _isActorNpc(actor) {
-    return actor.data.type == 'npc';
+  _isActorNpc(tokenDocument) {
+    return tokenDocument.actor.data.type == 'npc';
   }
 
-  _isMatchingType(actor) {
+  _isMatchingType(tokenDocument) {
+    const actor = tokenDocument.actor;
+
     const creatureTypes = this._settings.creatureTypes
       .split(';')
       .map((type) => type.toLowerCase().trim())
@@ -106,10 +107,6 @@ export default class Validator {
     }
 
     return actor.data.data.details?.type?.value?.toLowerCase().trim();
-  }
-
-  _hasPlayerOwner(actor) {
-    return actor.data.hasPlayerOwner;
   }
 
   _isGm() {
