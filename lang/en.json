@@ -1,4 +1,9 @@
 {
+  "PocketChange.ConvertFromLootable": "Convert from Lootable",
+  "PocketChange.ConvertFromLootableConfirmation": "Converted {number} tokens from loot",
+  "PocketChange.ConvertFromLootableErrorNoTokensSelected": "Tokens must be selected to convert from lootable",
+  "PocketChange.ConvertFromLootableWarning": "Convert this token from a lootable sheet. Be wary, this will not add back any previously deleted spells and features.",
+
   "PocketChange.ConvertToLootable": "Convert to Lootable",
   "PocketChange.ConvertToLootableConfirmation": "Converted {number} tokens to loot",
   "PocketChange.ConvertToLootableErrorNoTokensSelected": "Tokens must be selected to convert to lootable",
@@ -52,6 +57,7 @@
   "PocketChange.SettingUsePlatinumHint": "If enabled, generated currency could include platinum. Copper is always included.",
 
   "PocketChange.WarningModifyLootSheetToken": "Cannot modify existing loot sheet token {name}",
+  "PocketChange.WarningModifyNonLootSheetToken": "Cannot modify existing non-loot sheet token {name}",
   "PocketChange.WarningModifyNonNpcToken": "Cannot modify non-NPC token {name}",
   "PocketChange.WarningModifyPlayerOwnedToken": "Cannot modify player owned token {name}"
 }

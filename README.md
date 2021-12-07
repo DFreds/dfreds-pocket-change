@@ -41,6 +41,7 @@ This module also includes sweet macros. Basically, we got three of these bangers
 1. __Generate Currency for Selected Tokens__ - Useful for when you want to disable the automatic generation and do it all on demand (you overachiever you). This can't generate currency for player owned tokens, non-npc actors, and actors that are already loot sheets.
 1. __Convert Selected Tokens to Loot__ - This macro takes each token and changes their actor sheet to LootSheetNPC, deletes all their Feat items, applies damage to items based on your settings, sets token privileges to Observer for players, and adds a treasure overlay icon to the bodies. This allows players to steal that sweet cash and loot straight from the dead dude. This can't generate currency for player owned tokens, non-npc actors, and actors that are already loot sheets.
 1. __Convert Selected Tokens to Loot - Custom Damaged Items__ - This macro does the same as the other convert to loot macro, but this one lets you customize the chance of damaged items right in the macro. Rad.
+1. __Convert Selected Tokens from Loot - This macro takes each token and converts them back to the default actor sheet. Note that this does not add any previously deleted spells and features back to the actor.
 
 ## When it Automatically Generates Currency
 

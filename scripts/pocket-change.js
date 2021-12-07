@@ -214,7 +214,16 @@ export default class PocketChange {
     // Close the old sheet if it's open
     await sheet.close();
 
-    let newActorData = this._getLootSheetData();
+    let newActorData = {
+      flags: {
+        core: {
+          sheetClass: 'dnd5e.LootSheet5eNPC',
+        },
+        lootsheetnpc5e: {
+          lootsheettype: 'Loot',
+        },
+      },
+    };
     newActorData.items = this._getLootableItems({
       token,
       chanceOfDamagedItems,
@@ -223,7 +232,7 @@ export default class PocketChange {
     });
 
     // Eventually, this might be removed when loot sheet supports regular schema
-    this._handleCurrencySchemaChange(token, newActorData);
+    this._handleCurrencyChangeToLootSheet(token, newActorData);
 
     // Delete all items first
     await token.document.actor.deleteEmbeddedDocuments(
@@ -258,19 +267,6 @@ export default class PocketChange {
       // Re-draw the updated sheet if it was open
       token.actor.sheet.render(true);
     }
-  }
-
-  _getLootSheetData() {
-    return {
-      flags: {
-        core: {
-          sheetClass: 'dnd5e.LootSheet5eNPC',
-        },
-        lootsheetnpc5e: {
-          lootsheettype: 'Loot',
-        },
-      },
-    };
   }
 
   // Remove natural weapons, natural armor, class features, spells, and feats.
@@ -327,7 +323,7 @@ export default class PocketChange {
   // currently uses an older currency schema, compared to current 5e expectations.
   // Need to convert the actor's currency data to the LS schema here to avoid
   // breakage. If there is already currency on the actor, it is retained.
-  _handleCurrencySchemaChange(token, newActorData) {
+  _handleCurrencyChangeToLootSheet(token, newActorData) {
     if (typeof token.actor.data.data.currency.cp === 'number') {
       let oldCurrencyData = token.actor.data.data.currency;
       newActorData['data.currency'] = {
@@ -357,5 +353,80 @@ export default class PocketChange {
     });
 
     return permissions;
+  }
+
+  /**
+   * Converts the provided token from a lootable sheet
+   *
+   * @param {Token5e} token - the token to convert
+   */
+  async convertFromLoot(token) {
+    const sheet = token.actor.sheet;
+
+    // -1 for opened before but now closed
+    // 0 for closed and never opened
+    // 1 for currently open
+    const priorState = sheet._state;
+
+    // Close the old sheet if it's open
+    await sheet.close();
+
+    // Set back to default class
+    await token.document.actor.setFlag('core', 'sheetClass', 'Default');
+
+    // Eventually, this might be removed when loot sheet supports regular schema
+    let newActorData = {
+      flags: {
+        core: {
+          sheetClass: 'Default',
+        },
+      },
+    };
+    this._handleCurrencyChangeFromLootSheet(token, newActorData);
+
+    // Update actor with the new sheet and items
+    await token.document.actor.update(newActorData);
+
+    // Update the document without the overlay icon and remove permissions
+    await token.document.update({
+      overlayEffect: '',
+      vision: false,
+      actorData: {
+        actor: {
+          flags: {
+            loot: {
+              playersPermission: CONST.ENTITY_PERMISSIONS.NONE,
+            },
+          },
+        },
+        permission: CONST.ENTITY_PERMISSIONS.NONE,
+      },
+    });
+
+    // Deregister the old sheet class
+    token.actor._sheet = null;
+    delete token.actor.apps[sheet.appId];
+
+    if (priorState > 0) {
+      // Re-draw the updated sheet if it was open
+      token.actor.sheet.render(true);
+    }
+  }
+
+  // This is a workaround for the fact that the LootSheetNPC module
+  // currently uses an older currency schema, compared to current 5e expectations.
+  // Need to convert the actor's currency data to the LS schema here to avoid
+  // breakage. If there is already currency on the actor, it is retained.
+  _handleCurrencyChangeFromLootSheet(token, newActorData) {
+    if (typeof token.actor.data.data.currency.cp === 'object') {
+      let oldCurrencyData = token.actor.data.data.currency;
+      newActorData['data.currency'] = {
+        cp: oldCurrencyData.cp.value,
+        sp: oldCurrencyData.sp.value,
+        ep: oldCurrencyData.ep.value,
+        gp: oldCurrencyData.gp.value,
+        pp: oldCurrencyData.pp.value,
+      };
+    }
   }
 }

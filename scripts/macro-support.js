@@ -26,9 +26,19 @@ export default class MacroSupport {
         }
 
         // Only affect valid tokens
-        const filtered = canvas.tokens.controlled.filter((token) =>
-          this._isTokenValid(token)
-        );
+        const filtered = canvas.tokens.controlled.filter((token) => {
+          const isTokenLootSheet = this._isTokenLootSheet(token);
+
+          if (isTokenLootSheet) {
+            ui.notifications.warn(
+              game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
+                name: token.name,
+              })
+            );
+          }
+
+          return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
+        });
         filtered.forEach(
           async (token) => await this._generateCurrencyForToken(token)
         );
@@ -44,7 +54,7 @@ export default class MacroSupport {
     });
   }
 
-  _isTokenValid(token) {
+  _isTokenUnownedNpc(token) {
     if (token.actor.hasPlayerOwner) {
       ui.notifications.warn(
         game.i18n.format('PocketChange.WarningModifyPlayerOwnedToken', {
@@ -63,16 +73,11 @@ export default class MacroSupport {
       return false;
     }
 
-    if (token.actor.sheet.template.includes('lootsheetnpc5e')) {
-      ui.notifications.warn(
-        game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
-          name: token.name,
-        })
-      );
-      return false;
-    }
-
     return true;
+  }
+
+  _isTokenLootSheet(token) {
+    return token.actor.sheet.template.includes('lootsheetnpc5e');
   }
 
   async _generateCurrencyForToken(token) {
@@ -117,9 +122,19 @@ export default class MacroSupport {
         }
 
         // Only affect valid tokens
-        const filtered = canvas.tokens.controlled.filter((token) =>
-          this._isTokenValid(token)
-        );
+        const filtered = canvas.tokens.controlled.filter((token) => {
+          const isTokenLootSheet = this._isTokenLootSheet(token);
+
+          if (isTokenLootSheet) {
+            ui.notifications.warn(
+              game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
+                name: token.name,
+              })
+            );
+          }
+
+          return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
+        });
         filtered.forEach(async (token) => {
           const pocketChange = new game.dfreds.PocketChange();
           await pocketChange.convertToLoot({
@@ -133,6 +148,56 @@ export default class MacroSupport {
         // Notify number of tokens that were effected
         ui.notifications.info(
           game.i18n.format('PocketChange.ConvertToLootableConfirmation', {
+            number: filtered.length,
+          })
+        );
+      },
+      defaultYes: false,
+    });
+  }
+
+  /**
+   * For all selected tokens, convert them back from lootable sheets.
+   */
+  convertSelectedTokensFromLoot() {
+    return Dialog.confirm({
+      title: game.i18n.localize('PocketChange.ConvertFromLootable'),
+      content: `<p>${game.i18n.localize(
+        'PocketChange.ConvertFromLootableWarning'
+      )}</p>`,
+      yes: async () => {
+        // Notify if no tokens selected
+        if (canvas.tokens.controlled.length == 0) {
+          ui.notifications.error(
+            game.i18n.localize(
+              'PocketChange.ConvertFromLootableErrorNoTokensSelected'
+            )
+          );
+          return;
+        }
+
+        // Only affect valid tokens
+        const filtered = canvas.tokens.controlled.filter((token) => {
+          const isTokenLootSheet = this._isTokenLootSheet(token);
+
+          if (!isTokenLootSheet) {
+            ui.notifications.warn(
+              game.i18n.format('PocketChange.WarningModifyNonLootSheetToken', {
+                name: token.name,
+              })
+            );
+          }
+
+          return this._isTokenUnownedNpc(token) && isTokenLootSheet;
+        });
+        filtered.forEach(async (token) => {
+          const pocketChange = new game.dfreds.PocketChange();
+          await pocketChange.convertFromLoot(token);
+        });
+
+        // Notify number of tokens that were effected
+        ui.notifications.info(
+          game.i18n.format('PocketChange.ConvertFromLootableConfirmation', {
             number: filtered.length,
           })
         );
