@@ -217,7 +217,7 @@ export default class PocketChange {
     let newActorData = {
       flags: {
         core: {
-          sheetClass: 'dnd5e.LootSheet5eNPC',
+          sheetClass: 'dnd5e.LootSheetNPC5e',
         },
         lootsheetnpc5e: {
           lootsheettype: 'Loot',
