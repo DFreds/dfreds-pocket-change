@@ -231,9 +231,6 @@ export default class PocketChange {
       removeDamagedItems,
     });
 
-    // Eventually, this might be removed when loot sheet supports regular schema
-    this._handleCurrencyChangeToLootSheet(token, newActorData);
-
     // Delete all items first
     await token.document.actor.deleteEmbeddedDocuments(
       'Item',
@@ -319,23 +316,6 @@ export default class PocketChange {
     return Math.random() < chanceOfDamagedItems;
   }
 
-  // This is a workaround for the fact that the LootSheetNPC module
-  // currently uses an older currency schema, compared to current 5e expectations.
-  // Need to convert the actor's currency data to the LS schema here to avoid
-  // breakage. If there is already currency on the actor, it is retained.
-  _handleCurrencyChangeToLootSheet(token, newActorData) {
-    if (typeof token.actor.data.data.currency.cp === 'number') {
-      let oldCurrencyData = token.actor.data.data.currency;
-      newActorData['data.currency'] = {
-        cp: { value: oldCurrencyData.cp },
-        ep: { value: oldCurrencyData.ep },
-        gp: { value: oldCurrencyData.gp },
-        pp: { value: oldCurrencyData.pp },
-        sp: { value: oldCurrencyData.sp },
-      };
-    }
-  }
-
   // Update permissions to observer level, so players can loot
   _getUpdatedUserPermissions(token) {
     let lootingUsers = game.users.filter((user) => {
@@ -374,19 +354,6 @@ export default class PocketChange {
     // Set back to default class
     await token.document.actor.setFlag('core', 'sheetClass', 'Default');
 
-    // Eventually, this might be removed when loot sheet supports regular schema
-    let newActorData = {
-      flags: {
-        core: {
-          sheetClass: 'Default',
-        },
-      },
-    };
-    this._handleCurrencyChangeFromLootSheet(token, newActorData);
-
-    // Update actor with the new sheet and items
-    await token.document.actor.update(newActorData);
-
     // Update the document without the overlay icon and remove permissions
     await token.document.update({
       overlayEffect: '',
@@ -410,23 +377,6 @@ export default class PocketChange {
     if (priorState > 0) {
       // Re-draw the updated sheet if it was open
       token.actor.sheet.render(true);
-    }
-  }
-
-  // This is a workaround for the fact that the LootSheetNPC module
-  // currently uses an older currency schema, compared to current 5e expectations.
-  // Need to convert the actor's currency data to the LS schema here to avoid
-  // breakage. If there is already currency on the actor, it is retained.
-  _handleCurrencyChangeFromLootSheet(token, newActorData) {
-    if (typeof token.actor.data.data.currency.cp === 'object') {
-      let oldCurrencyData = token.actor.data.data.currency;
-      newActorData['data.currency'] = {
-        cp: oldCurrencyData.cp.value,
-        sp: oldCurrencyData.sp.value,
-        ep: oldCurrencyData.ep.value,
-        gp: oldCurrencyData.gp.value,
-        pp: oldCurrencyData.pp.value,
-      };
     }
   }
 }
