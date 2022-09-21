@@ -72,7 +72,7 @@ export default class Validator {
   }
 
   _isActorNpc(tokenDocument) {
-    return tokenDocument.actor.data.type == 'npc';
+    return tokenDocument.actor.type == 'npc';
   }
 
   _isMatchingType(tokenDocument) {
@@ -87,12 +87,10 @@ export default class Validator {
     if (creatureTypes.length === 0) return true;
 
     let actorType = this._getActorType(actor);
-    let actorSubtype = actor.data.data.details?.type?.subtype
-      ?.toLowerCase()
-      .trim();
+    let actorSubtype = this._getActorSubtype(actor);
 
     if (actorType === 'custom') {
-      actorType = actor.data.data.details?.type?.custom?.toLowerCase().trim();
+      actorType = actor.system.details?.type?.custom?.toLowerCase().trim();
     }
 
     return creatureTypes.some(
@@ -101,12 +99,11 @@ export default class Validator {
   }
 
   _getActorType(actor) {
-    // Fixes issue with old characters having type set to a string
-    if (typeof actor.data.data.details?.type === 'string') {
-      return actor.data.data.details?.type;
-    }
+    return actor.system.details?.type?.value?.toLowerCase().trim();
+  }
 
-    return actor.data.data.details?.type?.value?.toLowerCase().trim();
+  _getActorSubtype(actor) {
+    return actor.system.details?.type?.subtype?.toLowerCase().trim();
   }
 
   _isGm() {

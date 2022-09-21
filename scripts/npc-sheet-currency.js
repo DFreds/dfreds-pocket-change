@@ -26,7 +26,7 @@ export default class NpcSheetCurrency {
   }
 
   get _isDefaultSheet() {
-    return this._app.template.includes('npc-sheet.html');
+    return this._app.template.includes('npc-sheet.hbs');
   }
 
   get _isTidySheet() {
@@ -50,7 +50,7 @@ export default class NpcSheetCurrency {
     return renderTemplate(
       'modules/dfreds-pocket-change/templates/default-npc-currency-row.html',
       {
-        data: this._data.data,
+        data: this._data.system,
         config: {
           hasToken: !!this._app.token,
           currencies: {

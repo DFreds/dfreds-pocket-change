@@ -18,7 +18,7 @@ Hooks.on('preCreateToken', (tokenDocument, _tokenData, _options, _userId) => {
 
 Hooks.on('renderActorSheet5eNPC', async (app, html, data) => {
   const supportedTemplates = [
-    'systems/dnd5e/templates/actors/npc-sheet.html',
+    'systems/dnd5e/templates/actors/npc-sheet.hbs',
     'modules/tidy5e-sheet/templates/actors/tidy5e-npc.html',
   ];
 

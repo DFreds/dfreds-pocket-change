@@ -25,9 +25,9 @@ export default class PocketChange {
 
     log('Generating treasure');
 
-    tokenDocument.data.update({
+    tokenDocument.updateSource({
       actorData: {
-        data: {
+        system: {
           currency: this.generateCurrency(tokenDocument.actor),
         },
       },
@@ -63,7 +63,7 @@ export default class PocketChange {
   }
 
   _isWithinChallengeRating(actor, lowerCr, upperCr) {
-    let cr = actor.data.data.details.cr;
+    let cr = actor.system.details.cr;
     return cr >= lowerCr && cr <= upperCr;
   }
 
@@ -248,7 +248,7 @@ export default class PocketChange {
         actor: {
           flags: {
             loot: {
-              playersPermission: CONST.ENTITY_PERMISSIONS.OBSERVER,
+              playersPermission: CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER,
             },
           },
         },
@@ -273,18 +273,18 @@ export default class PocketChange {
     damagedItemsMultiplier,
     removeDamagedItems,
   }) {
-    return token.actor.data.items
+    return token.actor.items
       .map((item) => {
         return item.toObject();
       })
       .filter((item) => {
         if (item.type == 'weapon') {
-          return item.data.weaponType != 'natural';
+          return item.system.weaponType != 'natural';
         }
 
         if (item.type == 'equipment') {
-          if (!item.data.armor) return true;
-          return item.data.armor.type != 'natural';
+          if (!item.system.armor) return true;
+          return item.system.armor.type != 'natural';
         }
 
         return !['class', 'spell', 'feat'].includes(item.type);
@@ -294,24 +294,25 @@ export default class PocketChange {
           if (removeDamagedItems) return false;
 
           item.name += ' (Damaged)';
-          item.data.price *= damagedItemsMultiplier;
+          item.system.price *= damagedItemsMultiplier;
         }
 
         return true;
       })
       .map((item) => {
-        item.data.equipped = false;
+        item.system.equipped = false;
         return item;
       });
   }
 
   _isItemDamaged(item, chanceOfDamagedItems) {
-    const rarity = item.data.rarity;
+    const rarity = item.system.rarity;
     if (!rarity) return false;
 
     // Never consider items above common rarity breakable
-    if (rarity.toLowerCase() !== 'common' && rarity.toLowerCase() !== 'none')
+    if (rarity.toLowerCase() !== 'common' && rarity.toLowerCase() !== 'none') {
       return false;
+    }
 
     return Math.random() < chanceOfDamagedItems;
   }
@@ -326,10 +327,10 @@ export default class PocketChange {
     });
 
     let permissions = {};
-    Object.assign(permissions, token.actor.data.permission);
+    Object.assign(permissions, token.actor.permission);
 
     lootingUsers.forEach((user) => {
-      permissions[user.data._id] = CONST.ENTITY_PERMISSIONS.OBSERVER;
+      permissions[user.id] = CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER;
     });
 
     return permissions;
@@ -362,11 +363,11 @@ export default class PocketChange {
         actor: {
           flags: {
             loot: {
-              playersPermission: CONST.ENTITY_PERMISSIONS.NONE,
+              playersPermission: CONST.DOCUMENT_PERMISSION_LEVELS.NONE,
             },
           },
         },
-        permission: CONST.ENTITY_PERMISSIONS.NONE,
+        permission: CONST.DOCUMENT_PERMISSION_LEVELS.NONE,
       },
     });
 
