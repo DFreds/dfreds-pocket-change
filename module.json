@@ -38,7 +38,7 @@
       "label": "DFreds Pocket Change Macros",
       "path": "packs/macros.db",
       "module": "dfreds-pocket-change",
-      "entity": "Macro",
+      "type": "Macro",
       "private": false
     }
   ],
