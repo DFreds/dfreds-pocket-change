@@ -238,14 +238,14 @@ export default class PocketChange {
     light = undefined
   }) {
 
-    if(mode === "lootsheet") {
+    if(mode === "lootsheet"  && game.modules.get("lootsheet-simple")?.active) {
       this._convertToLootLootSheet({
         token,
         chanceOfDamagedItems,
         damagedItemsMultiplier,
         removeDamagedItems
       });
-    } else if(mode === "itempiles"){
+    } else if(mode === "itempiles" && game.modules.get("item-piles")?.active){
       this._convertToItemPiles({
         token,
         userOption, 
@@ -254,6 +254,7 @@ export default class PocketChange {
       });
     } else {
       // Do nothing
+      console.warn(`${Settings.PACKAGE_NAME} | the mode ${mode} cannot be used`);
     }
   }
 
