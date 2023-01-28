@@ -1,3 +1,5 @@
+import Settings from "./settings";
+
 /**
  * Simple logger that prepends the package name if the data is a string
  * 
@@ -5,7 +7,7 @@
  */
 export default function (data) {
   if (typeof data === 'string') {
-    console.log(`dfreds-pocket-change | ${data}`);
+    console.log(`${Settings.PACKAGE_NAME} | ${data}`);
   } else {
     console.log(data);
   }

@@ -1,3 +1,4 @@
+import API from './api.js';
 import Settings from './settings.js';
 
 export default class MacroSupport {
@@ -83,7 +84,7 @@ export default class MacroSupport {
   async _generateCurrencyForToken(token) {
     const actor = game.actors.get(token.data.actorId);
 
-    const pocketChange = new game.dfreds.PocketChange();
+    const pocketChange = new API.PocketChange();
     const currency = pocketChange.generateCurrency(actor);
 
     await token.actor.update({
@@ -136,7 +137,7 @@ export default class MacroSupport {
           return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
         });
         filtered.forEach(async (token) => {
-          const pocketChange = new game.dfreds.PocketChange();
+          const pocketChange = new API.PocketChange();
           await pocketChange.convertToLoot({
             token,
             chanceOfDamagedItems,
@@ -191,7 +192,7 @@ export default class MacroSupport {
           return this._isTokenUnownedNpc(token) && isTokenLootSheet;
         });
         filtered.forEach(async (token) => {
-          const pocketChange = new game.dfreds.PocketChange();
+          const pocketChange = new API.PocketChange();
           await pocketChange.convertFromLoot(token);
         });
 

@@ -83,6 +83,12 @@ It only generates currency if all of the following are true:
 
 Stops your players from being murder hobos. Also, it doesn't actually provide anyway for you to actually let the players steal that lovable NPC's life savings. That's what [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) does for you in conjunction with my included macros.
 
+## API
+
+`game.modules.get("dfreds-pocket-change).api.openCurrencyTrade(actorId) => void`
+
+`game.modules.get("dfreds-pocket-change").api.openItemTrade(actorId, itemId) => void`
+
 ## My Philosophy
 
 I've noticed over the months that a lot of FoundryVTT modules lack focus and good coding practice. A user should never be in a situation where they forget what any given module does. Additionally, a power user should never be totally lost on what's going on in a module if they dive into it.
@@ -94,3 +100,20 @@ In case anyone out there in the void is curious, this is my philosophy when it c
 - That thing the module does should do it well, with a minimum amount of initial configuration. It should "[Just Work](https://upload.wikimedia.org/wikipedia/commons/b/bf/ToddHoward2010sm_%28cropped%29.jpg)".
 - Additional configuration should only be added if it really makes sense. If the configuration starts to change the thing the module does well, it shouldn't be there.
 - Readmes (like this) should be funny AND informative. Please create a pull request if you think it could be funnier or informativer.
+
+
+## Issues
+
+Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/DFreds/dfreds-pocket-change/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
+
+## License
+
+- [NPC to Coin Pile](https://github.com/Shuggaloaf/NPC-to-Coin-Pile) with [???]()
+
+This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
+
+## Credit
+
+Thanks to anyone who helps me with this code! I appreciate the user community's feedback on this project!
+
+- [NPC to Coin Pile](https://github.com/Shuggaloaf/NPC-to-Coin-Pile) ty to [Shuggaloaf](https://github.com/Shuggaloaf)

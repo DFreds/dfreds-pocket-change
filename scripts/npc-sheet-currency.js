@@ -48,7 +48,7 @@ export default class NpcSheetCurrency {
 
   async _getDefaultTemplate() {
     return renderTemplate(
-      'modules/dfreds-pocket-change/templates/default-npc-currency-row.html',
+      `modules/${Settings.PACKAGE_NAME}/templates/default-npc-currency-row.html`,
       {
         data: this._data.system,
         config: {
@@ -80,7 +80,7 @@ export default class NpcSheetCurrency {
 
   async _getTidyTemplate() {
     return renderTemplate(
-      'modules/dfreds-pocket-change/templates/tidy-npc-currency-row.html',
+      `modules/${Settings.PACKAGE_NAME}/templates/tidy-npc-currency-row.html`,
       {
         data: this._data.data,
         config: {
@@ -122,7 +122,7 @@ export default class NpcSheetCurrency {
       )}</p>`,
       yes: async () => {
         const actor = this._app.actor;
-        const pocketChange = new game.dfreds.PocketChange();
+        const pocketChange = new API.PocketChange();
         const currency = pocketChange.generateCurrency(actor);
         await actor.update({ 'data.currency': currency });
       },
@@ -138,7 +138,7 @@ export default class NpcSheetCurrency {
       )}</p>`,
       yes: async () => {
         const token = this._app.token;
-        const pocketChange = new game.dfreds.PocketChange();
+        const pocketChange = new API.PocketChange();
         await pocketChange.convertToLoot({ token: token.object });
       },
       defaultYes: false,

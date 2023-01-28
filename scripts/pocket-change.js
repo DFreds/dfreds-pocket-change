@@ -380,4 +380,74 @@ export default class PocketChange {
       token.actor.sheet.render(true);
     }
   }
+
+  
+  /**
+   * Converts the provided token to a item piles lootable sheet
+   *
+   * @param {Token5e} token - the token to convert
+   * @param {number} userOption - the type of convertion by default is 1
+   * You've got 4 options to choose from:
+   * 0 = No Special Effect, Coin roll and -if enabled- Item Pile Transformation Only
+   * 1 = Light Effect only
+   * 2 = Change Image Only
+   * 3 = Both Image Change and Light effect
+   * @param {string} imgPath - the path to the image by default is the one set on the module setting 
+   */
+  async convertToItemPiles(token, userOption = 1, imgPath) {
+    if (token.actor.details.level > 0) {
+      // Do nothing;
+    } else {   
+      if(!imgPath) {
+        imgPath = Settings.lootIcon;
+      }
+      if (hasItemPiles === 1){
+          ItemPiles.API.turnTokensIntoItemPiles(token);
+      }
+      if (userOption === 0){
+        // Do nothing
+      }else if (userOption === 1){
+        await token.document.update({
+            light:{
+                dim:0.5,
+                bright:0.25,
+                luminosity:0,
+                alpha:1,
+                color:'#ad7600',
+                coloration:9,
+                animation:{
+                    type:"sunburst",
+                    speed:3,
+                    intensity:10
+                }
+            }
+        });
+      } else if (userOption === 2){
+        await token.document.update({
+          img : imgPath, 
+          rotation : 0
+        });
+      } else if (userOption === 3){
+        await token.document.update({
+            img: imgPath,
+            rotation : 0,
+            light:{
+                dim:0.5,
+                bright:0.25,
+                luminosity:0,
+                alpha:1,
+                color:'#ad7600',
+                coloration:9,
+                animation:{
+                    type:"sunburst",
+                    speed:3,
+                    intensity:10
+                }
+            }
+        });
+      } else {
+          ui.notifications.error(`${Settings.PACKAGE_NAME} | Error with User Options. Choose a valid option.`);
+      }
+    }
+  }
 }

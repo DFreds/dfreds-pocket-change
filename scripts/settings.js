@@ -73,6 +73,24 @@ export default class Settings {
       type: String,
     });
 
+    game.settings.register(Settings.PACKAGE_NAME, Settings.LOOT_ICON, {
+      name: game.i18n.localize('PocketChange.SettingLootIcon'),
+      hint: game.i18n.localize('PocketChange.SettingLootIconHint'),
+      scope: 'world',
+      config: true,
+      default: 'icons/svg/chest.svg',
+      type: String,
+      choices: {
+          chest: 'icons/svg/chest.svg',
+          lootbag1: 'modules/dfreds-pocket-change/assets/img/LootBag1.svg',
+          lootbag2: 'modules/dfreds-pocket-change/assets/img/LootBag2.svg',
+          lootbag3: 'modules/dfreds-pocket-change/assets/img/LootBag3.svg',
+          lootbag4: 'modules/dfreds-pocket-change/assets/img/LootBag4.svg'
+      },
+  });
+
+    imgPath
+
     game.settings.register(
       Settings.PACKAGE_NAME,
       Settings.CHANCE_OF_NO_CURRENCY,
