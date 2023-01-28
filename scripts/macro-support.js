@@ -9,7 +9,7 @@ export default class MacroSupport {
   /**
    * For all selected tokens, generate currency for them
    */
-  generateCurrencyForSelectedTokens() {
+  generateCurrencyForSelectedTokens(ignoreRating = false) {
     return Dialog.confirm({
       title: game.i18n.localize('PocketChange.GenerateCurrency'),
       content: `<p>${game.i18n.localize(
@@ -41,7 +41,7 @@ export default class MacroSupport {
           return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
         });
         filtered.forEach(
-          async (token) => await this._generateCurrencyForToken(token)
+          async (token) => await this._generateCurrencyForToken(token, ignoreRating)
         );
 
         // Notify number of tokens that were effected
@@ -81,11 +81,11 @@ export default class MacroSupport {
     return token.actor.sheet.template.includes('lootsheetnpc5e');
   }
 
-  async _generateCurrencyForToken(token) {
+  async _generateCurrencyForToken(token, ignoreRating) {
     const actor = game.actors.get(token.data.actorId);
 
     const pocketChange = new API.PocketChange();
-    const currency = pocketChange.generateCurrency(actor);
+    const currency = pocketChange.generateCurrency(actor, ignoreRating);
 
     await token.actor.update({
       'data.currency': currency,
@@ -100,11 +100,13 @@ export default class MacroSupport {
    * @param {number} chanceOfDamagedItems A number between 0 and 1 that corresponds to the percent chance an item will be damaged
    * @param {number} damagedItemsMultiplier A number between 0 and 1 that will lower a damaged items value
    * @param {boolean} removeDamagedItems If true, damaged items will be removed from the token rather than marked as damaged
+   * @param {string} mode e.g. "itempiles", "lootsheet"
    */
   convertSelectedTokensToLoot(
     chanceOfDamagedItems,
     damagedItemsMultiplier,
-    removeDamagedItems
+    removeDamagedItems,
+    mode = "lootsheet"
   ) {
     return Dialog.confirm({
       title: game.i18n.localize('PocketChange.ConvertToLootable'),
@@ -143,6 +145,7 @@ export default class MacroSupport {
             chanceOfDamagedItems,
             damagedItemsMultiplier,
             removeDamagedItems,
+            mode
           });
         });
 

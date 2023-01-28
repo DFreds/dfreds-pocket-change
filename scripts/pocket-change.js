@@ -20,15 +20,16 @@ export default class PocketChange {
    *
    * @param {TokenDocument5e} tokenDocument - The token document for the dropped actor
    */
-  populateTreasureForToken(tokenDocument) {
-    if (!this._validator.shouldAutoGenerateCurrency(tokenDocument)) return;
-
+  populateTreasureForToken(tokenDocument, ignoreRating) {
+    if (!this._validator.shouldAutoGenerateCurrency(tokenDocument)) {
+      return;
+    }
     log('Generating treasure');
 
     tokenDocument.updateSource({
       actorData: {
         system: {
-          currency: this.generateCurrency(tokenDocument.actor),
+          currency: this.generateCurrency(tokenDocument.actor, ignoreRating),
         },
       },
     });
@@ -39,17 +40,21 @@ export default class PocketChange {
    *
    * @param {Actor5e} actor - The actor to base the coin generation off of
    */
-  generateCurrency(actor) {
+  generateCurrency(actor, ignoreRating) {
     let currency;
 
-    if (this._isWithinChallengeRating(actor, 0, 4)) {
-      currency = this._treasureForChallengeRating0to4(actor);
-    } else if (this._isWithinChallengeRating(actor, 5, 10)) {
-      currency = this._treasureForChallengeRating5to10(actor);
-    } else if (this._isWithinChallengeRating(actor, 11, 16)) {
-      currency = this._treasureForChallengeRating11to16(actor);
-    } else if (this._isWithinChallengeRating(actor, 17, 100)) {
-      currency = this._treasureForChallengeRating17andUp(actor);
+    if(String(ignoreRating) === 'true') {
+      currency = this._treasureNoChallengeRating(actor);
+    } else {
+      if (this._isWithinChallengeRating(actor, 0, 4)) {
+        currency = this._treasureForChallengeRating0to4(actor);
+      } else if (this._isWithinChallengeRating(actor, 5, 10)) {
+        currency = this._treasureForChallengeRating5to10(actor);
+      } else if (this._isWithinChallengeRating(actor, 11, 16)) {
+        currency = this._treasureForChallengeRating11to16(actor);
+      } else if (this._isWithinChallengeRating(actor, 17, 100)) {
+        currency = this._treasureForChallengeRating17andUp(actor);
+      }
     }
 
     currency.convertCurrencies();
@@ -65,6 +70,25 @@ export default class PocketChange {
   _isWithinChallengeRating(actor, lowerCr, upperCr) {
     let cr = actor.system.details.cr;
     return cr >= lowerCr && cr <= upperCr;
+  }
+
+  _treasureNoChallengeRating(actor) {
+    let currency = new Currency(actor);
+    let roll = this._rollDice('1d100');
+
+    if (roll >= 1 && roll <= 30) {
+      currency.addCopper(this._rollDice('5d6'));
+    } else if (roll >= 31 && roll <= 60) {
+      currency.addSilver(this._rollDice('4d6'));
+    } else if (roll >= 61 && roll <= 70) {
+      currency.addElectrum(this._rollDice('3d6'));
+    } else if (roll >= 71 && roll <= 95) {
+      currency.addGold(this._rollDice('3d6'));
+    } else {
+      currency.addPlatinum(this._rollDice('1d6'));
+    }
+
+    return currency;
   }
 
   _treasureForChallengeRating0to4(actor) {
@@ -193,13 +217,62 @@ export default class PocketChange {
    * @param {number} options.chanceOfDamagedItems - (optional) the chance an item is considered damaged from 0 to 1. Uses the setting if undefined
    * @param {number} options.damagedItemsMultiplier - (optional) the amount to reduce the value of a damaged item by. Uses the setting if undefined
    * @param {boolean} options.removeDamagedItems - (optional) if true, removes items that are damaged of common rarity
+   * @param {string} options.mode e.g. "itempiles", "lootsheet"
+   * @param {number} options.userOption - the type of convertion by default is 1
+   * You've got 4 options to choose from:
+   * 0 = No Special Effect, Coin roll and -if enabled- Item Pile Transformation Only
+   * 1 = Light Effect only
+   * 2 = Change Image Only
+   * 3 = Both Image Change and Light effect
+   * @param {string} options.imgPath - the path to the image by default is the one set on the module setting 
+   * @param {Light} options.light explicit light effect to use if none is passed a default one is used
    */
   async convertToLoot({
     token,
     chanceOfDamagedItems,
     damagedItemsMultiplier,
     removeDamagedItems,
+    mode = "lootsheet",
+    userOption = 1, 
+    imgPath = undefined, 
+    light = undefined
   }) {
+
+    if(mode === "lootsheet") {
+      this._convertToLootLootSheet({
+        token,
+        chanceOfDamagedItems,
+        damagedItemsMultiplier,
+        removeDamagedItems
+      });
+    } else if(mode === "itempiles"){
+      this._convertToItemPiles({
+        token,
+        userOption, 
+        imgPath, 
+        light
+      });
+    } else {
+      // Do nothing
+    }
+  }
+
+/**
+   * Converts the provided token to a lootable sheet
+   *
+   * @param {object} options
+   * @param {Token5e} options.token - the token to convert
+   * @param {number} options.chanceOfDamagedItems - (optional) the chance an item is considered damaged from 0 to 1. Uses the setting if undefined
+   * @param {number} options.damagedItemsMultiplier - (optional) the amount to reduce the value of a damaged item by. Uses the setting if undefined
+   * @param {boolean} options.removeDamagedItems - (optional) if true, removes items that are damaged of common rarity
+   */
+  async _convertToLootLootSheet({
+    token,
+    chanceOfDamagedItems,
+    damagedItemsMultiplier,
+    removeDamagedItems
+  }) {
+
     chanceOfDamagedItems ??= this._settings.chanceOfDamagedItems;
     damagedItemsMultiplier ??= this._settings.damagedItemsMultiplier;
     removeDamagedItems ??= this._settings.removeDamagedItems;
@@ -393,34 +466,38 @@ export default class PocketChange {
    * 2 = Change Image Only
    * 3 = Both Image Change and Light effect
    * @param {string} imgPath - the path to the image by default is the one set on the module setting 
+   * @param {Light} light explicit light effect to use if none is passed a default one is used
    */
-  async convertToItemPiles(token, userOption = 1, imgPath) {
+  async _convertToItemPiles(token, userOption = 1, imgPath = undefined, light = undefined) {
     if (token.actor.details.level > 0) {
-      // Do nothing;
-    } else {   
+      // Do nothing
+    } else {
       if(!imgPath) {
         imgPath = Settings.lootIcon;
       }
-      if (hasItemPiles === 1){
-          ItemPiles.API.turnTokensIntoItemPiles(token);
+      if(!light) {
+        light = {
+            dim:0.2,
+            bright:0.2,
+            luminosity:0,
+            alpha:1,
+            color:'#ad8800',
+            coloration:6,
+            animation:{
+              // type:"sunburst",
+              type:"radialrainbow",
+              speed:3,
+              intensity:10
+            }
+        };
       }
+      ItemPiles.API.turnTokensIntoItemPiles(c);
       if (userOption === 0){
         // Do nothing
-      }else if (userOption === 1){
+      }
+      else if (userOption === 1){
         await token.document.update({
-            light:{
-                dim:0.5,
-                bright:0.25,
-                luminosity:0,
-                alpha:1,
-                color:'#ad7600',
-                coloration:9,
-                animation:{
-                    type:"sunburst",
-                    speed:3,
-                    intensity:10
-                }
-            }
+            light: light
         });
       } else if (userOption === 2){
         await token.document.update({
@@ -431,22 +508,10 @@ export default class PocketChange {
         await token.document.update({
             img: imgPath,
             rotation : 0,
-            light:{
-                dim:0.5,
-                bright:0.25,
-                luminosity:0,
-                alpha:1,
-                color:'#ad7600',
-                coloration:9,
-                animation:{
-                    type:"sunburst",
-                    speed:3,
-                    intensity:10
-                }
-            }
+            light: light
         });
       } else {
-          ui.notifications.error(`${Settings.PACKAGE_NAME} | Error with User Options. Choose a valid option.`);
+        ui.notifications.error(`${Settings.PACKAGE_NAME} | Error with User Options. Choose a valid option.`);
       }
     }
   }

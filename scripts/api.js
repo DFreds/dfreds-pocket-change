@@ -8,8 +8,8 @@ const API = {
     /**
    * For all selected tokens, generate currency for them
    */
-	generateCurrencyForSelectedTokens() {
-		this.MacroSupport.generateCurrencyForSelectedTokens();
+	generateCurrencyForSelectedTokens(ignoreRating = false) {
+		this.MacroSupport.generateCurrencyForSelectedTokens(ignoreRating);
 	},
 	
 	/**

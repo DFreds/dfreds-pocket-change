@@ -103,6 +103,9 @@ export default class NpcSheetCurrency {
       case 'convertToLootable':
         await this._convertToLootable();
         break;
+      case 'convertToItemPiles':
+        await this._convertToItemPiles();
+        break;
     }
   }
 
@@ -133,13 +136,38 @@ export default class NpcSheetCurrency {
   async _convertToLootable() {
     return Dialog.confirm({
       title: game.i18n.localize('PocketChange.ConvertToLootable'),
-      content: `<p>${game.i18n.localize(
-        'PocketChange.ConvertToLootableWarning'
-      )}</p>`,
+      content: await renderTemplate(`modules/${Settings.PACKAGE_NAME}/templates/dialog-pocket-change.html`, {
+        tokenId: this._app.token.id,
+        isItemPiles: false,
+        isLootSheet: true
+      }),
+      // content: `<p>${game.i18n.localize(
+      //   'PocketChange.ConvertToLootableWarning'
+      // )}</p>`,
       yes: async () => {
         const token = this._app.token;
         const pocketChange = new API.PocketChange();
         await pocketChange.convertToLoot({ token: token.object });
+      },
+      defaultYes: false,
+    });
+  }
+
+  async _convertToItemsPiles() {
+    return Dialog.confirm({
+      title: game.i18n.localize('PocketChange.ConvertToLootable'),
+      content: await renderTemplate(`modules/${Settings.PACKAGE_NAME}/templates/dialog-pocket-change.html`, {
+        tokenId: this._app.token.id,
+        isItemPiles: true,
+        isLootSheet: false
+      }),
+      // content: `<p>${game.i18n.localize(
+      //   'PocketChange.ConvertToLootableWarning'
+      // )}</p>`,
+      yes: async () => {
+        const token = this._app.token;
+        const pocketChange = new API.PocketChange();
+        await pocketChange.convertToItemPiles({ token: token.object });
       },
       defaultYes: false,
     });
