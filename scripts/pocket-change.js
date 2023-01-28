@@ -214,25 +214,25 @@ export default class PocketChange {
    *
    * @param {object} options
    * @param {Token5e} options.token - the token to convert
-   * @param {number} options.chanceOfDamagedItems - (optional) the chance an item is considered damaged from 0 to 1. Uses the setting if undefined
-   * @param {number} options.damagedItemsMultiplier - (optional) the amount to reduce the value of a damaged item by. Uses the setting if undefined
-   * @param {boolean} options.removeDamagedItems - (optional) if true, removes items that are damaged of common rarity
    * @param {string} options.mode e.g. "itempiles", "lootsheet"
-   * @param {number} options.userOption - the type of convertion by default is 1
+   * @param {number} options.chanceOfDamagedItems - (optional and only with mode "lootsheet") the chance an item is considered damaged from 0 to 1. Uses the setting if undefined
+   * @param {number} options.damagedItemsMultiplier - (optional and only with mode "lootsheet") the amount to reduce the value of a damaged item by. Uses the setting if undefined
+   * @param {boolean} options.removeDamagedItems - (optional and only with mode "lootsheet") if true, removes items that are damaged of common rarity
+   * @param {number} options.userOption - (optional and only with mode "itempiles") the type of convertion by default is 1
    * You've got 4 options to choose from:
    * 0 = No Special Effect, Coin roll and -if enabled- Item Pile Transformation Only
    * 1 = Light Effect only
    * 2 = Change Image Only
    * 3 = Both Image Change and Light effect
-   * @param {string} options.imgPath - the path to the image by default is the one set on the module setting 
-   * @param {Light} options.light explicit light effect to use if none is passed a default one is used
+   * @param {string} options.imgPath - (optional and only with mode "itempiles") the path to the image by default is the one set on the module setting 
+   * @param {Light} options.light - (optional and only with mode "itempiles") explicit light effect to use if none is passed a default one is used
    */
   async convertToLoot({
     token,
+    mode = "lootsheet",
     chanceOfDamagedItems,
     damagedItemsMultiplier,
     removeDamagedItems,
-    mode = "lootsheet",
     userOption = 1, 
     imgPath = undefined, 
     light = undefined
