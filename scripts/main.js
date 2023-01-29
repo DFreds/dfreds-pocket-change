@@ -14,7 +14,10 @@ Hooks.once('init', () => {
 });
 
 Hooks.once("setup", async function () {
-  setApi(API)
+  API = API || {};
+  API.PocketChange = PocketChange;
+  API.MacroSupport = MacroSupport;
+  setApi(API);
 });
 
 Hooks.on('preCreateToken', (tokenDocument, _tokenData, _options, _userId) => {

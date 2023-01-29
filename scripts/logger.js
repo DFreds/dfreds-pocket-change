@@ -1,4 +1,4 @@
-import Settings from "./settings";
+import Settings from "./settings.js";
 
 /**
  * Simple logger that prepends the package name if the data is a string

@@ -2,8 +2,8 @@ import PocketChange from './pocket-change.js';
 import MacroSupport from './macro-support.js';
 
 const API = {
-	PocketChange,
-    MacroSupport,
+	PocketChange: undefined,
+    MacroSupport: undefined,
 
     /**
    * For all selected tokens, generate currency for them
