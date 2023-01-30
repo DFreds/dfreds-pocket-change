@@ -11,7 +11,13 @@ const API = {
 	* @param {boolean} - (optional) if true it will generate a random currency without the rating check
     */
 	generateCurrencyForSelectedTokens(ignoreRating = false) {
-		this.MacroSupport.generateCurrencyForSelectedTokens(ignoreRating);
+		if(!this.MacroSupport){
+			this.MacroSupport = new MacroSupport();
+		}
+		if(!this.PocketChange){
+			this.PocketChange = new PocketChange();
+		}
+		this.MacroSupport.prototype.generateCurrencyForSelectedTokens(ignoreRating);
 	},
 	
 	/**
@@ -28,7 +34,13 @@ const API = {
 		damagedItemsMultiplier,
 		removeDamagedItems
 	) {
-		this.MacroSupport.convertSelectedTokensToLoot({
+		if(!this.MacroSupport){
+			this.MacroSupport = new MacroSupport();
+		}
+		if(!this.PocketChange){
+			this.PocketChange = new PocketChange();
+		}
+		this.MacroSupport.prototype.convertSelectedTokensToLoot({
 			chanceOfDamagedItems,
 			damagedItemsMultiplier,
 			removeDamagedItems,
@@ -39,7 +51,13 @@ const API = {
 	* For all selected tokens, convert them back from lootable sheets.
 	*/
 	revertSelectedTokensFromLootSheet() {
-		this.MacroSupport.revertSelectedTokensFromLootSheet();
+		if(!this.MacroSupport){
+			this.MacroSupport = new MacroSupport();
+		}
+		if(!this.PocketChange){
+			this.PocketChange = new PocketChange();
+		}
+		this.MacroSupport.prototype.revertSelectedTokensFromLootSheet();
 	},
 
 
@@ -60,7 +78,13 @@ const API = {
 		imgPath, 
 		light,
 	) {
-		this.MacroSupport.convertSelectedTokensToLoot({
+		if(!this.MacroSupport){
+			this.MacroSupport = new MacroSupport();
+		}
+		if(!this.PocketChange){
+			this.PocketChange = new PocketChange();
+		}
+		this.MacroSupport.prototype.convertSelectedTokensToLoot({
 			userOption, 
 			imgPath, 
 			light,

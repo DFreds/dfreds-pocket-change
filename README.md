@@ -103,6 +103,7 @@ For all selected tokens, generate currency for them
 
 For all selected tokens, convert them to lootable sheets.
 Adapted from the convert-to-lootable.js by @unsoluble, @Akaito, @honeybadger, @kekilla, and @cole.
+
 **NOTE:** You need the module [Loot Sheet NPC 5E](https://github.com/jopeek/fvtt-loot-sheet-npc-5e) enable and activate
 
 | Param | Type | Description |
@@ -122,6 +123,7 @@ For all selected tokens, convert them back from lootable sheets.
 `game.modules.get("dfreds-pocket-change").api.convertSelectedTokensToItemPiles(userOption, imgPath, light) => void`
 
 For all selected tokens, convert them to item piles.
+
 **NOTE:** You need the module [Item Piles](https://github.com/fantasycalendar/FoundryVTT-ItemPiles) enable and activate
 
 | Param | Type | Description |

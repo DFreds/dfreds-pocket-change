@@ -114,34 +114,14 @@ export default class MacroSupport {
       light = undefined
     }
   ) {
-    let contentTitle = game.i18n.localize('PocketChange.ConvertToLootable');
-    let contentWarn = `<p>${game.i18n.localize(
-      'PocketChange.ConvertToLootableWarning'
-    )}</p>`;
-    let contentError =  game.i18n.localize(
-      'PocketChange.ConvertToLootableErrorNoTokensSelected'
-    );
-    let contentModifyWarn = game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
-      name: token.name,
-    });
-    let contentInfoConfirmation = game.i18n.format('PocketChange.ConvertToLootableConfirmation', {
-      number: filtered.length,
-    });
-
     if(mode === "lootsheet") {
-      contentTitle = game.i18n.localize('PocketChange.ConvertToLootable');
-      contentWarn = `<p>${game.i18n.localize(
+      let contentTitle = game.i18n.localize('PocketChange.ConvertToLootable');
+      let contentWarn = `<p>${game.i18n.localize(
         'PocketChange.ConvertToLootableWarning'
       )}</p>`;
-      contentError =  game.i18n.localize(
+      let contentError =  game.i18n.localize(
         'PocketChange.ConvertToLootableErrorNoTokensSelected'
       );
-      contentModifyWarn = game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
-        name: token.name,
-      });
-      contentInfoConfirmation = game.i18n.format('PocketChange.ConvertToLootableConfirmation', {
-        number: filtered.length,
-      });
 
       return Dialog.confirm({
         title: contentTitle,
@@ -158,6 +138,9 @@ export default class MacroSupport {
             const isTokenLootSheet = this._isTokenLootSheet(token);
   
             if (isTokenLootSheet) {
+              let contentModifyWarn = game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
+                name: token.name,
+              });
               ui.notifications.warn(contentModifyWarn);
             }
   
@@ -174,25 +157,22 @@ export default class MacroSupport {
           });
   
           // Notify number of tokens that were effected
+          let contentInfoConfirmation = game.i18n.format('PocketChange.ConvertToLootableConfirmation', {
+            number: filtered.length,
+          });
           ui.notifications.info(contentInfoConfirmation);
         },
         defaultYes: false,
       });
     } 
     else if(mode === "itempiles") {
-      contentTitle = game.i18n.localize('PocketChange.ConvertToItemPiles')
-      contentWarn = `<p>${game.i18n.localize(
+      let contentTitle = game.i18n.localize('PocketChange.ConvertToItemPiles')
+      let contentWarn = `<p>${game.i18n.localize(
         'PocketChange.ConvertToItemPilesWarning'
       )}</p>`;
-      contentError =  game.i18n.localize(
+      let contentError =  game.i18n.localize(
         'PocketChange.ConvertToItemPilesErrorNoTokensSelected'
       );
-      contentModifyWarn = game.i18n.format('PocketChange.WarningModifyItemPilesToken', {
-        name: token.name,
-      });
-      contentInfoConfirmation = game.i18n.format('PocketChange.ConvertToItemPilesConfirmation', {
-        number: filtered.length,
-      });
 
       return Dialog.confirm({
         title: contentTitle,
@@ -209,6 +189,9 @@ export default class MacroSupport {
             const isTokenLootSheet = this._isTokenLootSheet(token);
   
             if (isTokenLootSheet) {
+              let contentModifyWarn = game.i18n.format('PocketChange.WarningModifyItemPilesToken', {
+                name: token.name,
+              });
               ui.notifications.warn(contentModifyWarn);
             }
   
@@ -225,6 +208,9 @@ export default class MacroSupport {
           });
   
           // Notify number of tokens that were effected
+          let contentInfoConfirmation = game.i18n.format('PocketChange.ConvertToItemPilesConfirmation', {
+            number: filtered.length,
+          });
           ui.notifications.info(contentInfoConfirmation);
         },
         defaultYes: false,
