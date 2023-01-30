@@ -14,7 +14,6 @@ Hooks.once('init', () => {
 });
 
 Hooks.once("setup", async function () {
-  API = API || {};
   API.PocketChange = PocketChange;
   API.MacroSupport = MacroSupport;
   setApi(API);

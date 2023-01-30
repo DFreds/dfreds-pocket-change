@@ -9,6 +9,11 @@
   "PocketChange.ConvertToLootableErrorNoTokensSelected": "Tokens must be selected to convert to lootable",
   "PocketChange.ConvertToLootableWarning": "Convert this token to a lootable sheet. Be wary, this will only keep items and convert the token to a loot sheet that players can interact with. This cannot be undone.",
 
+  "PocketChange.ConvertToItemPiles": "Convert to Item Piles",
+  "PocketChange.ConvertToItemPilesConfirmation": "Converted {number} tokens to item piles",
+  "PocketChange.ConvertToItemPilesErrorNoTokensSelected": "Tokens must be selected to convert to item piles",
+  "PocketChange.ConvertToItemPilesWarning": "Convert this token to a item piles. Be wary, this will only keep items and convert the token to a item piles that players can interact with. This cannot be undone.",
+
   "PocketChange.GenerateCurrency": "Generate Currency",
   "PocketChange.GenerateCurrencyConfirmation": "Generated currency for {number} tokens",
   "PocketChange.GenerateCurrencyErrorNoTokensSelected": "Tokens must be selected to generate currency",

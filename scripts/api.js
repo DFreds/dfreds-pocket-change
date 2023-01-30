@@ -35,8 +35,8 @@ const API = {
 	/**
 	 * For all selected tokens, convert them back from lootable sheets.
 	 */
-	convertSelectedTokensFromLoot() {
-		this.MacroSupport.convertSelectedTokensFromLoot();
+	convertSelectedTokensFromLootSheet() {
+		this.MacroSupport.convertSelectedTokensFromLootSheet();
 	}
 };
 export default API;

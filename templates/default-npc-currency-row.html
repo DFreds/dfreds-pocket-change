@@ -7,9 +7,16 @@
       <i class="fas fa-redo"></i>
     </a>
     {{#if config.hasToken}}
+    {{#if config.isLootSheet}}
     <a style="margin-left: 4px;" class="currency-loot rollable" data-action="convertToLootable" title="{{localize 'PocketChange.ConvertToLootable'}}">
       <i class="fas fa-shopping-bag"></i>
     </a>
+    {{/if}}
+    {{#if config.isItemPiles}}
+    <a style="margin-left: 4px;" class="currency-loot rollable" data-action="convertToItemPiles" title="{{localize 'PocketChange.ConvertToItemPiles'}}">
+      <i class="fas fa-box-open"></i>
+    </a>
+    {{/if}}
     {{/if}}
   </h3>
   {{#each data.currency as |v k|}}

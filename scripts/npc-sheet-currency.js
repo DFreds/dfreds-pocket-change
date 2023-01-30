@@ -1,3 +1,4 @@
+import API from './api.js';
 import Settings from './settings.js';
 
 /**
@@ -53,6 +54,8 @@ export default class NpcSheetCurrency {
         data: this._data.system,
         config: {
           hasToken: !!this._app.token,
+          isLootSheet: game.modules.get('lootsheet-simple')?.active,
+          isItemPiles: game.modules.get('item-piles')?.active,
           currencies: {
             pp: game.i18n.localize('DND5E.CurrencyPP'),
             gp: game.i18n.localize('DND5E.CurrencyGP'),
@@ -85,6 +88,8 @@ export default class NpcSheetCurrency {
         data: this._data.data,
         config: {
           hasToken: !!this._app.token,
+          isLootSheet: game.modules.get('lootsheet-simple')?.active,
+          isItemPiles: game.modules.get('item-piles')?.active,
         },
       }
     );
@@ -136,38 +141,46 @@ export default class NpcSheetCurrency {
   async _convertToLootable() {
     return Dialog.confirm({
       title: game.i18n.localize('PocketChange.ConvertToLootable'),
-      content: await renderTemplate(`modules/${Settings.PACKAGE_NAME}/templates/dialog-pocket-change.html`, {
-        tokenId: this._app.token.id,
-        isItemPiles: false,
-        isLootSheet: true
-      }),
-      // content: `<p>${game.i18n.localize(
-      //   'PocketChange.ConvertToLootableWarning'
-      // )}</p>`,
+      // content: await renderTemplate(`modules/${Settings.PACKAGE_NAME}/templates/dialog-pocket-change.html`, {
+      //   tokenId: this._app.token.id,
+      //   isItemPiles: false,
+      //   isLootSheet: true
+      // }),
+      content: `<p>${game.i18n.localize(
+        'PocketChange.ConvertToLootableWarning'
+      )}</p>`,
       yes: async () => {
         const token = this._app.token;
         const pocketChange = new API.PocketChange();
-        await pocketChange.convertToLoot({ token: token.object });
+        await pocketChange.convertToLoot(
+          { 
+            token: token.object,
+            mode: "lootsheet"
+          });
       },
       defaultYes: false,
     });
   }
 
-  async _convertToItemsPiles() {
+  async _convertToItemPiles() {
     return Dialog.confirm({
-      title: game.i18n.localize('PocketChange.ConvertToLootable'),
-      content: await renderTemplate(`modules/${Settings.PACKAGE_NAME}/templates/dialog-pocket-change.html`, {
-        tokenId: this._app.token.id,
-        isItemPiles: true,
-        isLootSheet: false
-      }),
-      // content: `<p>${game.i18n.localize(
-      //   'PocketChange.ConvertToLootableWarning'
-      // )}</p>`,
+      title: game.i18n.localize('PocketChange.ConvertToItemPiles'),
+      // content: await renderTemplate(`modules/${Settings.PACKAGE_NAME}/templates/dialog-pocket-change.html`, {
+      //   tokenId: this._app.token.id,
+      //   isItemPiles: true,
+      //   isLootSheet: false
+      // }),
+      content: `<p>${game.i18n.localize(
+        'PocketChange.ConvertToItemPilesWarning'
+      )}</p>`,
       yes: async () => {
         const token = this._app.token;
         const pocketChange = new API.PocketChange();
-        await pocketChange.convertToItemPiles({ token: token.object });
+        await pocketChange.convertToLoot(
+          { 
+          token: token.object,
+          mode: "itempiles"
+        });
       },
       defaultYes: false,
     });

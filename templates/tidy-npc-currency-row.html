@@ -10,10 +10,20 @@
   </a>
 </li>
 {{#if config.hasToken}}
+{{#if config.isLootSheet}}
 <li style="margin-left: 4px;" class="currency-item convert">
   <a class="currency-loot rollable" data-action="convertToLootable"
     title="{{localize 'PocketChange.ConvertToLootable'}}">
     <i class="fas fa-shopping-bag"></i>
   </a>
 </li>
+{{/if}}
+{{#if config.isLootSheet}}
+<li style="margin-left: 4px;" class="currency-item convert"></li>
+  <a class="currency-loot rollable" data-action="convertToItemPiles"
+    title="{{localize 'PocketChange.ConvertToItemPiles'}}">
+    <i class="fas fa-box-open"></i>
+  </a>
+</li>
+{{/if}}
 {{/if}}

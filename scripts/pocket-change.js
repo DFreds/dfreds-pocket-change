@@ -469,51 +469,47 @@ export default class PocketChange {
    * @param {string} imgPath - the path to the image by default is the one set on the module setting 
    * @param {Light} light explicit light effect to use if none is passed a default one is used
    */
-  async _convertToItemPiles(token, userOption = 1, imgPath = undefined, light = undefined) {
-    if (token.actor.details.level > 0) {
+  async _convertToItemPiles({token, userOption = 1, imgPath = undefined, light = undefined}) {
+    if(!imgPath) {
+      imgPath = game.settings.get(Settings.PACKAGE_NAME, Settings.LOOT_ICON);
+    }
+    if(!light) {
+      light = {
+          dim:0.2,
+          bright:0.2,
+          luminosity:0,
+          alpha:1,
+          color:'#ad8800',
+          coloration:6,
+          animation:{
+            // type:"sunburst",
+            type:"radialrainbow",
+            speed:3,
+            intensity:10
+          }
+      };
+    }
+    ItemPiles.API.turnTokensIntoItemPiles(token);
+    if (userOption === 0){
       // Do nothing
+    }
+    else if (userOption === 1){
+      await token.document.update({
+          light: light
+      });
+    } else if (userOption === 2){
+      await token.document.update({
+        img : imgPath, 
+        rotation : 0
+      });
+    } else if (userOption === 3){
+      await token.document.update({
+          img: imgPath,
+          rotation : 0,
+          light: light
+      });
     } else {
-      if(!imgPath) {
-        imgPath = Settings.lootIcon;
-      }
-      if(!light) {
-        light = {
-            dim:0.2,
-            bright:0.2,
-            luminosity:0,
-            alpha:1,
-            color:'#ad8800',
-            coloration:6,
-            animation:{
-              // type:"sunburst",
-              type:"radialrainbow",
-              speed:3,
-              intensity:10
-            }
-        };
-      }
-      ItemPiles.API.turnTokensIntoItemPiles(c);
-      if (userOption === 0){
-        // Do nothing
-      }
-      else if (userOption === 1){
-        await token.document.update({
-            light: light
-        });
-      } else if (userOption === 2){
-        await token.document.update({
-          img : imgPath, 
-          rotation : 0
-        });
-      } else if (userOption === 3){
-        await token.document.update({
-            img: imgPath,
-            rotation : 0,
-            light: light
-        });
-      } else {
-        ui.notifications.error(`${Settings.PACKAGE_NAME} | Error with User Options. Choose a valid option.`);
-      }
+      ui.notifications.error(`${Settings.PACKAGE_NAME} | Error with User Options. Choose a valid option.`);
     }
   }
 }

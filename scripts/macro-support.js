@@ -108,19 +108,58 @@ export default class MacroSupport {
     removeDamagedItems,
     mode = "lootsheet"
   ) {
-    return Dialog.confirm({
-      title: game.i18n.localize('PocketChange.ConvertToLootable'),
-      content: `<p>${game.i18n.localize(
+    let contentTitle = game.i18n.localize('PocketChange.ConvertToLootable');
+    let contentWarn = `<p>${game.i18n.localize(
+      'PocketChange.ConvertToLootableWarning'
+    )}</p>`;
+    let contentError =  game.i18n.localize(
+      'PocketChange.ConvertToLootableErrorNoTokensSelected'
+    );
+    let contentModifyWarn = game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
+      name: token.name,
+    });
+    let contentInfoConfirmation = game.i18n.format('PocketChange.ConvertToLootableConfirmation', {
+      number: filtered.length,
+    });
+
+    if(mode === "lootsheet") {
+      contentTitle = game.i18n.localize('PocketChange.ConvertToLootable');
+      contentWarn = `<p>${game.i18n.localize(
         'PocketChange.ConvertToLootableWarning'
-      )}</p>`,
+      )}</p>`;
+      contentError =  game.i18n.localize(
+        'PocketChange.ConvertToLootableErrorNoTokensSelected'
+      );
+      contentModifyWarn = game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
+        name: token.name,
+      });
+      contentInfoConfirmation = game.i18n.format('PocketChange.ConvertToLootableConfirmation', {
+        number: filtered.length,
+      });
+    } 
+    else if(mode === "itempiles") {
+      contentTitle = game.i18n.localize('PocketChange.ConvertToItemPiles')
+      contentWarn = `<p>${game.i18n.localize(
+        'PocketChange.ConvertToItemPilesWarning'
+      )}</p>`;
+      contentError =  game.i18n.localize(
+        'PocketChange.ConvertToItemPilesErrorNoTokensSelected'
+      );
+      contentModifyWarn = game.i18n.format('PocketChange.WarningModifyItemPilesToken', {
+        name: token.name,
+      });
+      contentInfoConfirmation = game.i18n.format('PocketChange.ConvertToItemPilesConfirmation', {
+        number: filtered.length,
+      });
+    }
+
+    return Dialog.confirm({
+      title: contentTitle,
+      content: contentWarn,
       yes: async () => {
         // Notify if no tokens selected
         if (canvas.tokens.controlled.length == 0) {
-          ui.notifications.error(
-            game.i18n.localize(
-              'PocketChange.ConvertToLootableErrorNoTokensSelected'
-            )
-          );
+          ui.notifications.error(contentError);
           return;
         }
 
@@ -129,11 +168,7 @@ export default class MacroSupport {
           const isTokenLootSheet = this._isTokenLootSheet(token);
 
           if (isTokenLootSheet) {
-            ui.notifications.warn(
-              game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
-                name: token.name,
-              })
-            );
+            ui.notifications.warn(contentModifyWarn);
           }
 
           return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
@@ -150,11 +185,7 @@ export default class MacroSupport {
         });
 
         // Notify number of tokens that were effected
-        ui.notifications.info(
-          game.i18n.format('PocketChange.ConvertToLootableConfirmation', {
-            number: filtered.length,
-          })
-        );
+        ui.notifications.info(contentInfoConfirmation);
       },
       defaultYes: false,
     });
@@ -163,7 +194,7 @@ export default class MacroSupport {
   /**
    * For all selected tokens, convert them back from lootable sheets.
    */
-  convertSelectedTokensFromLoot() {
+  convertSelectedTokensFromLootSheet() {
     return Dialog.confirm({
       title: game.i18n.localize('PocketChange.ConvertFromLootable'),
       content: `<p>${game.i18n.localize(
