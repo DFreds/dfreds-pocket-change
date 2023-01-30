@@ -81,13 +81,89 @@ It only generates currency if all of the following are true:
 
 ## What This Module Doesn't Do
 
-Stops your players from being murder hobos. Also, it doesn't actually provide anyway for you to actually let the players steal that lovable NPC's life savings. That's what [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) does for you in conjunction with my included macros.
+Stops your players from being murder hobos. Also, it doesn't actually provide anyway for you to actually let the players steal that lovable NPC's life savings. 
+
+That's what [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) and [Item Piles](https://github.com/fantasycalendar/FoundryVTT-ItemPiles) does for you in conjunction with my included macros.
 
 ## API
 
-`game.modules.get("dfreds-pocket-change).api.openCurrencyTrade(actorId) => void`
+### Generate currency for selected tokens
 
-`game.modules.get("dfreds-pocket-change").api.openItemTrade(actorId, itemId) => void`
+`game.modules.get("dfreds-pocket-change").api.generateCurrencyForSelectedTokens(ignoreRating = false) => void`
+
+For all selected tokens, generate currency for them
+
+| Param | Type | Description |
+| ---   | ---  | ---         |
+| ignoreRating | `boolean` | (optional) if true it will generate a random currency without the rating check |
+
+### Convert selected tokens to lootable sheets
+
+`game.modules.get("dfreds-pocket-change").api.convertSelectedTokensToLootSheet(chanceOfDamagedItems, damagedItemsMultiplier, removeDamagedItems) => void`
+
+For all selected tokens, convert them to lootable sheets.
+Adapted from the convert-to-lootable.js by @unsoluble, @Akaito, @honeybadger, @kekilla, and @cole.
+**NOTE:** You need the module [Loot Sheet NPC 5E](https://github.com/jopeek/fvtt-loot-sheet-npc-5e) enable and activate
+
+| Param | Type | Description |
+| ---   | ---  | ---         |
+| chanceOfDamagedItems | `number` | (optional) A number between 0 and 1 that corresponds to the percent chance an item will be damaged |
+| damagedItemsMultiplier | `number` | (optional) A number between 0 and 1 that will lower a damaged items value |
+| removeDamagedItems | `boolean` | (optional) If true, damaged items will be removed from the token rather than marked as damaged |
+
+### Revert selected tokens from lootable sheets
+
+`game.modules.get("dfreds-pocket-change").api.revertSelectedTokensFromLootSheet() => void`
+
+For all selected tokens, convert them back from lootable sheets.
+
+### Convert selected tokens to item piles
+
+`game.modules.get("dfreds-pocket-change").api.convertSelectedTokensToItemPiles(userOption, imgPath, light) => void`
+
+For all selected tokens, convert them to item piles.
+**NOTE:** You need the module [Item Piles](https://github.com/fantasycalendar/FoundryVTT-ItemPiles) enable and activate
+
+| Param | Type | Description |
+| ---   | ---  | ---         |
+| userOption | `number` | (optional) the type of convertion by default is 1. You've got 4 options to choose from: 0 = No Special Effect, Coin roll and -if enabled- Item Pile Transformation Only, 1 = Light Effect only, 2 = Change Image Only, 3 = Both Image Change and Light effect |
+| imgPath | `string` | (optional) the path to the image by default is the one set on the module setting  |
+| light | `light` | (optional) explicit light effect to use if none is passed a default one is used |
+
+As is, out of the box, this macro: (1) turns the token into an Item Pile, (2) Rolls and adds random coins and (3) adds a Light Effect. If that's good for you, then you don't need to change anything at all.
+
+**Want to Change the Token Image and/or add a Light Effect (or neither)?**
+
+You've got 4 options with option `userOption` to choose from:
+- 0 = No Special Effect, Coin roll and -if enabled- Item Pile Transformation Only 
+- 1 = Light Effect only
+- 2 = Change Image Only
+- 3 = Both Image Change and Light effect
+
+#### USER OPTION EXAMPLES
+
+##### No Visual Change, Roll Random Coin, Turn into Item Pile (Option 0)
+
+<img src="/docs/NPC_to_Item_Pile_Macro_Examples/Capture-06.gif" width="50%"/>
+
+&nbsp;
+
+##### Add Light Effect Only, Roll Random Coin, Turn into Item Pile (Option 1)
+
+<img src="/docs/NPC_to_Item_Pile_Macro_Examples/Capture-07.gif" width="50%"/>
+(no coins shown after executing macro was not a mistake, there is a percent chance to not receive any coins)
+
+&nbsp;
+
+##### Change Token Image Only, Roll Random Coin, Turn into Item Pile (Option 2)
+
+<img src="/docs/NPC_to_Item_Pile_Macro_Examples/Capture-08.gif" width="50%"/>
+
+&nbsp;
+
+##### Change Token Image & Add Light Effect, Roll Random Coin, Turn into Item Pile (Option 3)
+
+<img src="/docs/NPC_to_Item_Pile_Macro_Examples/Capture-09.gif" width="50%"/>
 
 ## My Philosophy
 

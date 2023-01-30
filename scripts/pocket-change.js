@@ -239,7 +239,7 @@ export default class PocketChange {
   }) {
 
     if(mode === "lootsheet"  && game.modules.get("lootsheet-simple")?.active) {
-      this._convertToLootLootSheet({
+      this._convertToLootSheet({
         token,
         chanceOfDamagedItems,
         damagedItemsMultiplier,
@@ -267,7 +267,7 @@ export default class PocketChange {
    * @param {number} options.damagedItemsMultiplier - (optional) the amount to reduce the value of a damaged item by. Uses the setting if undefined
    * @param {boolean} options.removeDamagedItems - (optional) if true, removes items that are damaged of common rarity
    */
-  async _convertToLootLootSheet({
+  async _convertToLootSheet({
     token,
     chanceOfDamagedItems,
     damagedItemsMultiplier,
@@ -459,19 +459,20 @@ export default class PocketChange {
   /**
    * Converts the provided token to a item piles lootable sheet
    *
-   * @param {Token5e} token - the token to convert
-   * @param {number} userOption - the type of convertion by default is 1
+   * @param {object} options
+   * @param {Token5e} options.token - the token to convert
+   * @param {number} options.userOption - (optional) the type of convertion by default is 1
    * You've got 4 options to choose from:
    * 0 = No Special Effect, Coin roll and -if enabled- Item Pile Transformation Only
    * 1 = Light Effect only
    * 2 = Change Image Only
    * 3 = Both Image Change and Light effect
-   * @param {string} imgPath - the path to the image by default is the one set on the module setting 
-   * @param {Light} light explicit light effect to use if none is passed a default one is used
+   * @param {string} options.imgPath - (optional) the path to the image by default is the one set on the module setting 
+   * @param {Light} options.light - (optional) explicit light effect to use if none is passed a default one is used
    */
   async _convertToItemPiles({token, userOption = 1, imgPath = undefined, light = undefined}) {
     if(!imgPath) {
-      imgPath = game.settings.get(Settings.PACKAGE_NAME, Settings.LOOT_ICON);
+      imgPath = new Settings().lootIcon;
     }
     if(!light) {
       light = {
@@ -489,7 +490,7 @@ export default class PocketChange {
           }
       };
     }
-    ItemPiles.API.turnTokensIntoItemPiles(token);
+    await ItemPiles.API.turnTokensIntoItemPiles(token);
     if (userOption === 0){
       // Do nothing
     }
@@ -499,14 +500,18 @@ export default class PocketChange {
       });
     } else if (userOption === 2){
       await token.document.update({
-        img : imgPath, 
+        texture : {
+          src: imgPath
+        },
         rotation : 0
       });
     } else if (userOption === 3){
       await token.document.update({
-          img: imgPath,
-          rotation : 0,
-          light: light
+        texture : {
+          src: imgPath
+        },
+        rotation : 0,
+        light: light
       });
     } else {
       ui.notifications.error(`${Settings.PACKAGE_NAME} | Error with User Options. Choose a valid option.`);

@@ -72,7 +72,7 @@ export default class Settings {
       default: 'icons/svg/chest.svg',
       type: String,
       choices: {
-          chest: 'icons/svg/chest.svg',
+          lootbag0: 'icons/svg/chest.svg',
           lootbag1: 'modules/dfreds-pocket-change/assets/img/LootBag1.svg',
           lootbag2: 'modules/dfreds-pocket-change/assets/img/LootBag2.svg',
           lootbag3: 'modules/dfreds-pocket-change/assets/img/LootBag3.svg',
@@ -252,7 +252,13 @@ export default class Settings {
    * @returns {string} a string representing the path to the icon
    */
   get lootIcon() {
-    return game.settings.get(Settings.PACKAGE_NAME, Settings.LOOT_ICON);
+    let lootIconKey = game.settings.get(Settings.PACKAGE_NAME, Settings.LOOT_ICON);
+    if(lootIconKey  === 'lootbag0') return 'icons/svg/chest.svg';
+    else if(lootIconKey  === 'lootbag1') return 'modules/dfreds-pocket-change/assets/img/LootBag1.svg';
+    else if(lootIconKey  === 'lootbag2') return 'modules/dfreds-pocket-change/assets/img/LootBag2.svg';
+    else if(lootIconKey  === 'lootbag3') return 'modules/dfreds-pocket-change/assets/img/LootBag3.svg';
+    else if(lootIconKey  === 'lootbag4') return 'modules/dfreds-pocket-change/assets/img/LootBag4.svg';
+    else return 'icons/svg/chest.svg';
   }
 
   /**
