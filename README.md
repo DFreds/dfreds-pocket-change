@@ -14,7 +14,10 @@ __DFreds Pocket Change__ is a FoundryVTT module which automatically adds currenc
 
 Have you ever watched as the peaceful NPCs of the town you've lovingly crafted get slaughtered by your players, only for them to ask how much money was in their pockets so they could loot them afterwards? Well, now you can automate that part. The money part. Not the slaughter. That would be weird.
 
-Oh yeah. This module is useless without [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) by ChalkOne. So get that bad boy.
+This module need at least one of these modules for work:
+
+- [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) by ChalkOne.
+- [Item Piles](https://github.com/fantasycalendar/FoundryVTT-ItemPiles) y Swap.
 
 ## What This Module Does
 
