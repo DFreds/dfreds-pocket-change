@@ -1,5 +1,6 @@
 import PocketChange from './pocket-change.js';
 import MacroSupport from './macro-support.js';
+import Settings from './settings.js';
 
 const API = {
 	PocketChange: undefined,
@@ -7,7 +8,7 @@ const API = {
 
     /**
     * For all selected tokens, generate currency for them
-	* 
+	*
 	* @param {boolean} - (optional) if true it will generate a random currency without the rating check
     */
 	generateCurrencyForSelectedTokens(ignoreRating = false) {
@@ -19,7 +20,7 @@ const API = {
 		}
 		this.MacroSupport.prototype.generateCurrencyForSelectedTokens(ignoreRating);
 	},
-	
+
 	/**
 	* For all selected tokens, convert them to lootable sheets.
 	*
@@ -34,6 +35,13 @@ const API = {
 		damagedItemsMultiplier,
 		removeDamagedItems
 	) {
+    if(!game.modules.get('lootsheet-simple')?.active) {
+      let word = 'install and activate';
+      if (game.modules.get('lootsheet-simple')) word = 'activate';
+      const errorText = `${Settings.PACKAGE_NAME} | Requires the 'lootsheet-simple' module. Please ${word} it.`.replace("<br>", "\n");
+      ui.notifications?.error(errorText);
+      throw new Error(errorText);
+    }
 		if(!this.MacroSupport){
 			this.MacroSupport = new MacroSupport();
 		}
@@ -46,11 +54,18 @@ const API = {
 			removeDamagedItems,
 			mode: "lootsheet"});
 	},
-	
+
 	/**
 	* For all selected tokens, convert them back from lootable sheets.
 	*/
 	revertSelectedTokensFromLootSheet() {
+    if(!game.modules.get('lootsheet-simple')?.active) {
+      let word = 'install and activate';
+      if (game.modules.get('lootsheet-simple')) word = 'activate';
+      const errorText = `${Settings.PACKAGE_NAME} | Requires the 'lootsheet-simple' module. Please ${word} it.`.replace("<br>", "\n");
+      ui.notifications?.error(errorText);
+      throw new Error(errorText);
+    }
 		if(!this.MacroSupport){
 			this.MacroSupport = new MacroSupport();
 		}
@@ -70,14 +85,21 @@ const API = {
 	* 1 = Light Effect only
 	* 2 = Change Image Only
 	* 3 = Both Image Change and Light effect
-	* @param {string} imgPath - (optional) the path to the image by default is the one set on the module setting 
+	* @param {string} imgPath - (optional) the path to the image by default is the one set on the module setting
 	* @param {Light} light (optional) explicit light effect to use if none is passed a default one is used
 	*/
 	convertSelectedTokensToItemPiles(
 		userOption,
-		imgPath, 
+		imgPath,
 		light,
 	) {
+    if(!game.modules.get('item-piles')?.active) {
+      let word = 'install and activate';
+      if (game.modules.get('item-piles')) word = 'activate';
+      const errorText = `${Settings.PACKAGE_NAME} | Requires the 'item-piles' module. Please ${word} it.`.replace("<br>", "\n");
+      ui.notifications?.error(errorText);
+      throw new Error(errorText);
+    }
 		if(!this.MacroSupport){
 			this.MacroSupport = new MacroSupport();
 		}
@@ -85,8 +107,8 @@ const API = {
 			this.PocketChange = new PocketChange();
 		}
 		this.MacroSupport.prototype.convertSelectedTokensToLoot({
-			userOption, 
-			imgPath, 
+			userOption,
+			imgPath,
 			light,
 			mode: "itempiles"});
 	},
