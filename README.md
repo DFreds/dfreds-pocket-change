@@ -17,7 +17,7 @@ Have you ever watched as the peaceful NPCs of the town you've lovingly crafted g
 This module need at least one of these modules for work:
 
 - [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) by ChalkOne.
-- [Item Piles](https://github.com/fantasycalendar/FoundryVTT-ItemPiles) y Swap.
+- [Item Piles](https://github.com/fantasycalendar/FoundryVTT-ItemPiles) by Swap.
 
 ## What This Module Does
 
