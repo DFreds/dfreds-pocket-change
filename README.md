@@ -28,6 +28,7 @@ Pocket Change also adds a currency row onto the NPC sheet. From there, you can d
 - Convert All Currency: Changes all coins to the highest possible denomination (like in the PC sheet)
 - Generate Currency: This replaces all their currency with new values. These values will be kept for all linked tokens and potentially overridden for non-linked tokens (see When it Automatically Generates Currency).
 - Convert to Lootable - This changes the actor sheet to a LootSheet5eNPC, deletes all the Feat and Spell items, applies damage to the rest of the items based on your settings, sets token privileges to Observer for players, and add a treasure overlay icon to the bodies. This allows players to steal that sweet cash and loot straight from the dead dude. Note that this only works on NPC actor sheets for tokens on the canvas.
+- Convert to Item Piles - This changes the actor sheet to a Item Piles. This allows players to steal that sweet cash and loot straight from the dead dude.
 
 See here:
 
@@ -59,7 +60,8 @@ It only generates currency if all of the following are true:
 
   > Not every random acolyte should have money you know!
 
-- The actor is not a loot sheet provided by Loot Sheet NPC 5e. This avoids any conflicts for loot sheet actors that have manually entered currency.
+- The actor is not a loot provided by Loot Sheet NPC 5e. This avoids any conflicts for loot sheet actors that have manually entered currency.
+- The actor is not a loot provided by Item Piles. This avoids any conflicts for loot sheet actors that have manually entered currency.
 
   >  I wouldn't want to mess up your perfectly balanced loot chests!
 
@@ -82,12 +84,6 @@ It only generates currency if all of the following are true:
 - The user is a GM. The final catch-all to make sure only GMs are generating currency.
 
   > Take that you pesky players!
-
-## What This Module Doesn't Do
-
-Stops your players from being murder hobos. Also, it doesn't actually provide anyway for you to actually let the players steal that lovable NPC's life savings. 
-
-That's what [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) and [Item Piles](https://github.com/fantasycalendar/FoundryVTT-ItemPiles) does for you in conjunction with my included macros.
 
 ## API
 
