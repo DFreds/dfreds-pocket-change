@@ -146,26 +146,27 @@ You've got 4 options with option `userOption` to choose from:
 
 ##### No Visual Change, Roll Random Coin, Turn into Item Pile (Option 0)
 
-<img src="/docs/NPC_to_Item_Pile_Macro_Examples/Capture-06.gif" width="50%"/>
+<img src="/docs/images/turn_into_pile_0_no_visual_change_and_roll_random_coin.gif" width="50%"/>
 
 &nbsp;
 
 ##### Add Light Effect Only, Roll Random Coin, Turn into Item Pile (Option 1)
 
-<img src="/docs/NPC_to_Item_Pile_Macro_Examples/Capture-07.gif" width="50%"/>
+<img src="/docs/images/turn_into_pile_1_light_effect_only_and_roll_random_coin.gif" width="50%"/>
+
 (no coins shown after executing macro was not a mistake, there is a percent chance to not receive any coins)
 
 &nbsp;
 
 ##### Change Token Image Only, Roll Random Coin, Turn into Item Pile (Option 2)
 
-<img src="/docs/NPC_to_Item_Pile_Macro_Examples/Capture-08.gif" width="50%"/>
+<img src="/docs/images/turn_into_pile_2_token_image_only_and_roll_random_coin.gif" width="50%"/>
 
 &nbsp;
 
 ##### Change Token Image & Add Light Effect, Roll Random Coin, Turn into Item Pile (Option 3)
 
-<img src="/docs/NPC_to_Item_Pile_Macro_Examples/Capture-09.gif" width="50%"/>
+<img src="/docs/images/turn_into_pile_3_token_image_and_light_effect_and_roll_random_coin.gif" width="50%"/>
 
 ## My Philosophy
 
