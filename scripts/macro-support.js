@@ -41,7 +41,8 @@ export default class MacroSupport {
           return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
         });
         filtered.forEach(
-          async (token) => await this._generateCurrencyForToken(token, ignoreRating)
+          async (token) =>
+            await this._generateCurrencyForToken(token, ignoreRating)
         );
 
         // Notify number of tokens that were effected
@@ -102,24 +103,22 @@ export default class MacroSupport {
    * @param {boolean} removeDamagedItems If true, damaged items will be removed from the token rather than marked as damaged
    * @param {string} mode e.g. "itempiles", "lootsheet"
    */
-  convertSelectedTokensToLoot(
-    {
-      token,
-      mode = "lootsheet",
-      chanceOfDamagedItems,
-      damagedItemsMultiplier,
-      removeDamagedItems,
-      userOption = 1, 
-      imgPath = undefined, 
-      light = undefined
-    }
-  ) {
-    if(mode === "lootsheet") {
+  convertSelectedTokensToLoot({
+    token,
+    mode = 'lootsheet',
+    chanceOfDamagedItems,
+    damagedItemsMultiplier,
+    removeDamagedItems,
+    userOption = 1,
+    imgPath = undefined,
+    light = undefined,
+  }) {
+    if (mode === 'lootsheet') {
       let contentTitle = game.i18n.localize('PocketChange.ConvertToLootable');
       let contentWarn = `<p>${game.i18n.localize(
         'PocketChange.ConvertToLootableWarning'
       )}</p>`;
-      let contentError =  game.i18n.localize(
+      let contentError = game.i18n.localize(
         'PocketChange.ConvertToLootableErrorNoTokensSelected'
       );
 
@@ -132,18 +131,21 @@ export default class MacroSupport {
             ui.notifications.error(contentError);
             return;
           }
-  
+
           // Only affect valid tokens
           const filtered = canvas.tokens.controlled.filter((token) => {
             const isTokenLootSheet = this._isTokenLootSheet(token);
-  
+
             if (isTokenLootSheet) {
-              let contentModifyWarn = game.i18n.format('PocketChange.WarningModifyLootSheetToken', {
-                name: token.name,
-              });
+              let contentModifyWarn = game.i18n.format(
+                'PocketChange.WarningModifyLootSheetToken',
+                {
+                  name: token.name,
+                }
+              );
               ui.notifications.warn(contentModifyWarn);
             }
-  
+
             return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
           });
           filtered.forEach(async (token) => {
@@ -152,25 +154,27 @@ export default class MacroSupport {
               token,
               chanceOfDamagedItems,
               damagedItemsMultiplier,
-              removeDamagedItems
+              removeDamagedItems,
             });
           });
-  
+
           // Notify number of tokens that were effected
-          let contentInfoConfirmation = game.i18n.format('PocketChange.ConvertToLootableConfirmation', {
-            number: filtered.length,
-          });
+          let contentInfoConfirmation = game.i18n.format(
+            'PocketChange.ConvertToLootableConfirmation',
+            {
+              number: filtered.length,
+            }
+          );
           ui.notifications.info(contentInfoConfirmation);
         },
         defaultYes: false,
       });
-    } 
-    else if(mode === "itempiles") {
-      let contentTitle = game.i18n.localize('PocketChange.ConvertToItemPiles')
+    } else if (mode === 'itempiles') {
+      let contentTitle = game.i18n.localize('PocketChange.ConvertToItemPiles');
       let contentWarn = `<p>${game.i18n.localize(
         'PocketChange.ConvertToItemPilesWarning'
       )}</p>`;
-      let contentError =  game.i18n.localize(
+      let contentError = game.i18n.localize(
         'PocketChange.ConvertToItemPilesErrorNoTokensSelected'
       );
 
@@ -183,34 +187,40 @@ export default class MacroSupport {
             ui.notifications.error(contentError);
             return;
           }
-  
+
           // Only affect valid tokens
           const filtered = canvas.tokens.controlled.filter((token) => {
             const isTokenLootSheet = this._isTokenLootSheet(token);
-  
+
             if (isTokenLootSheet) {
-              let contentModifyWarn = game.i18n.format('PocketChange.WarningModifyItemPilesToken', {
-                name: token.name,
-              });
+              let contentModifyWarn = game.i18n.format(
+                'PocketChange.WarningModifyItemPilesToken',
+                {
+                  name: token.name,
+                }
+              );
               ui.notifications.warn(contentModifyWarn);
             }
-  
+
             return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
           });
           filtered.forEach(async (token) => {
             const pocketChange = new API.PocketChange();
             await pocketChange._convertToItemPiles({
-              token, 
-              userOption, 
-              imgPath, 
-              light
+              token,
+              userOption,
+              imgPath,
+              light,
             });
           });
-  
+
           // Notify number of tokens that were effected
-          let contentInfoConfirmation = game.i18n.format('PocketChange.ConvertToItemPilesConfirmation', {
-            number: filtered.length,
-          });
+          let contentInfoConfirmation = game.i18n.format(
+            'PocketChange.ConvertToItemPilesConfirmation',
+            {
+              number: filtered.length,
+            }
+          );
           ui.notifications.info(contentInfoConfirmation);
         },
         defaultYes: false,

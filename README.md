@@ -17,7 +17,7 @@ Have you ever watched as the peaceful NPCs of the town you've lovingly crafted g
 This module need at least one of these modules for work:
 
 - [Loot Sheet NPC 5e](https://foundryvtt.com/packages/lootsheetnpc5e/) by ChalkOne.
-- [Item Piles](https://github.com/fantasycalendar/FoundryVTT-ItemPiles) by Swap.
+- [Item Piles](https://foundryvtt.com/packages/item-piles) by Swap.
 
 ## What This Module Does
 
@@ -104,7 +104,7 @@ For all selected tokens, generate currency for them
 For all selected tokens, convert them to lootable sheets.
 Adapted from the convert-to-lootable.js by @unsoluble, @Akaito, @honeybadger, @kekilla, and @cole.
 
-**NOTE:** You need the module [Loot Sheet NPC 5E](https://github.com/jopeek/fvtt-loot-sheet-npc-5e) enable and activate
+**NOTE:** You need the module [Loot Sheet NPC 5E](https://foundryvtt.com/packages/lootsheetnpc5e/) enable and activate
 
 | Param | Type | Description |
 | ---   | ---  | ---         |
@@ -124,7 +124,7 @@ For all selected tokens, convert them back from lootable sheets.
 
 For all selected tokens, convert them to item piles.
 
-**NOTE:** You need the module [Item Piles](https://github.com/fantasycalendar/FoundryVTT-ItemPiles) enable and activate
+**NOTE:** You need the module [Item Piles](https://foundryvtt.com/packages/item-piles) enable and activate
 
 | Param | Type | Description |
 | ---   | ---  | ---         |
@@ -185,8 +185,6 @@ In case anyone out there in the void is curious, this is my philosophy when it c
 Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/DFreds/dfreds-pocket-change/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
 
 ## License
-
-- [NPC to Coin Pile](https://github.com/Shuggaloaf/NPC-to-Coin-Pile) with [???]()
 
 This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
 

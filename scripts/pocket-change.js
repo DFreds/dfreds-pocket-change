@@ -43,7 +43,7 @@ export default class PocketChange {
   generateCurrency(actor, ignoreRating) {
     let currency;
 
-    if(String(ignoreRating) === 'true') {
+    if (String(ignoreRating) === 'true') {
       currency = this._treasureNoChallengeRating(actor);
     } else {
       if (this._isWithinChallengeRating(actor, 0, 4)) {
@@ -224,41 +224,42 @@ export default class PocketChange {
    * 1 = Light Effect only
    * 2 = Change Image Only
    * 3 = Both Image Change and Light effect
-   * @param {string} options.imgPath - (optional and only with mode "itempiles") the path to the image by default is the one set on the module setting 
+   * @param {string} options.imgPath - (optional and only with mode "itempiles") the path to the image by default is the one set on the module setting
    * @param {Light} options.light - (optional and only with mode "itempiles") explicit light effect to use if none is passed a default one is used
    */
   async convertToLoot({
     token,
-    mode = "lootsheet",
+    mode = 'lootsheet',
     chanceOfDamagedItems,
     damagedItemsMultiplier,
     removeDamagedItems,
-    userOption = 1, 
-    imgPath = undefined, 
-    light = undefined
+    userOption = 1,
+    imgPath = undefined,
+    light = undefined,
   }) {
-
-    if(mode === "lootsheet"  && game.modules.get("lootsheet-simple")?.active) {
+    if (mode === 'lootsheet' && game.modules.get('lootsheet-simple')?.active) {
       this._convertToLootSheet({
         token,
         chanceOfDamagedItems,
         damagedItemsMultiplier,
-        removeDamagedItems
+        removeDamagedItems,
       });
-    } else if(mode === "itempiles" && game.modules.get("item-piles")?.active){
+    } else if (mode === 'itempiles' && game.modules.get('item-piles')?.active) {
       this._convertToItemPiles({
         token,
-        userOption, 
-        imgPath, 
-        light
+        userOption,
+        imgPath,
+        light,
       });
     } else {
       // Do nothing
-      console.warn(`${Settings.PACKAGE_NAME} | the mode ${mode} cannot be used`);
+      console.warn(
+        `${Settings.PACKAGE_NAME} | the mode ${mode} cannot be used`
+      );
     }
   }
 
-/**
+  /**
    * Converts the provided token to a lootable sheet
    *
    * @param {object} options
@@ -271,9 +272,8 @@ export default class PocketChange {
     token,
     chanceOfDamagedItems,
     damagedItemsMultiplier,
-    removeDamagedItems
+    removeDamagedItems,
   }) {
-
     chanceOfDamagedItems ??= this._settings.chanceOfDamagedItems;
     damagedItemsMultiplier ??= this._settings.damagedItemsMultiplier;
     removeDamagedItems ??= this._settings.removeDamagedItems;
@@ -455,7 +455,6 @@ export default class PocketChange {
     }
   }
 
-  
   /**
    * Converts the provided token to a item piles lootable sheet
    *
@@ -467,54 +466,60 @@ export default class PocketChange {
    * 1 = Light Effect only
    * 2 = Change Image Only
    * 3 = Both Image Change and Light effect
-   * @param {string} options.imgPath - (optional) the path to the image by default is the one set on the module setting 
+   * @param {string} options.imgPath - (optional) the path to the image by default is the one set on the module setting
    * @param {Light} options.light - (optional) explicit light effect to use if none is passed a default one is used
    */
-  async _convertToItemPiles({token, userOption = 1, imgPath = undefined, light = undefined}) {
-    if(!imgPath) {
+  async _convertToItemPiles({
+    token,
+    userOption = 1,
+    imgPath = undefined,
+    light = undefined,
+  }) {
+    if (!imgPath) {
       imgPath = new Settings().lootIcon;
     }
-    if(!light) {
+    if (!light) {
       light = {
-          dim:0.2,
-          bright:0.2,
-          luminosity:0,
-          alpha:1,
-          color:'#ad8800',
-          coloration:6,
-          animation:{
-            // type:"sunburst",
-            type:"radialrainbow",
-            speed:3,
-            intensity:10
-          }
+        dim: 0.2,
+        bright: 0.2,
+        luminosity: 0,
+        alpha: 1,
+        color: '#ad8800',
+        coloration: 6,
+        animation: {
+          // type:"sunburst",
+          type: 'radialrainbow',
+          speed: 3,
+          intensity: 10,
+        },
       };
     }
     await ItemPiles.API.turnTokensIntoItemPiles(token);
-    if (userOption === 0){
+    if (userOption === 0) {
       // Do nothing
-    }
-    else if (userOption === 1){
+    } else if (userOption === 1) {
       await token.document.update({
-          light: light
+        light: light,
       });
-    } else if (userOption === 2){
+    } else if (userOption === 2) {
       await token.document.update({
-        texture : {
-          src: imgPath
+        texture: {
+          src: imgPath,
         },
-        rotation : 0
+        rotation: 0,
       });
-    } else if (userOption === 3){
+    } else if (userOption === 3) {
       await token.document.update({
-        texture : {
-          src: imgPath
+        texture: {
+          src: imgPath,
         },
-        rotation : 0,
-        light: light
+        rotation: 0,
+        light: light,
       });
     } else {
-      ui.notifications.error(`${Settings.PACKAGE_NAME} | Error with User Options. Choose a valid option.`);
+      ui.notifications.error(
+        `${Settings.PACKAGE_NAME} | Error with User Options. Choose a valid option.`
+      );
     }
   }
 }

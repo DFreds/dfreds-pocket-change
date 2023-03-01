@@ -13,7 +13,7 @@ Hooks.once('init', () => {
   // game.dfreds.MacroSupport = MacroSupport;
 });
 
-Hooks.once("setup", async function () {
+Hooks.once('setup', async function () {
   API.PocketChange = PocketChange;
   API.MacroSupport = MacroSupport;
   setApi(API);
@@ -41,14 +41,14 @@ Hooks.on('renderActorSheet5eNPC', async (app, html, data) => {
  * @param api to set to game module.
  */
 export function setApi(api) {
-	const data = game.modules.get(Settings.PACKAGE_NAME);
-	data.api = api;
+  const data = game.modules.get(Settings.PACKAGE_NAME);
+  data.api = api;
 }
 /**
  * Returns the set API.
  * @returns Api from games module.
  */
 export function getApi() {
-	const data = game.modules.get(Settings.PACKAGE_NAME);
-	return data.api;
+  const data = game.modules.get(Settings.PACKAGE_NAME);
+  return data.api;
 }

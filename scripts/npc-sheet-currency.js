@@ -152,11 +152,10 @@ export default class NpcSheetCurrency {
       yes: async () => {
         const token = this._app.token;
         const pocketChange = new API.PocketChange();
-        await pocketChange.convertToLoot(
-          { 
-            token: token.object,
-            mode: "lootsheet"
-          });
+        await pocketChange.convertToLoot({
+          token: token.object,
+          mode: 'lootsheet',
+        });
       },
       defaultYes: false,
     });
@@ -176,10 +175,9 @@ export default class NpcSheetCurrency {
       yes: async () => {
         const token = this._app.token;
         const pocketChange = new API.PocketChange();
-        await pocketChange.convertToLoot(
-          { 
+        await pocketChange.convertToLoot({
           token: token.object,
-          mode: "itempiles"
+          mode: 'itempiles',
         });
       },
       defaultYes: false,
