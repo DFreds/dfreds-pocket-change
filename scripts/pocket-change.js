@@ -39,11 +39,12 @@ export default class PocketChange {
    * Generates currency for the provided actor based on its challenge rating
    *
    * @param {Actor5e} actor - The actor to base the coin generation off of
+   * @param {boolean} ignoreRating - If true to generate a random number of coins independent of NPC rating for anyone would like to take something truly random
    */
   generateCurrency(actor, ignoreRating) {
     let currency;
 
-    if (String(ignoreRating) === 'true') {
+    if (ignoreRating) {
       currency = this._treasureNoChallengeRating(actor);
     } else {
       if (this._isWithinChallengeRating(actor, 0, 4)) {

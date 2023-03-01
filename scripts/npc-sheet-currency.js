@@ -141,11 +141,6 @@ export default class NpcSheetCurrency {
   async _convertToLootable() {
     return Dialog.confirm({
       title: game.i18n.localize('PocketChange.ConvertToLootable'),
-      // content: await renderTemplate(`modules/${Settings.PACKAGE_NAME}/templates/dialog-pocket-change.html`, {
-      //   tokenId: this._app.token.id,
-      //   isItemPiles: false,
-      //   isLootSheet: true
-      // }),
       content: `<p>${game.i18n.localize(
         'PocketChange.ConvertToLootableWarning'
       )}</p>`,
@@ -164,11 +159,6 @@ export default class NpcSheetCurrency {
   async _convertToItemPiles() {
     return Dialog.confirm({
       title: game.i18n.localize('PocketChange.ConvertToItemPiles'),
-      // content: await renderTemplate(`modules/${Settings.PACKAGE_NAME}/templates/dialog-pocket-change.html`, {
-      //   tokenId: this._app.token.id,
-      //   isItemPiles: true,
-      //   isLootSheet: false
-      // }),
       content: `<p>${game.i18n.localize(
         'PocketChange.ConvertToItemPilesWarning'
       )}</p>`,
