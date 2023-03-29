@@ -19,7 +19,7 @@
     {{/if}}
     {{/if}}
   </h3>
-  {{#each data.currency as |v k|}}
+  {{#each system.currency as |v k|}}
   <label style="margin-left: 4px;" class="denomination {{k}}">{{lookup ../config.currencies k}}</label>
   <input type="number" step="any" name="system.currency.{{k}}" value="{{v}}" data-dtype="Number" />
   {{/each}}

@@ -132,7 +132,7 @@ export default class NpcSheetCurrency {
         const actor = this._app.actor;
         const pocketChange = new API.PocketChange();
         const currency = pocketChange.generateCurrency(actor);
-        await actor.update({ 'data.currency': currency });
+        await actor.update({ 'system.currency': currency });
       },
       defaultYes: false,
     });

@@ -45,7 +45,7 @@ export default class PocketChange {
     let currency;
 
     if (ignoreRating) {
-      currency = this._treasureNoChallengeRating(actor);
+      this._treasureNoChallengeRating(actor);
     } else {
       if (this._isWithinChallengeRating(actor, 0, 4)) {
         currency = this._treasureForChallengeRating0to4(actor);
@@ -56,16 +56,16 @@ export default class PocketChange {
       } else if (this._isWithinChallengeRating(actor, 17, 100)) {
         currency = this._treasureForChallengeRating17andUp(actor);
       }
+
+      currency.convertCurrencies();
+
+      const converted = currency.convertToStandardCurrency();
+      if (this._settings.showChatMessage) {
+        this._showChatMessage(actor, converted);
+      }
+  
+      return converted;
     }
-
-    currency.convertCurrencies();
-
-    const converted = currency.convertToStandardCurrency();
-    if (this._settings.showChatMessage) {
-      this._showChatMessage(actor, converted);
-    }
-
-    return converted;
   }
 
   _isWithinChallengeRating(actor, lowerCr, upperCr) {
@@ -74,22 +74,66 @@ export default class PocketChange {
   }
 
   _treasureNoChallengeRating(actor) {
-    let currency = new Currency(actor);
-    let roll = this._rollDice('1d100');
-
-    if (roll >= 1 && roll <= 30) {
-      currency.addCopper(this._rollDice('5d6'));
-    } else if (roll >= 31 && roll <= 60) {
-      currency.addSilver(this._rollDice('4d6'));
-    } else if (roll >= 61 && roll <= 70) {
-      currency.addElectrum(this._rollDice('3d6'));
-    } else if (roll >= 71 && roll <= 95) {
-      currency.addGold(this._rollDice('3d6'));
-    } else {
-      currency.addPlatinum(this._rollDice('1d6'));
-    }
-
-    return currency;
+    new Dialog({
+      title: "Apply Currency to Selected Tokens",
+      content: `<style>.loot-sheet-currency td:first-child{text-align:right;padding-right:0.75em}</style>
+    <p>Enter the amounts or roll expressions to be added to each selected token's currency.</p>
+    <table class="loot-sheet-currency">
+    <tr><td>Platinum</td><td><input name="pp" type="text" placeholder="ex. 2d6 or 42" /></td></tr>
+    <tr><td>    Gold</td><td><input name="gp" type="text" placeholder="ex. 2d6 or 42" /></td></tr>
+    <tr><td>Electrum</td><td><input name="ep" type="text" placeholder="ex. 2d6 or 42" /></td></tr>
+    <tr><td>  Silver</td><td><input name="sp" type="text" placeholder="ex. 2d6 or 42" /></td></tr>
+    <tr><td>  Copper</td><td><input name="cp" type="text" placeholder="ex. 2d6 or 42" /></td></tr>
+    <tr><td>Function</td><td><select>
+    <option value="rep" selected>Replace values</option>
+    <option value="add">Add Values</option>
+    <option value="sub">Subtract Values</option>
+    <option value="mul">Multiply Values</option>
+    <option value="div">Divide Values</option>
+    </select></td></tr>
+    </table>`,
+      buttons: {
+        cancel: { label: "Cancel", icon: '<i class="fas fa-times"></i>' },
+        submit: {
+          label: "Submit", icon: '<i class="fas fa-save"></i>',
+          callback: async html => {
+            const actors = canvas.tokens.controlled.map(x => x.actor);
+            if (actors.length == 0) { ui.notifications.info("No tokens selected"); return; }
+            const roll = x => x.length > 0 ? Roll.create(x) : Roll.create('0');
+            const curr = {
+              pp: roll(html.find('input[name="pp"]').val()),
+              gp: roll(html.find('input[name="gp"]').val()),
+              ep: roll(html.find('input[name="ep"]').val()),
+              sp: roll(html.find('input[name="sp"]').val()),
+              cp: roll(html.find('input[name="cp"]').val())
+            };
+            const op = html.find('select').val();
+            for(const actor of actors) {
+              const currency = duplicate(actor.system.currency);
+              var current = 0;
+              var rollTotal = 0;
+              var result = 0;
+              for (let key of Object.keys(currency)) {
+                current = currency[key].value !== undefined ? parseInt(currency[key].value) : parseInt(currency[key]);
+                rollTotal = (await curr[key].reroll({async:true})).total;
+                if (isNaN(current)) current = 0;
+                if(op === 'rep') result = rollTotal;
+                else if(op === 'add') result = current + rollTotal;
+                else if(op === 'sub') result = current - rollTotal;
+                else if(op === 'mul') result = current * rollTotal;
+                else if(op === 'div') result = current / rollTotal;
+                if (currency[key] === undefined) currency[key] = result.toString();
+                else currency[key] = result;
+              }
+              if (this._settings.showChatMessage) {
+                this._showChatMessage(actor, currency);
+              }
+              await actor.update({ system: { currency } });
+            }
+          }
+        }
+      }, default: "submit"
+    }).render(true);
   }
 
   _treasureForChallengeRating0to4(actor) {

@@ -16,7 +16,8 @@ Hooks.once('init', () => {
 Hooks.once('setup', async function () {
   API.PocketChange = PocketChange;
   API.MacroSupport = MacroSupport;
-  setApi(API);
+  const data = game.modules.get(Settings.PACKAGE_NAME);
+  data.api = api;
 });
 
 Hooks.on('preCreateToken', (tokenDocument, _tokenData, _options, _userId) => {
@@ -35,20 +36,3 @@ Hooks.on('renderActorSheet5eNPC', async (app, html, data) => {
   const npcSheetCurrency = new NpcSheetCurrency({ app, html, data });
   await npcSheetCurrency.injectCurrencyRow();
 });
-
-/**
- * Initialization helper, to set API.
- * @param api to set to game module.
- */
-export function setApi(api) {
-  const data = game.modules.get(Settings.PACKAGE_NAME);
-  data.api = api;
-}
-/**
- * Returns the set API.
- * @returns Api from games module.
- */
-export function getApi() {
-  const data = game.modules.get(Settings.PACKAGE_NAME);
-  return data.api;
-}

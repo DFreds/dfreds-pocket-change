@@ -38,6 +38,18 @@ export default class MacroSupport {
             );
           }
 
+          const isItemPiles = this._isItemPiles(token);
+
+          if (isItemPiles) {
+            let contentModifyWarn = game.i18n.format(
+              'PocketChange.WarningModifyItemPilesToken',
+              {
+                name: token.name,
+              }
+            );
+            ui.notifications.warn(contentModifyWarn);
+          }
+
           return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
         });
         filtered.forEach(
@@ -82,6 +94,10 @@ export default class MacroSupport {
     return token.actor.sheet.template.includes('lootsheetnpc5e');
   }
 
+  _isItemPiles(token) {
+    return game.itempiles.API.isItemPileContainer(token);
+  }
+
   async _generateCurrencyForToken(token, ignoreRating) {
     const actor = game.actors.get(token.data.actorId);
 
@@ -89,7 +105,7 @@ export default class MacroSupport {
     const currency = pocketChange.generateCurrency(actor, ignoreRating);
 
     await token.actor.update({
-      'data.currency': currency,
+      'system.currency': currency,
     });
   }
 
@@ -190,9 +206,9 @@ export default class MacroSupport {
 
           // Only affect valid tokens
           const filtered = canvas.tokens.controlled.filter((token) => {
-            const isTokenLootSheet = this._isTokenLootSheet(token);
+            const isItemPiles = this._isItemPiles(token);
 
-            if (isTokenLootSheet) {
+            if (isItemPiles) {
               let contentModifyWarn = game.i18n.format(
                 'PocketChange.WarningModifyItemPilesToken',
                 {
@@ -202,7 +218,7 @@ export default class MacroSupport {
               ui.notifications.warn(contentModifyWarn);
             }
 
-            return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
+            return this._isTokenUnownedNpc(token) && !isItemPiles;
           });
           filtered.forEach(async (token) => {
             const pocketChange = new API.PocketChange();
