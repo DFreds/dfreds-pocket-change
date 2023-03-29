@@ -45,7 +45,7 @@ export default class PocketChange {
     let currency;
 
     if (ignoreRating) {
-      this._treasureNoChallengeRating(actor);
+      this._treasureNoChallengeRating([actor]);
     } else {
       if (this._isWithinChallengeRating(actor, 0, 4)) {
         currency = this._treasureForChallengeRating0to4(actor);
@@ -73,7 +73,12 @@ export default class PocketChange {
     return cr >= lowerCr && cr <= upperCr;
   }
 
-  _treasureNoChallengeRating(actor) {
+  _treasureNoChallengeRating(actorsToUpdate) {
+    if (!actorsToUpdate || actorsToUpdate.length == 0) { 
+      ui.notifications.info("No actors to update"); 
+      return; 
+    }
+
     new Dialog({
       title: "Apply Currency to Selected Tokens",
       content: `<style>.loot-sheet-currency td:first-child{text-align:right;padding-right:0.75em}</style>
@@ -97,11 +102,6 @@ export default class PocketChange {
         submit: {
           label: "Submit", icon: '<i class="fas fa-save"></i>',
           callback: async html => {
-            const actorsToUpdate = [actor]; // canvas.tokens.controlled.map(x => x.actor);
-            if (actorsToUpdate.length == 0) { 
-              ui.notifications.info("No actors to update"); 
-              return; 
-            }
             const roll = x => x.length > 0 ? Roll.create(x) : Roll.create('0');
             const curr = {
               pp: roll(html.find('input[name="pp"]').val()),
