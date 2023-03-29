@@ -97,8 +97,11 @@ export default class PocketChange {
         submit: {
           label: "Submit", icon: '<i class="fas fa-save"></i>',
           callback: async html => {
-            const actors = canvas.tokens.controlled.map(x => x.actor);
-            if (actors.length == 0) { ui.notifications.info("No tokens selected"); return; }
+            const actorsToUpdate = [actor]; // canvas.tokens.controlled.map(x => x.actor);
+            if (actorsToUpdate.length == 0) { 
+              ui.notifications.info("No actors to update"); 
+              return; 
+            }
             const roll = x => x.length > 0 ? Roll.create(x) : Roll.create('0');
             const curr = {
               pp: roll(html.find('input[name="pp"]').val()),
@@ -108,8 +111,8 @@ export default class PocketChange {
               cp: roll(html.find('input[name="cp"]').val())
             };
             const op = html.find('select').val();
-            for(const actor of actors) {
-              const currency = duplicate(actor.system.currency);
+            for(const actorToUpdate of actorsToUpdate) {
+              const currency = duplicate(actorToUpdate.system.currency);
               var current = 0;
               var rollTotal = 0;
               var result = 0;
@@ -126,9 +129,9 @@ export default class PocketChange {
                 else currency[key] = result;
               }
               if (this._settings.showChatMessage) {
-                this._showChatMessage(actor, currency);
+                this._showChatMessage(actorToUpdate, currency);
               }
-              await actor.update({ system: { currency } });
+              await actorToUpdate.update({ system: { currency } });
             }
           }
         }
