@@ -1,5 +1,4 @@
 import PocketChange from './pocket-change.js';
-import MacroSupport from './macro-support.js';
 import NpcSheetCurrency from './npc-sheet-currency.js';
 import Settings from './settings.js';
 import API from './api.js';
@@ -13,14 +12,12 @@ Hooks.once('init', () => {
   // Is better o use the API setting as standard
   // game.dfreds = game.dfreds || {};
   // game.dfreds.PocketChange = PocketChange;
-  // game.dfreds.MacroSupport = MacroSupport;
   lootSheetSimpleActive = game.modules.get('lootsheet-simple')?.active;
   itemPilesActive = game.modules.get('item-piles')?.active
 });
 
 Hooks.once('setup', async function () {
   API.PocketChange = PocketChange;
-  API.MacroSupport = MacroSupport;
   const data = game.modules.get(Settings.PACKAGE_NAME);
   data.api = api;
 });
