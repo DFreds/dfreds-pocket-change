@@ -1,5 +1,6 @@
 import Currency from './currency.js';
 import log from './logger.js';
+import { itemPilesActive, lootSheetSimpleActive } from './main.js';
 import Settings from './settings.js';
 import Validator from './validator.js';
 
@@ -285,14 +286,14 @@ export default class PocketChange {
     imgPath = undefined,
     light = undefined,
   }) {
-    if (mode === 'lootsheet' && game.modules.get('lootsheet-simple')?.active) {
+    if (mode === 'lootsheet' && lootSheetSimpleActive) {
       this._convertToLootSheet({
         token,
         chanceOfDamagedItems,
         damagedItemsMultiplier,
         removeDamagedItems,
       });
-    } else if (mode === 'itempiles' && game.modules.get('item-piles')?.active) {
+    } else if (mode === 'itempiles' && itemPilesActive) {
       this._convertToItemPiles({
         token,
         userOption,

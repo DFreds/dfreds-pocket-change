@@ -4,6 +4,9 @@ import NpcSheetCurrency from './npc-sheet-currency.js';
 import Settings from './settings.js';
 import API from './api.js';
 
+export let lootSheetSimpleActive = false;
+export let itemPilesActive = false;
+
 Hooks.once('init', () => {
   new Settings().registerSettings();
 
@@ -11,6 +14,8 @@ Hooks.once('init', () => {
   // game.dfreds = game.dfreds || {};
   // game.dfreds.PocketChange = PocketChange;
   // game.dfreds.MacroSupport = MacroSupport;
+  lootSheetSimpleActive = game.modules.get('lootsheet-simple')?.active;
+  itemPilesActive = game.modules.get('item-piles')?.active
 });
 
 Hooks.once('setup', async function () {

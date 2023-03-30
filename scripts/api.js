@@ -1,6 +1,7 @@
 import PocketChange from './pocket-change.js';
 import MacroSupport from './macro-support.js';
 import Settings from './settings.js';
+import { itemPilesActive, lootSheetSimpleActive } from './main.js';
 
 const API = {
   PocketChange: undefined,
@@ -35,7 +36,7 @@ const API = {
     damagedItemsMultiplier,
     removeDamagedItems
   ) {
-    if (!game.modules.get('lootsheet-simple')?.active) {
+    if (!lootSheetSimpleActive) {
       let word = 'install and activate';
       if (game.modules.get('lootsheet-simple')) word = 'activate';
       const errorText =
@@ -64,7 +65,7 @@ const API = {
    * For all selected tokens, convert them back from lootable sheets.
    */
   revertSelectedTokensFromLootSheet() {
-    if (!game.modules.get('lootsheet-simple')?.active) {
+    if (!lootSheetSimpleActive) {
       let word = 'install and activate';
       if (game.modules.get('lootsheet-simple')) word = 'activate';
       const errorText =
@@ -97,7 +98,7 @@ const API = {
    * @param {Light} light (optional) explicit light effect to use if none is passed a default one is used
    */
   convertSelectedTokensToItemPiles(userOption, imgPath, light) {
-    if (!game.modules.get('item-piles')?.active) {
+    if (!itemPilesActive) {
       let word = 'install and activate';
       if (game.modules.get('item-piles')) word = 'activate';
       const errorText =

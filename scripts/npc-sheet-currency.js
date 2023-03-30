@@ -1,4 +1,5 @@
 import API from './api.js';
+import { itemPilesActive, lootSheetSimpleActive } from './main.js';
 import Settings from './settings.js';
 
 /**
@@ -54,8 +55,8 @@ export default class NpcSheetCurrency {
         data: this._data.system,
         config: {
           hasToken: !!this._app.token,
-          isLootSheet: game.modules.get('lootsheet-simple')?.active,
-          isItemPiles: game.modules.get('item-piles')?.active,
+          isLootSheet: lootSheetSimpleActive,
+          isItemPiles: itemPilesActive,
           currencies: {
             pp: game.i18n.localize('DND5E.CurrencyPP'),
             gp: game.i18n.localize('DND5E.CurrencyGP'),
@@ -88,8 +89,8 @@ export default class NpcSheetCurrency {
         data: this._data.system,
         config: {
           hasToken: !!this._app.token,
-          isLootSheet: game.modules.get('lootsheet-simple')?.active,
-          isItemPiles: game.modules.get('item-piles')?.active,
+          isLootSheet: lootSheetSimpleActive,
+          isItemPiles: itemPilesActive,
         },
       }
     );
