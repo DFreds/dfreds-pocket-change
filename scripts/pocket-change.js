@@ -263,56 +263,6 @@ export default class PocketChange {
    *
    * @param {object} options
    * @param {Token5e} options.token - the token to convert
-   * @param {string} options.mode e.g. "itempiles", "lootsheet"
-   * @param {number} options.chanceOfDamagedItems - (optional and only with mode "lootsheet") the chance an item is considered damaged from 0 to 1. Uses the setting if undefined
-   * @param {number} options.damagedItemsMultiplier - (optional and only with mode "lootsheet") the amount to reduce the value of a damaged item by. Uses the setting if undefined
-   * @param {boolean} options.removeDamagedItems - (optional and only with mode "lootsheet") if true, removes items that are damaged of common rarity
-   * @param {number} options.userOption - (optional and only with mode "itempiles") the type of convertion by default is 1
-   * You've got 4 options to choose from:
-   * 0 = No Special Effect, Coin roll and -if enabled- Item Pile Transformation Only
-   * 1 = Light Effect only
-   * 2 = Change Image Only
-   * 3 = Both Image Change and Light effect
-   * @param {string} options.imgPath - (optional and only with mode "itempiles") the path to the image by default is the one set on the module setting
-   * @param {Light} options.light - (optional and only with mode "itempiles") explicit light effect to use if none is passed a default one is used
-   */
-  async convertToLoot({
-    token,
-    mode = 'lootsheet',
-    chanceOfDamagedItems,
-    damagedItemsMultiplier,
-    removeDamagedItems,
-    userOption = 1,
-    imgPath = undefined,
-    light = undefined,
-  }) {
-    if (mode === 'lootsheet' && lootSheetSimpleActive) {
-      this._convertToLootSheet({
-        token,
-        chanceOfDamagedItems,
-        damagedItemsMultiplier,
-        removeDamagedItems,
-      });
-    } else if (mode === 'itempiles' && itemPilesActive) {
-      this._convertToItemPiles({
-        token,
-        userOption,
-        imgPath,
-        light,
-      });
-    } else {
-      // Do nothing
-      console.warn(
-        `${Settings.PACKAGE_NAME} | the mode ${mode} cannot be used`
-      );
-    }
-  }
-
-  /**
-   * Converts the provided token to a lootable sheet
-   *
-   * @param {object} options
-   * @param {Token5e} options.token - the token to convert
    * @param {number} options.chanceOfDamagedItems - (optional) the chance an item is considered damaged from 0 to 1. Uses the setting if undefined
    * @param {number} options.damagedItemsMultiplier - (optional) the amount to reduce the value of a damaged item by. Uses the setting if undefined
    * @param {boolean} options.removeDamagedItems - (optional) if true, removes items that are damaged of common rarity
@@ -506,29 +456,30 @@ export default class PocketChange {
 
   /**
    * Converts the provided token to a item piles lootable sheet
-   *
-   * @param {object} options
+   * check out the documentation from the itempiles page https://fantasycomputer.works/FoundryVTT-ItemPiles/#/api?id=turntokensintoitempiles
+   * @param {object} options	object	Options to pass to the function
    * @param {Token5e} options.token - the token to convert
-   * @param {number} options.userOption - (optional) the type of convertion by default is 1
-   * You've got 4 options to choose from:
-   * 0 = No Special Effect, Coin roll and -if enabled- Item Pile Transformation Only
-   * 1 = Light Effect only
-   * 2 = Change Image Only
-   * 3 = Both Image Change and Light effect
-   * @param {string} options.imgPath - (optional) the path to the image by default is the one set on the module setting
-   * @param {Light} options.light - (optional) explicit light effect to use if none is passed a default one is used
+   * @param {object} options.pileSettings	object	Overriding settings to be put on the item piles’ settings - see pile flag defaults
+   * @param {object} options.tokenSettings	object/Function	Overriding settings that will update the tokens’ settings
+   * @param {boolean} options.applyDefaultLight little utility for lazy people apply a default light
+   * @param {boolean} options.applyDefaultImage little utility for lazy people apply a default image
    */
   async _convertToItemPiles({
     token,
-    userOption = 1,
-    imgPath = undefined,
-    light = undefined,
+    pileSettings,
+    tokenSettings,
+    applyDefaultLight,
+    applyDefaultImage
   }) {
-    if (!imgPath) {
-      imgPath = new Settings().lootIcon;
+    applyDefaultLight ??= true;
+    applyDefaultImage ??= true;
+
+    if (applyDefaultImage) {
+      let imgPath = new Settings().lootIcon;
+      mergeObject(tokenSettings, { texture: { src: imgPath }});
     }
-    if (!light) {
-      light = {
+    if (applyDefaultLight) {
+      let light = {
         dim: 0.2,
         bright: 0.2,
         luminosity: 0,
@@ -542,33 +493,14 @@ export default class PocketChange {
           intensity: 10,
         },
       };
+      mergeObject(tokenSettings, { light: light});
     }
-    await ItemPiles.API.turnTokensIntoItemPiles(token);
-    if (userOption === 0) {
-      // Do nothing
-    } else if (userOption === 1) {
-      await token.document.update({
-        light: light,
-      });
-    } else if (userOption === 2) {
-      await token.document.update({
-        texture: {
-          src: imgPath,
-        },
-        rotation: 0,
-      });
-    } else if (userOption === 3) {
-      await token.document.update({
-        texture: {
-          src: imgPath,
-        },
-        rotation: 0,
-        light: light,
-      });
-    } else {
-      ui.notifications.error(
-        `${Settings.PACKAGE_NAME} | Error with User Options. Choose a valid option.`
-      );
-    }
+    await game.itempiles.API.turnTokensIntoItemPiles(
+      token,
+      {
+        pileSettings: pileSettings,
+        tokenSettings: tokenSettings
+      }
+    );
   }
 }
