@@ -51,7 +51,7 @@ export default class NpcSheetCurrency {
     return renderTemplate(
       `modules/${Settings.PACKAGE_NAME}/templates/default-npc-currency-row.html`,
       {
-        data: this._data.system,
+        data: this._data.data,
         config: {
           hasToken: !!this._app.token,
           isLootSheet: game.modules.get('lootsheet-simple')?.active,

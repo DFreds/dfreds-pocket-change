@@ -78,7 +78,7 @@ export default class MacroSupport {
       return false;
     }
 
-    if (token.actor.data.type !== 'npc') {
+    if (token.actor.system.type !== 'npc') {
       ui.notifications.warn(
         game.i18n.format('PocketChange.WarningModifyNonNpcToken', {
           name: token.name,
@@ -99,7 +99,7 @@ export default class MacroSupport {
   }
 
   async _generateCurrencyForToken(token, ignoreRating) {
-    const actor = game.actors.get(token.data.actorId);
+    const actor = game.actors.get(token.system.actorId);
 
     const pocketChange = new API.PocketChange();
     const currency = pocketChange.generateCurrency(actor, ignoreRating);
