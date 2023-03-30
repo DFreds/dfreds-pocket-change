@@ -14,7 +14,7 @@ const API = {
     if (!this.PocketChange) {
       this.PocketChange = new PocketChange();
     }
-    
+
     return Dialog.confirm({
       title: game.i18n.localize('PocketChange.GenerateCurrency'),
       content: `<p>${game.i18n.localize(
@@ -139,14 +139,61 @@ const API = {
       ui.notifications?.error(errorText);
       throw new Error(errorText);
     }
+
     if (!this.PocketChange) {
       this.PocketChange = new PocketChange();
     }
-    this._convertSelectedTokensToLootByMode({
-      chanceOfDamagedItems,
-      damagedItemsMultiplier,
-      removeDamagedItems,
-      mode: 'lootsheet',
+
+    return Dialog.confirm({
+      title: game.i18n.localize('PocketChange.ConvertToLootable'),
+      content: `<p>${game.i18n.localize(
+        'PocketChange.ConvertToLootableWarning'
+      )}</p>`,
+      yes: async () => {
+        // Notify if no tokens selected
+        if (canvas.tokens.controlled.length == 0) {
+          ui.notifications.error(game.i18n.localize(
+            'PocketChange.ConvertToLootableErrorNoTokensSelected'
+          ));
+          return;
+        }
+
+        // Only affect valid tokens
+        const filtered = canvas.tokens.controlled.filter((token) => {
+          const isTokenLootSheet = this._isTokenLootSheet(token);
+
+          if (isTokenLootSheet) {
+            let contentModifyWarn = game.i18n.format(
+              'PocketChange.WarningModifyLootSheetToken',
+              {
+                name: token.name,
+              }
+            );
+            ui.notifications.warn(contentModifyWarn);
+          }
+
+          return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
+        });
+        filtered.forEach(async (token) => {
+          const pocketChange = new API.PocketChange();
+          await pocketChange._convertToLootSheet({
+            token,
+            chanceOfDamagedItems,
+            damagedItemsMultiplier,
+            removeDamagedItems,
+          });
+        });
+
+        // Notify number of tokens that were effected
+        let contentInfoConfirmation = game.i18n.format(
+          'PocketChange.ConvertToLootableConfirmation',
+          {
+            number: filtered.length,
+          }
+        );
+        ui.notifications.info(contentInfoConfirmation);
+      },
+      defaultYes: false,
     });
   },
 
@@ -165,10 +212,11 @@ const API = {
       ui.notifications?.error(errorText);
       throw new Error(errorText);
     }
+
     if (!this.PocketChange) {
       this.PocketChange = new PocketChange();
     }
-        
+
     return Dialog.confirm({
       title: game.i18n.localize('PocketChange.ConvertFromLootable'),
       content: `<p>${game.i18n.localize(
@@ -240,150 +288,62 @@ const API = {
       ui.notifications?.error(errorText);
       throw new Error(errorText);
     }
+
     if (!this.PocketChange) {
       this.PocketChange = new PocketChange();
     }
-    this._convertSelectedTokensToLootByMode({
-      userOption,
-      imgPath,
-      light,
-      mode: 'itempiles',
-    });
-  },
 
-  /**
-   * For all selected tokens, convert them to lootable sheets.
-   *
-   * Adapted from the convert-to-lootable.js by @unsoluble, @Akaito, @honeybadger, @kekilla, and @cole.
-   *
-   * @param {number} chanceOfDamagedItems A number between 0 and 1 that corresponds to the percent chance an item will be damaged
-   * @param {number} damagedItemsMultiplier A number between 0 and 1 that will lower a damaged items value
-   * @param {boolean} removeDamagedItems If true, damaged items will be removed from the token rather than marked as damaged
-   * @param {string} mode e.g. "itempiles", "lootsheet"
-   */
-  _convertSelectedTokensToLootByMode({
-    token,
-    mode = 'lootsheet',
-    chanceOfDamagedItems,
-    damagedItemsMultiplier,
-    removeDamagedItems,
-    userOption = 1,
-    imgPath = undefined,
-    light = undefined,
-  }) {
-    if (mode === 'lootsheet') {
-      let contentTitle = game.i18n.localize('PocketChange.ConvertToLootable');
-      let contentWarn = `<p>${game.i18n.localize(
-        'PocketChange.ConvertToLootableWarning'
-      )}</p>`;
-      let contentError = game.i18n.localize(
-        'PocketChange.ConvertToLootableErrorNoTokensSelected'
-      );
-
-      return Dialog.confirm({
-        title: contentTitle,
-        content: contentWarn,
-        yes: async () => {
-          // Notify if no tokens selected
-          if (canvas.tokens.controlled.length == 0) {
-            ui.notifications.error(contentError);
-            return;
-          }
-
-          // Only affect valid tokens
-          const filtered = canvas.tokens.controlled.filter((token) => {
-            const isTokenLootSheet = this._isTokenLootSheet(token);
-
-            if (isTokenLootSheet) {
-              let contentModifyWarn = game.i18n.format(
-                'PocketChange.WarningModifyLootSheetToken',
-                {
-                  name: token.name,
-                }
-              );
-              ui.notifications.warn(contentModifyWarn);
-            }
-
-            return this._isTokenUnownedNpc(token) && !isTokenLootSheet;
-          });
-          filtered.forEach(async (token) => {
-            const pocketChange = new API.PocketChange();
-            await pocketChange._convertToLootSheet({
-              token,
-              chanceOfDamagedItems,
-              damagedItemsMultiplier,
-              removeDamagedItems,
-            });
-          });
-
-          // Notify number of tokens that were effected
-          let contentInfoConfirmation = game.i18n.format(
-            'PocketChange.ConvertToLootableConfirmation',
-            {
-              number: filtered.length,
-            }
-          );
-          ui.notifications.info(contentInfoConfirmation);
-        },
-        defaultYes: false,
-      });
-    } else if (mode === 'itempiles') {
-      let contentTitle = game.i18n.localize('PocketChange.ConvertToItemPiles');
-      let contentWarn = `<p>${game.i18n.localize(
+    return Dialog.confirm({
+      title: game.i18n.localize('PocketChange.ConvertToItemPiles'),
+      content: `<p>${game.i18n.localize(
         'PocketChange.ConvertToItemPilesWarning'
-      )}</p>`;
-      let contentError = game.i18n.localize(
-        'PocketChange.ConvertToItemPilesErrorNoTokensSelected'
-      );
+      )}</p>`,
+      yes: async () => {
+        // Notify if no tokens selected
+        if (canvas.tokens.controlled.length == 0) {
+          ui.notifications.error(game.i18n.localize(
+            'PocketChange.ConvertToItemPilesErrorNoTokensSelected'
+          ));
+          return;
+        }
 
-      return Dialog.confirm({
-        title: contentTitle,
-        content: contentWarn,
-        yes: async () => {
-          // Notify if no tokens selected
-          if (canvas.tokens.controlled.length == 0) {
-            ui.notifications.error(contentError);
-            return;
+        // Only affect valid tokens
+        const filtered = canvas.tokens.controlled.filter((token) => {
+          const isItemPiles = this._isItemPiles(token);
+
+          if (isItemPiles) {
+            let contentModifyWarn = game.i18n.format(
+              'PocketChange.WarningModifyItemPilesToken',
+              {
+                name: token.name,
+              }
+            );
+            ui.notifications.warn(contentModifyWarn);
           }
 
-          // Only affect valid tokens
-          const filtered = canvas.tokens.controlled.filter((token) => {
-            const isItemPiles = this._isItemPiles(token);
-
-            if (isItemPiles) {
-              let contentModifyWarn = game.i18n.format(
-                'PocketChange.WarningModifyItemPilesToken',
-                {
-                  name: token.name,
-                }
-              );
-              ui.notifications.warn(contentModifyWarn);
-            }
-
-            return this._isTokenUnownedNpc(token) && !isItemPiles;
+          return this._isTokenUnownedNpc(token) && !isItemPiles;
+        });
+        filtered.forEach(async (token) => {
+          const pocketChange = new API.PocketChange();
+          await pocketChange._convertToItemPiles({
+            token,
+            userOption,
+            imgPath,
+            light,
           });
-          filtered.forEach(async (token) => {
-            const pocketChange = new API.PocketChange();
-            await pocketChange._convertToItemPiles({
-              token,
-              userOption,
-              imgPath,
-              light,
-            });
-          });
+        });
 
-          // Notify number of tokens that were effected
-          let contentInfoConfirmation = game.i18n.format(
-            'PocketChange.ConvertToItemPilesConfirmation',
-            {
-              number: filtered.length,
-            }
-          );
-          ui.notifications.info(contentInfoConfirmation);
-        },
-        defaultYes: false,
-      });
-    }
+        // Notify number of tokens that were effected
+        let contentInfoConfirmation = game.i18n.format(
+          'PocketChange.ConvertToItemPilesConfirmation',
+          {
+            number: filtered.length,
+          }
+        );
+        ui.notifications.info(contentInfoConfirmation);
+      },
+      defaultYes: false,
+    });
   }
 };
 export default API;
