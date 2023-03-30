@@ -19,7 +19,7 @@ Hooks.once('init', () => {
 Hooks.once('setup', async function () {
   API.PocketChange = PocketChange;
   const data = game.modules.get(Settings.PACKAGE_NAME);
-  data.api = api;
+  data.api = API;
 });
 
 Hooks.on('preCreateToken', (tokenDocument, _tokenData, _options, _userId) => {

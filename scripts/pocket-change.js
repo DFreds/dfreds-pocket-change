@@ -473,10 +473,23 @@ export default class PocketChange {
   }) {
     applyDefaultLight ??= true;
     applyDefaultImage ??= true;
+    tokenSettings ??= {rotation: 0};
+    pileSettings ??={}
 
     if (applyDefaultImage) {
       let imgPath = new Settings().lootIcon;
-      mergeObject(tokenSettings, { texture: { src: imgPath }});
+      mergeObject(tokenSettings, 
+        { 
+          texture: { 
+            src: imgPath 
+          },
+          document:{ 
+            texture: { 
+              src: imgPath 
+            }
+          }
+        }
+      );
     }
     if (applyDefaultLight) {
       let light = {
