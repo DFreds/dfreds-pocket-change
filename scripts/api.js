@@ -333,21 +333,22 @@ const API = {
         });
         filtered.forEach(async (token) => {
           const pocketChange = new API.PocketChange();
-          if(game.modules.get("warpgate")?.active) {
-            await pocketChange._convertToItemPilesWithWarpgate({
-              token,
-              userOption,
-              imgPath,
-              light,
-            });
-          } else {
+          // TODO to check
+          // if(game.modules.get("warpgate")?.active) {
+          //   await pocketChange._convertToItemPilesWithWarpgate({
+          //     token,
+          //     userOption,
+          //     imgPath,
+          //     light,
+          //   });
+          // } else {
             await pocketChange._convertToItemPiles({
               token,
               userOption,
               imgPath,
               light,
             });
-          }
+          // }
         });
 
         // Notify number of tokens that were effected
