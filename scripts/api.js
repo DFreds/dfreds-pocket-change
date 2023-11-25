@@ -128,6 +128,10 @@ const API = {
     damagedItemsMultiplier,
     removeDamagedItems
   ) {
+    if (!canvas.tokens.controlled.length) {
+      ui.notifications.info(`${Settings.PACKAGE_NAME} | Please select tokens to convert to lootable.`)
+      return;
+    }
     if (!lootSheetSimpleActive) {
       let word = 'install and activate';
       if (game.modules.get('lootsheet-simple')) word = 'activate';
@@ -277,6 +281,10 @@ const API = {
    * @param {Light} light (optional) explicit light effect to use if none is passed a default one is used
    */
   convertSelectedTokensToItemPiles(userOption, imgPath, light) {
+    if (!canvas.tokens.controlled.length) {
+      ui.notifications.info(`${Settings.PACKAGE_NAME} | Please select tokens to convert to lootable.`)
+      return;
+    }
     if (!itemPilesActive) {
       let word = 'install and activate';
       if (game.modules.get('item-piles')) word = 'activate';
@@ -325,12 +333,21 @@ const API = {
         });
         filtered.forEach(async (token) => {
           const pocketChange = new API.PocketChange();
-          await pocketChange._convertToItemPiles({
-            token,
-            userOption,
-            imgPath,
-            light,
-          });
+          if(game.modules.get("warpgate")?.active) {
+            await pocketChange._convertToItemPilesWithWarpgate({
+              token,
+              userOption,
+              imgPath,
+              light,
+            });
+          } else {
+            await pocketChange._convertToItemPiles({
+              token,
+              userOption,
+              imgPath,
+              light,
+            });
+          }
         });
 
         // Notify number of tokens that were effected

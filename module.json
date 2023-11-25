@@ -16,11 +16,11 @@
   "bugs": "https://github.com/DFreds/dfreds-pocket-change/issues",
   "changelog": "https://github.com/DFreds/dfreds-pocket-change/releases",
   "flags": {},
-  "version": "2.0.2",
+  "version": "4.1.0",
   "compatibility": {
-    "minimum": 10,
-    "verified": "10.291",
-    "maximum": 10
+    "minimum": 11,
+    "verified": 11,
+    "maximum": 11
   },
   "scripts": [],
   "esmodules": ["./scripts/main.js"],

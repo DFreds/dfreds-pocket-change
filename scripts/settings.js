@@ -20,6 +20,10 @@ export default class Settings {
   static USE_GOLD = 'useGold';
   static USE_PLATINUM = 'usePlatinum';
 
+  static untouchedPile = 'icons/containers/chest/chest-reinforced-box-brown.webp';
+  static openedPile = 'icons/containers/chest/chest-wooden-tied-white.webp';
+  static emptyPile = 'icons/svg/invisible.svg';
+
   /**
    * Register all the settings for the module
    */

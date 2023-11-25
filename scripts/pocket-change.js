@@ -226,7 +226,13 @@ export default class PocketChange {
     roll.evaluate({
       async: false, // TODO eventually, this will be asynchronous and will need to handle it
     });
-    return roll.total;
+    
+    // Players and Trusted Players (no guests or GMs).
+    const numPlayers = game.users.filter(user => {return user.role >= 1 && user.role <= 2 && user.active}).length;
+    let result = roll.total;
+    /** ensure it can devide evenly across all looting players (convienence) */
+    result = result + (numPlayers) - (result % Math.max(numPlayers, 1)) ?? 0;
+    return result;
   }
 
   _showChatMessage(actor, currency) {
@@ -459,14 +465,12 @@ export default class PocketChange {
    * check out the documentation from the itempiles page https://fantasycomputer.works/FoundryVTT-ItemPiles/#/api?id=turntokensintoitempiles
    * @param {object} options	object	Options to pass to the function
    * @param {Token5e} options.token - the token to convert
-   * @param {object} options.pileSettings	object	Overriding settings to be put on the item piles’ settings - see pile flag defaults
    * @param {object} options.tokenSettings	object/Function	Overriding settings that will update the tokens’ settings
    * @param {boolean} options.applyDefaultLight little utility for lazy people apply a default light
    * @param {boolean} options.applyDefaultImage little utility for lazy people apply a default image
    */
   async _convertToItemPiles({
     token,
-    pileSettings,
     tokenSettings,
     applyDefaultLight,
     applyDefaultImage
@@ -474,7 +478,6 @@ export default class PocketChange {
     applyDefaultLight ??= true;
     applyDefaultImage ??= true;
     tokenSettings ??= {rotation: 0};
-    pileSettings ??={}
 
     if (applyDefaultImage) {
       let imgPath = new Settings().lootIcon;
@@ -483,11 +486,6 @@ export default class PocketChange {
           texture: { 
             src: imgPath 
           },
-          document:{ 
-            texture: { 
-              src: imgPath 
-            }
-          }
         }
       );
     }
@@ -508,12 +506,126 @@ export default class PocketChange {
       };
       mergeObject(tokenSettings, { light: light});
     }
-    await game.itempiles.API.turnTokensIntoItemPiles(
-      token,
-      {
-        pileSettings: pileSettings,
-        tokenSettings: tokenSettings
+
+    await game.itempiles.API.turnTokensIntoItemPiles(token, {
+      pileSettings:  {
+        openedImage: applyDefaultImage ? new Settings().lootIcon : Settings.openedPile,
+        emptyImage: Settings.emptyPile,
+        isContainer: true,
+        deleteWhenEmpty: false,
+        activePlayers:true,
+        closed: true
+      },
+      tokenSettings: tokenSettings
+    });
+  }
+
+  /**
+   * It is recommended to add the following filter to Item Pile's default filter: system.weaponType | natural. Which will filter out the natural weapons found on many creatures. Alternatively, define the `shouldBeLoot` filter function
+   * @param {Item5e} item 
+   * @returns {boolean}
+   */
+  _shouldBeLoot(item) {
+    // TODO
+    return true;
+  }
+
+  /**
+   * Converts the provided token to a item piles lootable sheet with warpgate
+   * check out the original macro from honeybadger https://github.com/trioderegion/fvtt-macros/blob/master/honeybadger-macros/tokens/single-loot-pile.js#L77
+   * @param {object} options	object	Options to pass to the function
+   * @param {Token5e} options.token - the token to convert
+   * @param {object} options.tokenSettings	object/Function	Overriding settings that will update the tokens’ settings
+   * @param {boolean} options.applyDefaultLight little utility for lazy people apply a default light
+   * @param {boolean} options.applyDefaultImage little utility for lazy people apply a default image
+   */
+  async _convertToItemPilesWithWarpgate({
+    token,
+    tokenSettings,
+    applyDefaultLight,
+    applyDefaultImage,
+  }) {
+    applyDefaultLight ??= true;
+    applyDefaultImage ??= true;
+    tokenSettings ??= {rotation: 0};
+
+    // if (applyDefaultImage) {
+    //   let imgPath = new Settings().lootIcon;
+    //   mergeObject(tokenSettings, 
+    //     { 
+    //       texture: { 
+    //         src: imgPath 
+    //       },
+    //     }
+    //   );
+    // }
+    // if (applyDefaultLight) {
+    //   let light = {
+    //     dim: 0.2,
+    //     bright: 0.2,
+    //     luminosity: 0,
+    //     alpha: 1,
+    //     color: '#ad8800',
+    //     coloration: 6,
+    //     animation: {
+    //       // type:"sunburst",
+    //       type: 'radialrainbow',
+    //       speed: 3,
+    //       intensity: 10,
+    //     },
+    //   };
+    //   mergeObject(tokenSettings, { light: light});
+    // }
+
+    const ActiveEffect = token.actor.effects.reduce( (acc, curr) => {
+      acc[curr.data.label] = warpgate.CONST.DELETE;
+      return acc;
+    }, {})
+
+    let updates = {
+      token: {
+        'texture.src': Settings.untouchedPile, 
+        name: 'Pile of Lewt',
+      },
+      actor: {
+        system: {currency: token.actor?.system?.currency ?? {gp:0, sp:0, cp:0}},
+        name: 'Pile of Loot',
+      },
+      embedded: {
+        ActiveEffect,
+        Item: {}
       }
-    );
+    }
+
+    //map the update data
+    const singlePile = [token].reduce( (acc, tok) => {
+      /* get their items */
+      const items = tok.actor.items.reduce( (acc, item) => {
+        if(this._shouldBeLoot(item)) {
+          acc[randomID()] = item.toObject();
+        }
+
+        return acc;
+      }, {} )
+
+      foundry.utils.mergeObject(acc.embedded.Item, items);
+      return acc;
+    }, updates)
+
+    const toDelete = [token].filter( t => t.id !== token.id ).map( t => t.id );
+    await canvas.scene.deleteEmbeddedDocuments('Token', toDelete);
+
+    await warpgate.mutate(token.document, singlePile, {}, {permanent:true, comparisonKeys: {ActiveEffect: 'label', Item: 'id'}})
+
+    await ItemPiles.API.turnTokensIntoItemPiles(token, {
+      pileSettings: {
+        openedImage: Settings.openedPile,
+        emptyImage:  Settings.emptyPile,
+        isContainer: true,
+        deleteWhenEmpty: false,
+        activePlayers:true,
+        closed: true
+      }
+    })
   }
 }
