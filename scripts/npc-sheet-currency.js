@@ -165,15 +165,16 @@ export default class NpcSheetCurrency {
       yes: async () => {
         const token = this._app.token;
         const pocketChange = new API.PocketChange();
-        if(game.modules.get("warpgate")?.active) {
-          await pocketChange._convertToItemPilesWithWarpgate({
-            token: token.object
-          });
-        } else {
+        // TODO to check
+        // if(game.modules.get("warpgate")?.active) {
+        //   await pocketChange._convertToItemPilesWithWarpgate({
+        //     token: token.object
+        //   });
+        // } else {
           await pocketChange._convertToItemPiles({
             token: token.object
           });
-        }
+        // }
       },
       defaultYes: false,
     });
