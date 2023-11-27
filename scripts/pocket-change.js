@@ -511,7 +511,7 @@ export default class PocketChange {
       pileSettings:  {
         openedImage: applyDefaultImage ? new Settings().lootIcon : Settings.openedPile,
         emptyImage: Settings.emptyPile,
-        isContainer: true,
+        type: game.itempiles.pile_types.CONTAINER,
         deleteWhenEmpty: false,
         activePlayers:true,
         closed: true
@@ -621,7 +621,7 @@ export default class PocketChange {
       pileSettings: {
         openedImage: Settings.openedPile,
         emptyImage:  Settings.emptyPile,
-        isContainer: true,
+        type: game.itempiles.pile_types.CONTAINER,
         deleteWhenEmpty: false,
         activePlayers:true,
         closed: true
