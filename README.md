@@ -10,6 +10,8 @@
 
 __DFreds Pocket Change__ is a FoundryVTT module which automatically adds currency to actors based on the DMG Individual Treasure Tables by Challenge Rating.
 
+## CURRENTLY DOES NOT WORK FOR v11
+
 ## Let Me Sell You This
 
 Have you ever watched as the peaceful NPCs of the town you've lovingly crafted get slaughtered by your players, only for them to ask how much money was in their pockets so they could loot them afterwards? Well, now you can automate that part. The money part. Not the slaughter. That would be weird.
