@@ -32,16 +32,6 @@
       "path": "lang/en.json"
     }
   ],
-  "packs": [
-    {
-      "name": "dfreds-pocket-change-macros",
-      "label": "DFreds Pocket Change Macros",
-      "path": "packs/macros.db",
-      "module": "dfreds-pocket-change",
-      "type": "Macro",
-      "private": false
-    }
-  ],
   "relationships": {
     "systems": [],
     "requires": []
