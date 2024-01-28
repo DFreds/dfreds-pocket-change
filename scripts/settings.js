@@ -218,11 +218,13 @@ export default class Settings {
   /**
    * Returns the game setting for creatureTypes
    *
-   * @returns {string} a string separated by a semi-colon for the types of
-   * creatures to generate currency for
    */
   get creatureTypes() {
-    return game.settings.get(Constants.MODULE_ID, Settings.CREATURE_TYPES);
+    return game.settings
+      .get(Constants.MODULE_ID, Settings.CREATURE_TYPES)
+      .split(';')
+      .map((type) => type.toLowerCase().trim())
+      .filter((type) => type);
   }
 
   /**

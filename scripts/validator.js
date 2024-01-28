@@ -78,10 +78,7 @@ export default class Validator {
   _isMatchingType(tokenDocument) {
     const actor = tokenDocument.actor;
 
-    const creatureTypes = this._settings.creatureTypes
-      .split(';')
-      .map((type) => type.toLowerCase().trim())
-      .filter((type) => type);
+    const creatureTypes = this._settings.creatureTypes;
 
     // Handle blank creature types by always saying they are valid
     if (creatureTypes.length === 0) return true;
