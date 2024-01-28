@@ -9,7 +9,6 @@ export default class Settings {
   static SHOW_CURRENCY_ON_NPCS = 'showCurrencyOnNpcs';
   static SHOW_CHAT_MESSAGE = 'showChatMessage';
   static CREATURE_TYPES = 'creatureTypes';
-  static LOOT_ICON = 'lootableIcon';
   static CHANCE_OF_NO_CURRENCY = 'chanceOfNoCurrency';
   static CURRENCY_MULTIPLIER = 'currencyMultiplier';
   static CHANCE_OF_DAMAGED_ITEMS = 'chanceOfDamagedItems';
@@ -65,15 +64,6 @@ export default class Settings {
       scope: 'world',
       config: true,
       default: 'Humanoid',
-      type: String,
-    });
-
-    game.settings.register(Constants.MODULE_ID, Settings.LOOT_ICON, {
-      name: game.i18n.localize('PocketChange.SettingLootIcon'),
-      hint: game.i18n.localize('PocketChange.SettingLootIconHint'),
-      scope: 'world',
-      config: true,
-      default: 'icons/svg/chest.svg',
       type: String,
     });
 
@@ -233,15 +223,6 @@ export default class Settings {
    */
   get creatureTypes() {
     return game.settings.get(Constants.MODULE_ID, Settings.CREATURE_TYPES);
-  }
-
-  /**
-   * Returns the game setting for lootIcon
-   *
-   * @returns {string} a string representing the path to the icon
-   */
-  get lootIcon() {
-    return game.settings.get(Constants.MODULE_ID, Settings.LOOT_ICON);
   }
 
   /**
