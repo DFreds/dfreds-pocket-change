@@ -97,9 +97,6 @@ export default class NpcSheetCurrency {
       case 'generateCurrency':
         await this._generateCurrency();
         break;
-      case 'convertToLootable':
-        await this._convertToLootable();
-        break;
     }
   }
 
@@ -122,21 +119,6 @@ export default class NpcSheetCurrency {
         const pocketChange = new game.dfreds.PocketChange();
         const currency = pocketChange.generateCurrency(actor);
         await actor.update({ 'data.currency': currency });
-      },
-      defaultYes: false,
-    });
-  }
-
-  async _convertToLootable() {
-    return Dialog.confirm({
-      title: game.i18n.localize('PocketChange.ConvertToLootable'),
-      content: `<p>${game.i18n.localize(
-        'PocketChange.ConvertToLootableWarning'
-      )}</p>`,
-      yes: async () => {
-        const token = this._app.token;
-        const pocketChange = new game.dfreds.PocketChange();
-        await pocketChange.convertToLoot({ token: token.object });
       },
       defaultYes: false,
     });
