@@ -1,9 +1,9 @@
+import Constants from './constants.js';
+
 /**
  * Handles registration and access of settings
  */
 export default class Settings {
-  static PACKAGE_NAME = 'dfreds-pocket-change';
-
   // Settings keys
   static ENABLED = 'enabled';
   static SHOW_CURRENCY_ON_NPCS = 'showCurrencyOnNpcs';
@@ -24,7 +24,11 @@ export default class Settings {
    * Register all the settings for the module
    */
   registerSettings() {
-    game.settings.register(Settings.PACKAGE_NAME, Settings.ENABLED, {
+    this._registerConfigSettings();
+  }
+
+  _registerConfigSettings() {
+    game.settings.register(Constants.MODULE_ID, Settings.ENABLED, {
       name: game.i18n.localize('PocketChange.SettingEnabled'),
       hint: game.i18n.localize('PocketChange.SettingEnabledHint'),
       scope: 'world',
@@ -34,7 +38,7 @@ export default class Settings {
     });
 
     game.settings.register(
-      Settings.PACKAGE_NAME,
+      Constants.MODULE_ID,
       Settings.SHOW_CURRENCY_ON_NPCS,
       {
         name: game.i18n.localize('PocketChange.SettingShowCurrencyOnNpcs'),
@@ -46,7 +50,7 @@ export default class Settings {
       }
     );
 
-    game.settings.register(Settings.PACKAGE_NAME, Settings.SHOW_CHAT_MESSAGE, {
+    game.settings.register(Constants.MODULE_ID, Settings.SHOW_CHAT_MESSAGE, {
       name: game.i18n.localize('PocketChange.SettingShowChatMessage'),
       hint: game.i18n.localize('PocketChange.SettingShowChatMessageHint'),
       scope: 'world',
@@ -55,7 +59,7 @@ export default class Settings {
       type: Boolean,
     });
 
-    game.settings.register(Settings.PACKAGE_NAME, Settings.CREATURE_TYPES, {
+    game.settings.register(Constants.MODULE_ID, Settings.CREATURE_TYPES, {
       name: game.i18n.localize('PocketChange.SettingCreatureTypes'),
       hint: game.i18n.localize('PocketChange.SettingCreatureTypesHint'),
       scope: 'world',
@@ -64,7 +68,7 @@ export default class Settings {
       type: String,
     });
 
-    game.settings.register(Settings.PACKAGE_NAME, Settings.LOOT_ICON, {
+    game.settings.register(Constants.MODULE_ID, Settings.LOOT_ICON, {
       name: game.i18n.localize('PocketChange.SettingLootIcon'),
       hint: game.i18n.localize('PocketChange.SettingLootIconHint'),
       scope: 'world',
@@ -74,7 +78,7 @@ export default class Settings {
     });
 
     game.settings.register(
-      Settings.PACKAGE_NAME,
+      Constants.MODULE_ID,
       Settings.CHANCE_OF_NO_CURRENCY,
       {
         name: game.i18n.localize('PocketChange.SettingChanceOfNoCurrency'),
@@ -91,26 +95,22 @@ export default class Settings {
       }
     );
 
-    game.settings.register(
-      Settings.PACKAGE_NAME,
-      Settings.CURRENCY_MULTIPLIER,
-      {
-        name: game.i18n.localize('PocketChange.SettingCurrencyMultiplier'),
-        hint: game.i18n.localize('PocketChange.SettingCurrencyMultiplierHint'),
-        scope: 'world',
-        config: true,
-        default: 1,
-        range: {
-          min: 0,
-          max: 2,
-          step: 0.1,
-        },
-        type: Number,
-      }
-    );
+    game.settings.register(Constants.MODULE_ID, Settings.CURRENCY_MULTIPLIER, {
+      name: game.i18n.localize('PocketChange.SettingCurrencyMultiplier'),
+      hint: game.i18n.localize('PocketChange.SettingCurrencyMultiplierHint'),
+      scope: 'world',
+      config: true,
+      default: 1,
+      range: {
+        min: 0,
+        max: 2,
+        step: 0.1,
+      },
+      type: Number,
+    });
 
     game.settings.register(
-      Settings.PACKAGE_NAME,
+      Constants.MODULE_ID,
       Settings.CHANCE_OF_DAMAGED_ITEMS,
       {
         name: game.i18n.localize('PocketChange.SettingChanceOfDamagedItems'),
@@ -130,7 +130,7 @@ export default class Settings {
     );
 
     game.settings.register(
-      Settings.PACKAGE_NAME,
+      Constants.MODULE_ID,
       Settings.DAMAGED_ITEMS_MULTIPLIER,
       {
         name: game.i18n.localize('PocketChange.SettingDamagedItemsMultiplier'),
@@ -149,20 +149,16 @@ export default class Settings {
       }
     );
 
-    game.settings.register(
-      Settings.PACKAGE_NAME,
-      Settings.REMOVE_DAMAGED_ITEMS,
-      {
-        name: game.i18n.localize('PocketChange.SettingRemoveDamagedItems'),
-        hint: game.i18n.localize('PocketChange.SettingRemoveDamagedItemsHint'),
-        scope: 'world',
-        config: true,
-        default: false,
-        type: Boolean,
-      }
-    );
+    game.settings.register(Constants.MODULE_ID, Settings.REMOVE_DAMAGED_ITEMS, {
+      name: game.i18n.localize('PocketChange.SettingRemoveDamagedItems'),
+      hint: game.i18n.localize('PocketChange.SettingRemoveDamagedItemsHint'),
+      scope: 'world',
+      config: true,
+      default: false,
+      type: Boolean,
+    });
 
-    game.settings.register(Settings.PACKAGE_NAME, Settings.USE_SILVER, {
+    game.settings.register(Constants.MODULE_ID, Settings.USE_SILVER, {
       name: game.i18n.localize('PocketChange.SettingUseSilver'),
       hint: game.i18n.localize('PocketChange.SettingUseSilverHint'),
       scope: 'world',
@@ -171,7 +167,7 @@ export default class Settings {
       type: Boolean,
     });
 
-    game.settings.register(Settings.PACKAGE_NAME, Settings.USE_ELECTRUM, {
+    game.settings.register(Constants.MODULE_ID, Settings.USE_ELECTRUM, {
       name: game.i18n.localize('PocketChange.SettingUseElectrum'),
       hint: game.i18n.localize('PocketChange.SettingUseElectrumHint'),
       scope: 'world',
@@ -180,7 +176,7 @@ export default class Settings {
       type: Boolean,
     });
 
-    game.settings.register(Settings.PACKAGE_NAME, Settings.USE_GOLD, {
+    game.settings.register(Constants.MODULE_ID, Settings.USE_GOLD, {
       name: game.i18n.localize('PocketChange.SettingUseGold'),
       hint: game.i18n.localize('PocketChange.SettingUseGoldHint'),
       scope: 'world',
@@ -189,7 +185,7 @@ export default class Settings {
       type: Boolean,
     });
 
-    game.settings.register(Settings.PACKAGE_NAME, Settings.USE_PLATINUM, {
+    game.settings.register(Constants.MODULE_ID, Settings.USE_PLATINUM, {
       name: game.i18n.localize('PocketChange.SettingUsePlatinum'),
       hint: game.i18n.localize('PocketChange.SettingUsePlatinumHint'),
       scope: 'world',
@@ -205,7 +201,7 @@ export default class Settings {
    * @returns {boolean} true if currency should be generated on token drop
    */
   get enabled() {
-    return game.settings.get(Settings.PACKAGE_NAME, Settings.ENABLED);
+    return game.settings.get(Constants.MODULE_ID, Settings.ENABLED);
   }
 
   /**
@@ -215,7 +211,7 @@ export default class Settings {
    */
   get showCurrencyOnNpcs() {
     return game.settings.get(
-      Settings.PACKAGE_NAME,
+      Constants.MODULE_ID,
       Settings.SHOW_CURRENCY_ON_NPCS
     );
   }
@@ -226,7 +222,7 @@ export default class Settings {
    * @returns {boolean} true if a chat message should be displayed for dropped tokens
    */
   get showChatMessage() {
-    return game.settings.get(Settings.PACKAGE_NAME, Settings.SHOW_CHAT_MESSAGE);
+    return game.settings.get(Constants.MODULE_ID, Settings.SHOW_CHAT_MESSAGE);
   }
 
   /**
@@ -236,7 +232,7 @@ export default class Settings {
    * creatures to generate currency for
    */
   get creatureTypes() {
-    return game.settings.get(Settings.PACKAGE_NAME, Settings.CREATURE_TYPES);
+    return game.settings.get(Constants.MODULE_ID, Settings.CREATURE_TYPES);
   }
 
   /**
@@ -245,7 +241,7 @@ export default class Settings {
    * @returns {string} a string representing the path to the icon
    */
   get lootIcon() {
-    return game.settings.get(Settings.PACKAGE_NAME, Settings.LOOT_ICON);
+    return game.settings.get(Constants.MODULE_ID, Settings.LOOT_ICON);
   }
 
   /**
@@ -256,7 +252,7 @@ export default class Settings {
    */
   get chanceOfNoCurrency() {
     return game.settings.get(
-      Settings.PACKAGE_NAME,
+      Constants.MODULE_ID,
       Settings.CHANCE_OF_NO_CURRENCY
     );
   }
@@ -268,10 +264,7 @@ export default class Settings {
    * the amount to multiply the currency by
    */
   get currencyMultiplier() {
-    return game.settings.get(
-      Settings.PACKAGE_NAME,
-      Settings.CURRENCY_MULTIPLIER
-    );
+    return game.settings.get(Constants.MODULE_ID, Settings.CURRENCY_MULTIPLIER);
   }
 
   /**
@@ -282,7 +275,7 @@ export default class Settings {
    */
   get chanceOfDamagedItems() {
     return game.settings.get(
-      Settings.PACKAGE_NAME,
+      Constants.MODULE_ID,
       Settings.CHANCE_OF_DAMAGED_ITEMS
     );
   }
@@ -295,7 +288,7 @@ export default class Settings {
    */
   get damagedItemsMultiplier() {
     return game.settings.get(
-      Settings.PACKAGE_NAME,
+      Constants.MODULE_ID,
       Settings.DAMAGED_ITEMS_MULTIPLIER
     );
   }
@@ -307,7 +300,7 @@ export default class Settings {
    */
   get removeDamagedItems() {
     return game.settings.get(
-      Settings.PACKAGE_NAME,
+      Constants.MODULE_ID,
       Settings.REMOVE_DAMAGED_ITEMS
     );
   }
@@ -318,7 +311,7 @@ export default class Settings {
    * @returns {boolean} true if silver can be used
    */
   get useSilver() {
-    return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_SILVER);
+    return game.settings.get(Constants.MODULE_ID, Settings.USE_SILVER);
   }
 
   /**
@@ -327,7 +320,7 @@ export default class Settings {
    * @returns {boolean} true if electrum can be used
    */
   get useElectrum() {
-    return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_ELECTRUM);
+    return game.settings.get(Constants.MODULE_ID, Settings.USE_ELECTRUM);
   }
 
   /**
@@ -336,7 +329,7 @@ export default class Settings {
    * @returns {boolean} true if gold can be used
    */
   get useGold() {
-    return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_GOLD);
+    return game.settings.get(Constants.MODULE_ID, Settings.USE_GOLD);
   }
 
   /**
@@ -345,6 +338,6 @@ export default class Settings {
    * @returns {boolean} true if platinum can be used
    */
   get usePlatinum() {
-    return game.settings.get(Settings.PACKAGE_NAME, Settings.USE_PLATINUM);
+    return game.settings.get(Constants.MODULE_ID, Settings.USE_PLATINUM);
   }
 }
