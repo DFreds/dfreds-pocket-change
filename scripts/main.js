@@ -1,5 +1,4 @@
 import PocketChange from './pocket-change.js';
-import MacroSupport from './macro-support.js';
 import NpcSheetCurrency from './npc-sheet-currency.js';
 import Settings from './settings.js';
 
@@ -8,7 +7,6 @@ Hooks.once('init', () => {
 
   game.dfreds = game.dfreds || {};
   game.dfreds.PocketChange = PocketChange;
-  game.dfreds.MacroSupport = MacroSupport;
 });
 
 Hooks.on('preCreateToken', (tokenDocument, _tokenData, _options, _userId) => {
