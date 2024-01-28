@@ -9,7 +9,7 @@ Hooks.once('init', () => {
   game.dfreds.PocketChange = PocketChange;
 });
 
-Hooks.on('preCreateToken', (tokenDocument, _tokenData, _options, _userId) => {
+Hooks.on('createToken', (tokenDocument, _tokenData, _options, _userId) => {
   const pocketChange = new game.dfreds.PocketChange();
   pocketChange.populateTreasureForToken(tokenDocument);
 });

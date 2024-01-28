@@ -25,13 +25,9 @@ export default class PocketChange {
 
     log('Generating treasure');
 
-    tokenDocument.updateSource({
-      actorData: {
-        system: {
-          currency: this.generateCurrency(tokenDocument.actor),
-        },
-      },
-    });
+    const actor = tokenDocument.actor;
+    const currency = this.generateCurrency(actor);
+    return actor.update({ 'data.currency': currency });
   }
 
   /**
