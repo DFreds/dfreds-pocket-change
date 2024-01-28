@@ -52,7 +52,6 @@ export default class NpcSheetCurrency {
       {
         data: this._data.system,
         config: {
-          hasToken: !!this._app.token,
           currencies: {
             pp: game.i18n.localize('DND5E.CurrencyPP'),
             gp: game.i18n.localize('DND5E.CurrencyGP'),
@@ -83,9 +82,7 @@ export default class NpcSheetCurrency {
       'modules/dfreds-pocket-change/templates/tidy-npc-currency-row.html',
       {
         data: this._data.data,
-        config: {
-          hasToken: !!this._app.token,
-        },
+        config: {},
       }
     );
   }

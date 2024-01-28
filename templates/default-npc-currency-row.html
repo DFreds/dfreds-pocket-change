@@ -6,11 +6,6 @@
     <a style="margin-left: 4px;" class="currency-regenerate rollable" data-action="generateCurrency" title="{{localize 'PocketChange.GenerateCurrency'}}">
       <i class="fas fa-redo"></i>
     </a>
-    {{#if config.hasToken}}
-    <a style="margin-left: 4px;" class="currency-loot rollable" data-action="convertToLootable" title="{{localize 'PocketChange.ConvertToLootable'}}">
-      <i class="fas fa-shopping-bag"></i>
-    </a>
-    {{/if}}
   </h3>
   {{#each data.currency as |v k|}}
   <label style="margin-left: 4px;" class="denomination {{k}}">{{lookup ../config.currencies k}}</label>
