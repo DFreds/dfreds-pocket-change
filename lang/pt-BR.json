@@ -1,0 +1,60 @@
+{
+  "PocketChange.ConvertFromLootable": "Converter de Saqueável",
+  "PocketChange.ConvertFromLootableConfirmation": "Convertido {number} tokens de saque",
+  "PocketChange.ConvertFromLootableErrorNoTokensSelected": "Tokens devem ser selecionados para converter de saqueável",
+  "PocketChange.ConvertFromLootableWarning": "Converta este token de uma ficha de saque. Cuidado, isso não irá restaurar quaisquer magias ou habilidades previamente excluídas.",
+
+  "PocketChange.ConvertToLootable": "Converter para Saqueável",
+  "PocketChange.ConvertToLootableConfirmation": "Convertido {number} tokens para saque",
+  "PocketChange.ConvertToLootableErrorNoTokensSelected": "Tokens devem ser selecionados para converter para saqueável",
+  "PocketChange.ConvertToLootableWarning": "Converta este token para uma ficha saqueável. Cuidado, isso irá manter apenas os itens e converter o token em uma ficha de saque com a qual os jogadores podem interagir. Isso não pode ser desfeito.",
+
+  "PocketChange.GenerateCurrency": "Gerar Moeda",
+  "PocketChange.GenerateCurrencyConfirmation": "Gerada moeda para {number} tokens",
+  "PocketChange.GenerateCurrencyErrorNoTokensSelected": "Tokens devem ser selecionados para gerar moeda",
+  "PocketChange.GenerateCurrencyWarning": "Gerar moeda para este NPC. Cuidado, isso irá substituir todas as moedas atuais carregadas pelo NPC e não pode ser desfeito.",
+
+  "PocketChange.SettingEnabled": "Habilitado",
+  "PocketChange.SettingEnabledHint": "Se habilitado, moeda será gerada para tokens soltos em cenas.",
+
+  "PocketChange.SettingShowCurrencyOnNpcs": "Mostrar Moeda em fichas de NPC",
+  "PocketChange.SettingShowCurrencyOnNpcsHint": "Se habilitado, a moeda será exibida nas fichas de NPCs. Atualmente suporta a ficha de ator padrão e Tidy.",
+
+  "PocketChange.SettingShowChatMessage": "Mostrar Mensagem no Chat",
+  "PocketChange.SettingShowChatMessageHint": "Se habilitado, uma mensagem de chat será criada sempre que moeda for gerada.",
+
+  "PocketChange.SettingCreatureTypes": "Tipos de Criaturas",
+  "PocketChange.SettingCreatureTypesHint": "Esses são os tipos de criaturas que gerarão moeda, separados por ponto e vírgula. Isso corresponderá ao tipo, subtipo e tipo personalizado delas. Deixe em branco para gerar moeda para todos os tipos de criaturas. Exemplo: Humanoide;Aberração;Monstruosidade",
+
+  "PocketChange.SettingChanceOfNoCurrency": "Chance de Não Gerar Moeda",
+  "PocketChange.SettingChanceOfNoCurrencyHint": "Essa é a porcentagem de chance de que nenhuma moeda será gerada para um token.",
+
+  "PocketChange.SettingCurrencyMultiplier": "Multiplicador de Moeda",
+  "PocketChange.SettingCurrencyMultiplierHint": "Isso multiplica a moeda gerada pelo número dado.",
+
+  "PocketChange.SettingChanceOfDamagedItems": "Chance de Itens Danificados",
+  "PocketChange.SettingChanceOfDamagedItemsHint": "Essa é a porcentagem de chance de que um item Comum será danificado quando um token for convertido para saque. Um item danificado tem seu valor reduzido e adiciona (Danificado) ao nome. Defina isso para 0 se você quiser desativar itens danificados.",
+
+  "PocketChange.SettingDamagedItemsMultiplier": "Multiplicador de Itens Danificados",
+  "PocketChange.SettingDamagedItemsMultiplierHint": "Isso multiplica o preço de um item danificado pelo número dado, reduzindo seu valor.",
+
+  "PocketChange.SettingRemoveDamagedItems": "Remover Itens Danificados",
+  "PocketChange.SettingRemoveDamagedItemsHint": "Se habilitado, isso removerá itens danificados de tokens que forem convertidos para saque.",
+
+  "PocketChange.SettingUseSilver": "Usar Prata",
+  "PocketChange.SettingUseSilverHint": "Se habilitado, a moeda gerada poderá incluir prata. O cobre é sempre incluído.",
+
+  "PocketChange.SettingUseElectrum": "Usar Electrum",
+  "PocketChange.SettingUseElectrumHint": "Se habilitado, a moeda gerada poderá incluir electrum. O cobre é sempre incluído.",
+
+  "PocketChange.SettingUseGold": "Usar Ouro",
+  "PocketChange.SettingUseGoldHint": "Se habilitado, a moeda gerada poderá incluir ouro. O cobre é sempre incluído.",
+
+  "PocketChange.SettingUsePlatinum": "Usar Platina",
+  "PocketChange.SettingUsePlatinumHint": "Se habilitado, a moeda gerada poderá incluir platina. O cobre é sempre incluído.",
+
+  "PocketChange.WarningModifyLootSheetToken": "Não é possível modificar o token existente de ficha de saque {name}",
+  "PocketChange.WarningModifyNonLootSheetToken": "Não é possível modificar o token existente de ficha não-saqueável {name}",
+  "PocketChange.WarningModifyNonNpcToken": "Não é possível modificar token que não seja de NPC {name}",
+  "PocketChange.WarningModifyPlayerOwnedToken": "Não é possível modificar token de propriedade do jogador {name}"
+}
