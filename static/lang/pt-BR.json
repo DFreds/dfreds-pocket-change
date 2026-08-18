@@ -71,10 +71,6 @@
             "ChanceOfNoCurrency": {
                 "Name": "Chance de Não Gerar Moeda",
                 "Hint": "Essa é a porcentagem de chance de que nenhuma moeda será gerada para um token."
-            },
-            "CurrencyMultiplier": {
-                "Name": "Multiplicador de Moeda",
-                "Hint": "Isso multiplica a moeda gerada pelo número dado."
             }
         }
     }

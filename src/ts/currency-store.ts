@@ -1,4 +1,3 @@
-import { Settings } from "./settings.ts";
 import { TreasureTableConfig } from "./treasure-table.ts";
 
 /**
@@ -16,12 +15,10 @@ interface CurrencyAmount {
  * added on top of what the actor already carries.
  */
 class CurrencyStore {
-    #settings: Settings;
     #config: TreasureTableConfig;
     #amounts: number[];
 
     constructor(actor: Actor, config: TreasureTableConfig) {
-        this.#settings = new Settings();
         this.#config = config;
         this.#amounts = config.currencies.map((currency) => {
             const value = foundry.utils.getProperty(actor, currency.path);
@@ -30,16 +27,15 @@ class CurrencyStore {
     }
 
     /**
-     * Adds an amount of the currency at the given index, multiplied by the
-     * currency multiplier setting
+     * Adds an amount of the currency at the given index
      *
      * @param currencyIndex - The index of the currency in the configuration
-     * @param amount - The amount to add before the multiplier is applied
+     * @param amount - The amount to add
      */
     add(currencyIndex: number, amount: number): void {
         if (currencyIndex < 0 || currencyIndex >= this.#amounts.length) return;
 
-        this.#amounts[currencyIndex] += Math.floor(amount * this.#settings.currencyMultiplier);
+        this.#amounts[currencyIndex] += Math.floor(amount);
     }
 
     /**

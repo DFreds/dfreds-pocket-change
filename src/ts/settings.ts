@@ -11,7 +11,6 @@ class Settings {
     #SHOW_CHAT_MESSAGE = "showChatMessage";
     #CREATURE_TYPES = "creatureTypes";
     #CHANCE_OF_NO_CURRENCY = "chanceOfNoCurrency";
-    #CURRENCY_MULTIPLIER = "currencyMultiplier";
     #TREASURE_TABLE = "treasureTable";
 
     // Menu keys
@@ -80,22 +79,6 @@ class Settings {
                 initial: 0.25,
             }),
         });
-
-        game.settings.register(MODULE_ID, this.#CURRENCY_MULTIPLIER, {
-            name: "PocketChange.Settings.CurrencyMultiplier.Name",
-            hint: "PocketChange.Settings.CurrencyMultiplier.Hint",
-            scope: "world",
-            config: true,
-            default: 1,
-            type: new foundry.data.fields.NumberField({
-                required: true,
-                nullable: false,
-                min: 0,
-                max: 2,
-                step: 0.1,
-                initial: 1,
-            }),
-        });
     }
 
     #registerNonConfigSettings(): void {
@@ -140,13 +123,6 @@ class Settings {
      */
     get chanceOfNoCurrency(): number {
         return game.settings.get(MODULE_ID, this.#CHANCE_OF_NO_CURRENCY) as unknown as number;
-    }
-
-    /**
-     * Returns the amount to multiply generated currency by
-     */
-    get currencyMultiplier(): number {
-        return game.settings.get(MODULE_ID, this.#CURRENCY_MULTIPLIER) as unknown as number;
     }
 
     /**
