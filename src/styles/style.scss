@@ -51,8 +51,10 @@
         gap: 0.5rem;
         margin-bottom: 0.5rem;
 
-        label {
+        .treasure-tier-label,
+        .treasure-tier-joiner {
             flex: none;
+            color: var(--color-form-hint);
         }
 
         input {
@@ -65,27 +67,40 @@
         }
     }
 
+    // Each cell already holds a bordered input, so those boxes are what separate
+    // the rows. Core stripes every table body row, which tints the gaps behind
+    // half the inputs and reads as a banding fault, so the striping is dropped.
     .treasure-rows {
         width: 100%;
         margin: 0 0 0.5rem;
         border-collapse: collapse;
+        background: none;
+
+        tbody tr,
+        tbody tr:nth-child(even),
+        tbody tr:nth-child(odd) {
+            background: none;
+        }
 
         th {
-            padding: 0.25rem;
+            padding: 0.25rem 0.25rem 0.4rem;
             text-align: center;
+            font-weight: bold;
+            color: var(--color-form-hint);
+            font-size: var(--font-size-11, 0.6875rem);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        // A mid grey at low opacity, so the rule shows up on a light or dark window
+        thead tr {
+            border-bottom: 1px solid rgba(127, 127, 127, 0.5);
         }
 
         td {
-            padding: 0.25rem;
+            padding: 0.2rem 0.25rem;
             text-align: center;
-        }
-
-        thead tr {
-            border-bottom: 1px solid var(--color-border, #7a7971);
-        }
-
-        tbody tr:nth-child(odd) {
-            background: rgba(128, 128, 128, 0.15);
+            background: none;
         }
 
         input {
@@ -100,6 +115,38 @@
         .treasure-delete-cell {
             width: 2.25rem;
         }
+    }
+
+    .filter-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .filter-row {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        input,
+        select {
+            flex: 1;
+            min-width: 0;
+        }
+
+        select {
+            flex: 0 0 9rem;
+        }
+
+        button {
+            flex: 0 0 auto;
+        }
+    }
+
+    .no-filters {
+        padding: 0.5rem;
+        color: var(--color-form-hint);
     }
 
     .treasure-roll-range {

@@ -9,8 +9,7 @@ import { findPropertyPaths, isKnownPropertyPath, nextSegments } from "./property
  * Enter, Tab and Escape are wired globally by core at startup, so none of that
  * is repeated here.
  *
- * Adapted from dfreds-triggers, cut down to the one case this module has:
- * every path names a property of an Actor.
+ * Every path here names a property of an Actor.
  */
 
 /** A ceiling against an unusually wide schema, not a display limit. The menu scrolls. */

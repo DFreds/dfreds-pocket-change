@@ -6,8 +6,6 @@
  * `template.json` have no schema to walk, hence the fallbacks.
  *
  * Nothing here touches the DOM; `path-autocomplete.ts` is what puts it on screen.
- *
- * Adapted from dfreds-triggers.
  */
 
 /**
@@ -99,7 +97,6 @@ function collectObjectPaths(source: object, prefix: string, into: Set<string>): 
         const path = prefix ? `${prefix}.${leaf}` : leaf;
         into.add(path);
 
-        // "a.b.c" also contributes "a" and "a.b"
         const segments = path.split(".");
         for (let index = 1; index < segments.length; index += 1) {
             into.add(segments.slice(0, index).join("."));
@@ -158,7 +155,6 @@ function findPropertyPaths(documentName: string, subtype?: string): string[] {
     const paths = new Set<string>();
     const documentClass = documentClassFor(documentName);
 
-    // The document's own fields, minus its embedded collections
     const schema = (documentClass as { schema?: WalkableField } | undefined)?.schema;
     if (isWalkable(schema)) {
         const skip = new Set(hierarchyFieldNames(documentClass));

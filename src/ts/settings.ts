@@ -6,12 +6,10 @@ import { TreasureConfig } from "./ui/treasure-config.ts";
  * Handles registration and access of settings
  */
 class Settings {
-    // Settings keys
     #ENABLED = "enabled";
     #SHOW_CHAT_MESSAGE = "showChatMessage";
     #TREASURE_TABLE = "treasureTable";
 
-    // Menu keys
     #TREASURE_MENU = "treasureMenu";
 
     /**

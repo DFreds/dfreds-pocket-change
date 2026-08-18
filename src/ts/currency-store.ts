@@ -1,8 +1,5 @@
 import { TreasureTableConfig } from "./treasure-table.ts";
 
-/**
- * A currency total after generation, used for chat messages
- */
 interface CurrencyAmount {
     label: string;
     amount: number;
@@ -52,7 +49,7 @@ class CurrencyStore {
     }
 
     /**
-     * Returns the current total for each currency with its label
+     * @returns The current total for each currency with its label
      */
     describe(): CurrencyAmount[] {
         return this.#config.currencies.map((currency, index) => {

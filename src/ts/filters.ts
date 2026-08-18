@@ -3,9 +3,8 @@ import { ActorFilter, FilterConfig } from "./treasure-table.ts";
 /**
  * Evaluates the configured filters against an actor.
  *
- * Adapted from dfreds-triggers, cut down to the case this module has: every
- * filter reads a value straight off one actor, so there are no transition
- * operators and nothing to compare against a previous state.
+ * Every filter reads a value straight off one actor, so there is nothing to
+ * compare against a previous state.
  */
 
 function toNumber(value: unknown): number | undefined {
@@ -18,10 +17,6 @@ function toNumber(value: unknown): number | undefined {
     return undefined;
 }
 
-/**
- * Turns the raw value stored on a filter into something comparable, so that
- * numbers compare as numbers and true, false and null keep their meaning
- */
 function resolveExpectedValue(raw: string): unknown {
     const trimmed = raw.trim();
     if (trimmed === "") return "";
