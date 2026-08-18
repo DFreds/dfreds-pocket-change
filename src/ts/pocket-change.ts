@@ -37,9 +37,12 @@ class PocketChange {
      * table and applies it to the actor
      *
      * @param actor - The actor to generate currency for
+     * @param options - Options for the generation
+     * @param options.replace - If true, the currency the actor already carries
+     * is thrown away rather than added to
      */
-    async generateCurrencyForActor(actor: Actor): Promise<void> {
-        const store = await this.#generateCurrency(actor);
+    async generateCurrencyForActor(actor: Actor, { replace = false } = {}): Promise<void> {
+        const store = await this.#generateCurrency(actor, replace);
         if (!store) return;
 
         await actor.update(store.buildUpdate());
@@ -49,7 +52,7 @@ class PocketChange {
         }
     }
 
-    async #generateCurrency(actor: Actor): Promise<CurrencyStore | null> {
+    async #generateCurrency(actor: Actor, replace: boolean): Promise<CurrencyStore | null> {
         const config = this.#settings.treasureTable;
 
         if (!config.attributePath || config.currencies.length === 0) {
@@ -69,7 +72,7 @@ class PocketChange {
             return null;
         }
 
-        const store = new CurrencyStore(actor, config);
+        const store = new CurrencyStore(actor, config, { startFromNothing: replace });
         for (const [currencyIndex, formula] of row.formulas.entries()) {
             if (!formula) continue;
             store.add(currencyIndex, await this.#rollDice(formula));

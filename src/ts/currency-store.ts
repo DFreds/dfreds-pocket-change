@@ -8,16 +8,19 @@ interface CurrencyAmount {
 /**
  * Tracks currency totals for an actor while treasure is generated.
  *
- * Totals start at the actor's current amounts so that generated treasure is
- * added on top of what the actor already carries.
+ * Totals start at the actor's current amounts, so generated treasure is added
+ * on top of what the actor already carries. Starting from nothing instead
+ * throws those amounts away, which is what regenerating from a sheet does.
  */
 class CurrencyStore {
     #config: TreasureTableConfig;
     #amounts: number[];
 
-    constructor(actor: Actor, config: TreasureTableConfig) {
+    constructor(actor: Actor, config: TreasureTableConfig, { startFromNothing = false } = {}) {
         this.#config = config;
         this.#amounts = config.currencies.map((currency) => {
+            if (startFromNothing) return 0;
+
             const value = foundry.utils.getProperty(actor, currency.path);
             return typeof value === "number" ? value : 0;
         });

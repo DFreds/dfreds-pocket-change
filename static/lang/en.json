@@ -1,6 +1,8 @@
 {
     "PocketChange": {
         "CurrencyGeneratedFor": "Currency generated for {name}",
+        "GenerateCurrency": "Generate Currency",
+        "GenerateCurrencyWarning": "Roll new currency for {name}? This replaces the currency they are already carrying and cannot be undone.",
         "TreasureConfig": {
             "AppName": "Treasure Table",
             "ConfigurationTab": "Configuration",

@@ -10,8 +10,8 @@ const Init: Listener = {
             new Settings().register();
 
             (game.modules.get(MODULE_ID) as ThisModule).api = {
-                generateCurrencyForActor(actor: Actor) {
-                    return new PocketChange().generateCurrencyForActor(actor);
+                generateCurrencyForActor(actor: Actor, options?: { replace?: boolean }) {
+                    return new PocketChange().generateCurrencyForActor(actor, options);
                 },
             };
         });

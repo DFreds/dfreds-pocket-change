@@ -1,6 +1,8 @@
 {
     "PocketChange": {
         "CurrencyGeneratedFor": "Moeda gerada para {name}",
+        "GenerateCurrency": "Gerar Moeda",
+        "GenerateCurrencyWarning": "Rolar nova moeda para {name}? Isso substitui a moeda que já está carregando e não pode ser desfeito.",
         "TreasureConfig": {
             "AppName": "Tabela de Tesouro",
             "ConfigurationTab": "Configuração",
