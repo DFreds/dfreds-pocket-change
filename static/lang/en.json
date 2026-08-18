@@ -3,6 +3,8 @@
         "CurrencyGeneratedFor": "Currency generated for {name}",
         "TreasureConfig": {
             "AppName": "Treasure Table",
+            "ConfigurationTab": "Configuration",
+            "RollTablesTab": "Roll Tables",
             "General": "General",
             "AttributePath": {
                 "Name": "Actor Attribute",

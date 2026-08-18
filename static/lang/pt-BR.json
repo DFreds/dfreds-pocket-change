@@ -3,6 +3,8 @@
         "CurrencyGeneratedFor": "Moeda gerada para {name}",
         "TreasureConfig": {
             "AppName": "Tabela de Tesouro",
+            "ConfigurationTab": "Configuração",
+            "RollTablesTab": "Tabelas de Rolagem",
             "General": "Geral",
             "AttributePath": {
                 "Name": "Atributo do Ator",

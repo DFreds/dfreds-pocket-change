@@ -1,0 +1,101 @@
+<div class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    <div class="treasure-scroll">
+        {{#each tiers as |tier tierIndex|}}
+            <fieldset class="treasure-tier">
+                <legend>{{localize "PocketChange.TreasureConfig.Tier"}}</legend>
+
+                <div class="treasure-tier-range">
+                    <label>{{localize "PocketChange.TreasureConfig.From"}}</label>
+                    <input type="number" name="tiers.{{tierIndex}}.min" value="{{tier.min}}" step="any" />
+                    <label>{{localize "PocketChange.TreasureConfig.To"}}</label>
+                    <input
+                        type="number"
+                        name="tiers.{{tierIndex}}.max"
+                        value="{{tier.max}}"
+                        step="any"
+                        placeholder="{{localize 'PocketChange.TreasureConfig.NoLimit'}}"
+                    />
+                    <button
+                        type="button"
+                        class="icon"
+                        data-action="deleteTier"
+                        data-tier-index="{{tierIndex}}"
+                        data-tooltip
+                        aria-label="{{localize 'PocketChange.TreasureConfig.DeleteTier'}}"
+                    >
+                        <i class="fa-solid fa-trash" inert></i>
+                    </button>
+                </div>
+
+                <table class="treasure-rows">
+                    <thead>
+                        <tr>
+                            <th class="treasure-roll-header">{{localize "PocketChange.TreasureConfig.Roll"}}</th>
+                            {{#each ../currencies as |currency|}}
+                                <th>{{currency.label}}</th>
+                            {{/each}}
+                            <th class="treasure-delete-header"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each tier.rows as |row rowIndex|}}
+                            <tr>
+                                <td class="treasure-roll-cell">
+                                    <div class="treasure-roll-range">
+                                        <input
+                                            type="number"
+                                            name="tiers.{{tierIndex}}.rows.{{rowIndex}}.rangeStart"
+                                            value="{{row.rangeStart}}"
+                                        />
+                                        <span>&ndash;</span>
+                                        <input
+                                            type="number"
+                                            name="tiers.{{tierIndex}}.rows.{{rowIndex}}.rangeEnd"
+                                            value="{{row.rangeEnd}}"
+                                        />
+                                    </div>
+                                </td>
+                                {{#each row.formulas as |formula currencyIndex|}}
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="tiers.{{tierIndex}}.rows.{{rowIndex}}.formulas.{{currencyIndex}}"
+                                            value="{{formula}}"
+                                        />
+                                    </td>
+                                {{/each}}
+                                <td class="treasure-delete-cell">
+                                    <button
+                                        type="button"
+                                        class="icon"
+                                        data-action="deleteRow"
+                                        data-tier-index="{{tierIndex}}"
+                                        data-row-index="{{rowIndex}}"
+                                        data-tooltip
+                                        aria-label="{{localize 'PocketChange.TreasureConfig.DeleteRow'}}"
+                                    >
+                                        <i class="fa-solid fa-trash" inert></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
+                <button type="button" data-action="addRow" data-tier-index="{{tierIndex}}">
+                    <i class="fa-solid fa-plus" inert></i>
+                    {{localize "PocketChange.TreasureConfig.AddRow"}}
+                </button>
+            </fieldset>
+        {{/each}}
+
+        {{#unless tiers.length}}
+            <p class="hint">{{localize "PocketChange.TreasureConfig.NoTiers"}}</p>
+        {{/unless}}
+
+        <button type="button" data-action="addTier">
+            <i class="fa-solid fa-plus" inert></i>
+            {{localize "PocketChange.TreasureConfig.AddTier"}}
+        </button>
+    </div>
+</div>

@@ -49,17 +49,54 @@ class TreasureConfig extends HandlebarsApplicationMixin(
     };
 
     static override PARTS = {
-        form: {
-            id: "form",
-            template: `modules/${MODULE_ID}/templates/treasure-config.hbs`,
-            scrollable: [".treasure-config-body"],
+        tabs: { template: "templates/generic/tab-navigation.hbs" },
+        configuration: {
+            id: "configuration",
+            template: `modules/${MODULE_ID}/templates/treasure-config-configuration.hbs`,
+            scrollable: [".treasure-scroll"],
+        },
+        tables: {
+            id: "tables",
+            template: `modules/${MODULE_ID}/templates/treasure-config-tables.hbs`,
+            scrollable: [".treasure-scroll"],
         },
         footer: { template: "templates/generic/form-footer.hbs" },
+    };
+
+    static override TABS = {
+        sheet: {
+            tabs: [
+                {
+                    id: "configuration",
+                    icon: "fa-solid fa-gears",
+                    label: "PocketChange.TreasureConfig.ConfigurationTab",
+                },
+                {
+                    id: "tables",
+                    icon: "fa-solid fa-table-list",
+                    label: "PocketChange.TreasureConfig.RollTablesTab",
+                },
+            ],
+            initial: "configuration",
+        },
     };
 
     protected override _onClose(options: ApplicationClosingOptions): void {
         this.#config = null;
         super._onClose(options);
+    }
+
+    protected override async _preparePartContext(
+        partId: string,
+        context: Record<string, unknown>,
+        options: HandlebarsRenderOptions,
+    ): Promise<object> {
+        await super._preparePartContext(partId, context, options);
+
+        const tabs = context.tabs as Record<string, unknown> | undefined;
+        if (tabs && partId in tabs) context.tab = tabs[partId];
+
+        return context;
     }
 
     protected override async _prepareContext(options: HandlebarsRenderOptions): Promise<object> {

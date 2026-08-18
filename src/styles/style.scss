@@ -1,8 +1,33 @@
 .dfreds-pocket-change-treasure-config {
-    .treasure-config-body {
+    .window-content {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    // Reset and Save stay put while the tab content above them scrolls
+    .form-footer {
+        flex: 0 0 auto;
+    }
+
+    .tab {
+        min-height: 0;
+
+        &.active {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+        }
+    }
+
+    .treasure-scroll {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding-right: 0.25rem;
     }
 
     .treasure-currency-row {
@@ -32,6 +57,7 @@
 
         input {
             flex: 0 0 5rem;
+            text-align: center;
         }
 
         button {
@@ -40,22 +66,39 @@
     }
 
     .treasure-rows {
+        width: 100%;
         margin: 0 0 0.5rem;
+        border-collapse: collapse;
 
         th {
+            padding: 0.25rem;
             text-align: center;
         }
 
         td {
-            padding: 0.125rem 0.25rem;
+            padding: 0.25rem;
+            text-align: center;
+        }
+
+        thead tr {
+            border-bottom: 1px solid var(--color-border, #7a7971);
+        }
+
+        tbody tr:nth-child(odd) {
+            background: rgba(128, 128, 128, 0.15);
+        }
+
+        input {
+            text-align: center;
         }
 
         .treasure-roll-header {
-            width: 7.5rem;
+            width: 8rem;
         }
 
-        .treasure-delete-header {
-            width: 2rem;
+        .treasure-delete-header,
+        .treasure-delete-cell {
+            width: 2.25rem;
         }
     }
 
@@ -66,11 +109,19 @@
 
         input {
             flex: 1;
-            text-align: center;
         }
     }
 
     button.icon {
         flex: none;
+    }
+}
+
+table.pocket-change-currency {
+    text-align: center;
+
+    th,
+    td {
+        text-align: center;
     }
 }

@@ -1,0 +1,60 @@
+<div class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    <div class="treasure-scroll">
+        <fieldset>
+            <legend>{{localize "PocketChange.TreasureConfig.General"}}</legend>
+
+            <div class="form-group">
+                <label>{{localize "PocketChange.TreasureConfig.AttributePath.Name"}}</label>
+                <div class="form-fields">
+                    <input type="text" name="attributePath" value="{{attributePath}}" />
+                </div>
+                <p class="hint">{{localize "PocketChange.TreasureConfig.AttributePath.Hint"}}</p>
+            </div>
+
+            <div class="form-group">
+                <label>{{localize "PocketChange.TreasureConfig.SelectionFormula.Name"}}</label>
+                <div class="form-fields">
+                    <input type="text" name="selectionFormula" value="{{selectionFormula}}" />
+                </div>
+                <p class="hint">{{localize "PocketChange.TreasureConfig.SelectionFormula.Hint"}}</p>
+            </div>
+        </fieldset>
+
+        <fieldset class="treasure-currencies">
+            <legend>{{localize "PocketChange.TreasureConfig.Currencies"}}</legend>
+            <p class="hint">{{localize "PocketChange.TreasureConfig.CurrenciesHint"}}</p>
+
+            {{#each currencies as |currency currencyIndex|}}
+                <div class="treasure-currency-row">
+                    <input
+                        type="text"
+                        name="currencies.{{currencyIndex}}.label"
+                        value="{{currency.label}}"
+                        placeholder="{{localize 'PocketChange.TreasureConfig.CurrencyLabel'}}"
+                    />
+                    <input
+                        type="text"
+                        name="currencies.{{currencyIndex}}.path"
+                        value="{{currency.path}}"
+                        placeholder="{{localize 'PocketChange.TreasureConfig.CurrencyPath'}}"
+                    />
+                    <button
+                        type="button"
+                        class="icon"
+                        data-action="deleteCurrency"
+                        data-currency-index="{{currencyIndex}}"
+                        data-tooltip
+                        aria-label="{{localize 'PocketChange.TreasureConfig.DeleteCurrency'}}"
+                    >
+                        <i class="fa-solid fa-trash" inert></i>
+                    </button>
+                </div>
+            {{/each}}
+
+            <button type="button" data-action="addCurrency">
+                <i class="fa-solid fa-plus" inert></i>
+                {{localize "PocketChange.TreasureConfig.AddCurrency"}}
+            </button>
+        </fieldset>
+    </div>
+</div>

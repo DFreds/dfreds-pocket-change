@@ -116,7 +116,7 @@ class PocketChange {
         const headers = amounts.map((amount) => `<th>${amount.label}</th>`).join("");
         const values = amounts.map((amount) => `<td>${amount.amount}</td>`).join("");
 
-        return `<table><tr>${headers}</tr><tr>${values}</tr></table>`;
+        return `<table class="pocket-change-currency"><thead><tr>${headers}</tr></thead><tbody><tr>${values}</tr></tbody></table>`;
     }
 }
 
