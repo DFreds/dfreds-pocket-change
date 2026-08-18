@@ -1,0 +1,49 @@
+{
+    "PocketChange": {
+        "GenerateCurrency": "Gerar Moeda",
+        "GenerateCurrencyWarning": "Gerar moeda para este NPC. Cuidado, isso irá substituir todas as moedas atuais carregadas pelo NPC e não pode ser desfeito.",
+        "CurrencyGeneratedFor": "Moeda gerada para {name}",
+        "Settings": {
+            "Enabled": {
+                "Name": "Habilitado",
+                "Hint": "Se habilitado, moeda será gerada para tokens soltos em cenas."
+            },
+            "ShowCurrencyOnNpcs": {
+                "Name": "Mostrar Moeda em fichas de NPC",
+                "Hint": "Se habilitado, a moeda será exibida nas fichas de NPCs. Atualmente suporta a ficha de ator padrão e Tidy."
+            },
+            "ShowChatMessage": {
+                "Name": "Mostrar Mensagem no Chat",
+                "Hint": "Se habilitado, uma mensagem de chat será criada sempre que moeda for gerada."
+            },
+            "CreatureTypes": {
+                "Name": "Tipos de Criaturas",
+                "Hint": "Esses são os tipos de criaturas que gerarão moeda, separados por ponto e vírgula. Isso corresponderá ao tipo, subtipo e tipo personalizado delas. Deixe em branco para gerar moeda para todos os tipos de criaturas. Exemplo: Humanoide;Aberração;Monstruosidade"
+            },
+            "ChanceOfNoCurrency": {
+                "Name": "Chance de Não Gerar Moeda",
+                "Hint": "Essa é a porcentagem de chance de que nenhuma moeda será gerada para um token."
+            },
+            "CurrencyMultiplier": {
+                "Name": "Multiplicador de Moeda",
+                "Hint": "Isso multiplica a moeda gerada pelo número dado."
+            },
+            "UseSilver": {
+                "Name": "Usar Prata",
+                "Hint": "Se habilitado, a moeda gerada poderá incluir prata. O cobre é sempre incluído."
+            },
+            "UseElectrum": {
+                "Name": "Usar Electrum",
+                "Hint": "Se habilitado, a moeda gerada poderá incluir electrum. O cobre é sempre incluído."
+            },
+            "UseGold": {
+                "Name": "Usar Ouro",
+                "Hint": "Se habilitado, a moeda gerada poderá incluir ouro. O cobre é sempre incluído."
+            },
+            "UsePlatinum": {
+                "Name": "Usar Platina",
+                "Hint": "Se habilitado, a moeda gerada poderá incluir platina. O cobre é sempre incluído."
+            }
+        }
+    }
+}

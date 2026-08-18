@@ -1,0 +1,49 @@
+{
+    "PocketChange": {
+        "GenerateCurrency": "Generate Currency",
+        "GenerateCurrencyWarning": "Generate currency for this NPC. Be wary, this will replace all current coins carried by the NPC and cannot be undone.",
+        "CurrencyGeneratedFor": "Currency generated for {name}",
+        "Settings": {
+            "Enabled": {
+                "Name": "Enabled",
+                "Hint": "If enabled, currency will be generated for tokens dropped in scenes."
+            },
+            "ShowCurrencyOnNpcs": {
+                "Name": "Show Currency on NPC sheets",
+                "Hint": "If enabled, currency will be displayed on NPC actor sheets. Currently supports the default actor sheet and Tidy."
+            },
+            "ShowChatMessage": {
+                "Name": "Show Chat Message",
+                "Hint": "If enabled, a chat message will be created any time currency is generated."
+            },
+            "CreatureTypes": {
+                "Name": "Creature Types",
+                "Hint": "These are the types of creatures that will generate currency, separated via semi-colons. This will match on their type, subtype, and custom type. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity"
+            },
+            "ChanceOfNoCurrency": {
+                "Name": "Chance of No Currency",
+                "Hint": "This is the percent chance that no money will be generated for a token."
+            },
+            "CurrencyMultiplier": {
+                "Name": "Currency Multiplier",
+                "Hint": "This multiplies the generated currency by the given number."
+            },
+            "UseSilver": {
+                "Name": "Use Silver",
+                "Hint": "If enabled, generated currency could include silver. Copper is always included."
+            },
+            "UseElectrum": {
+                "Name": "Use Electrum",
+                "Hint": "If enabled, generated currency could include electrum. Copper is always included."
+            },
+            "UseGold": {
+                "Name": "Use Gold",
+                "Hint": "If enabled, generated currency could include gold. Copper is always included."
+            },
+            "UsePlatinum": {
+                "Name": "Use Platinum",
+                "Hint": "If enabled, generated currency could include platinum. Copper is always included."
+            }
+        }
+    }
+}
