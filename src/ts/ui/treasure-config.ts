@@ -4,7 +4,11 @@ import { MODULE_ID } from "../constants.ts";
 import { Settings } from "../settings.ts";
 import { bindPathInput } from "./path-autocomplete.ts";
 import {
+    ActorFilter,
     CurrencyDefinition,
+    FILTER_OPERATORS,
+    FilterGroup,
+    FilterOperator,
     getDefaultTreasureTable,
     TreasureRow,
     TreasureTableConfig,
@@ -45,6 +49,8 @@ class TreasureConfig extends HandlebarsApplicationMixin(
             deleteTier: TreasureConfig.#onDeleteTier,
             addRow: TreasureConfig.#onAddRow,
             deleteRow: TreasureConfig.#onDeleteRow,
+            addFilter: TreasureConfig.#onAddFilter,
+            deleteFilter: TreasureConfig.#onDeleteFilter,
             resetDefaults: TreasureConfig.#onResetDefaults,
         },
     };
@@ -54,6 +60,11 @@ class TreasureConfig extends HandlebarsApplicationMixin(
         configuration: {
             id: "configuration",
             template: `modules/${MODULE_ID}/templates/treasure-config-configuration.hbs`,
+            scrollable: [".treasure-scroll"],
+        },
+        filters: {
+            id: "filters",
+            template: `modules/${MODULE_ID}/templates/treasure-config-filters.hbs`,
             scrollable: [".treasure-scroll"],
         },
         tables: {
@@ -71,6 +82,11 @@ class TreasureConfig extends HandlebarsApplicationMixin(
                     id: "configuration",
                     icon: "fa-solid fa-gears",
                     label: "PocketChange.TreasureConfig.ConfigurationTab",
+                },
+                {
+                    id: "filters",
+                    icon: "fa-solid fa-filter",
+                    label: "PocketChange.TreasureConfig.FiltersTab",
                 },
                 {
                     id: "tables",
@@ -91,7 +107,7 @@ class TreasureConfig extends HandlebarsApplicationMixin(
         await super._onRender(context, options);
 
         const pathInputs = this.element.querySelectorAll<HTMLInputElement>(
-            'input[name="attributePath"], input[name="typePaths"], input[name$=".path"]',
+            'input[name="attributePath"], input[name$=".path"]',
         );
 
         for (const input of pathInputs) {
@@ -120,10 +136,15 @@ class TreasureConfig extends HandlebarsApplicationMixin(
         return Object.assign(context, {
             attributePath: this.#config.attributePath,
             selectionFormula: this.#config.selectionFormula,
-            actorTypes: this.#config.actorTypes.join("; "),
-            typePaths: this.#config.typePaths.join("; "),
             currencies: this.#config.currencies,
             tiers: this.#config.tiers,
+            filters: this.#config.filters,
+            operators: Object.fromEntries(
+                FILTER_OPERATORS.map((operator) => [
+                    operator,
+                    game.i18n.localize(`PocketChange.TreasureConfig.Operators.${operator}`),
+                ]),
+            ),
             buttons: [
                 {
                     type: "button",
@@ -184,6 +205,42 @@ class TreasureConfig extends HandlebarsApplicationMixin(
         }
 
         await this.render();
+    }
+
+    static async #onAddFilter(this: TreasureConfig, _event: Event, target: HTMLElement): Promise<void> {
+        this.#syncFromForm();
+        if (!this.#config) return;
+
+        const group = this.#groupOf(target);
+        if (!group) return;
+
+        this.#config.filters[group].push({
+            path: "",
+            operator: "eq",
+            value: "",
+        });
+
+        await this.render();
+    }
+
+    static async #onDeleteFilter(this: TreasureConfig, _event: Event, target: HTMLElement): Promise<void> {
+        this.#syncFromForm();
+        if (!this.#config) return;
+
+        const group = this.#groupOf(target);
+        if (!group) return;
+
+        const index = Number(target.dataset.filterIndex);
+        if (Number.isNaN(index)) return;
+
+        this.#config.filters[group].splice(index, 1);
+
+        await this.render();
+    }
+
+    #groupOf(target: HTMLElement): FilterGroup | null {
+        const group = target.dataset.filterGroup;
+        return group === "all" || group === "any" ? group : null;
     }
 
     static async #onAddTier(this: TreasureConfig): Promise<void> {
@@ -267,8 +324,14 @@ class TreasureConfig extends HandlebarsApplicationMixin(
 
         this.#config.attributePath = String(expanded.attributePath ?? "");
         this.#config.selectionFormula = String(expanded.selectionFormula ?? "");
-        this.#config.actorTypes = this.#toList(expanded.actorTypes);
-        this.#config.typePaths = this.#toList(expanded.typePaths);
+
+        const filters = (expanded.filters ?? {}) as Record<string, unknown>;
+        this.#config.filters = {
+            all: this.#toFilters(filters.all),
+            any: this.#toFilters(filters.any),
+            chanceOfNothing: typeof filters.chanceOfNothing === "number" ? filters.chanceOfNothing : 0,
+        };
+
         this.#config.currencies = this.#toArray(expanded.currencies).map((currency): CurrencyDefinition => {
             const data = currency as Record<string, unknown>;
             return {
@@ -293,6 +356,17 @@ class TreasureConfig extends HandlebarsApplicationMixin(
         });
     }
 
+    #toFilters(value: unknown): ActorFilter[] {
+        return this.#toArray(value).map((filter): ActorFilter => {
+            const data = filter as Record<string, unknown>;
+            return {
+                path: String(data.path ?? ""),
+                operator: String(data.operator ?? "eq") as FilterOperator,
+                value: String(data.value ?? ""),
+            };
+        });
+    }
+
     /**
      * Converts an object expanded from form data with numeric keys, such as
      * {0: "a", 1: "b"}, into an array ordered by those keys
@@ -305,20 +379,14 @@ class TreasureConfig extends HandlebarsApplicationMixin(
             .map(([, entry]) => entry);
     }
 
-    /**
-     * Converts a semicolon-separated input value into a list of trimmed,
-     * non-empty entries
-     */
-    #toList(value: unknown): string[] {
-        return String(value ?? "")
-            .split(";")
-            .map((entry) => entry.trim())
-            .filter((entry) => entry);
-    }
-
     #findValidationError(config: TreasureTableConfig): string | null {
         if (config.currencies.some((currency) => !currency.label.trim() || !currency.path.trim())) {
             return game.i18n.localize("PocketChange.TreasureConfig.Errors.CurrencyBlank");
+        }
+
+        const allFilters = [...config.filters.all, ...config.filters.any];
+        if (allFilters.some((filter) => !filter.path.trim())) {
+            return game.i18n.localize("PocketChange.TreasureConfig.Errors.FilterBlank");
         }
 
         if (!Roll.validate(config.selectionFormula)) {

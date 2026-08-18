@@ -5,33 +5,28 @@
             "AppName": "Treasure Table",
             "ConfigurationTab": "Configuration",
             "RollTablesTab": "Roll Tables",
+            "FiltersTab": "Filters",
             "General": "General",
             "AttributePath": {
                 "Name": "Actor Attribute",
-                "Hint": "The actor value used to pick a tier. For dnd5e, this is the challenge rating at system.details.cr."
+                "Hint": "The actor value used to pick a tier. Higher values usually mean more treasure."
             },
             "SelectionFormula": {
                 "Name": "Selection Roll",
                 "Hint": "The roll made to pick a row within a tier. Each row covers a range of results from this roll."
             },
-            "ActorTypes": {
-                "Name": "Actor Types",
-                "Hint": "The types of actors that can receive currency, separated by semi-colons. For dnd5e, this is npc. Leave it blank to allow every type."
-            },
-            "TypePaths": {
-                "Name": "Creature Type Attributes",
-                "Hint": "The actor values compared against the Creature Types setting, separated by semi-colons. Leave it blank to skip the creature type check."
-            },
             "UnknownPathWarning": "Actors do not appear to have this value. It can still be saved: some values exist without being listed.",
             "Currencies": "Currencies",
             "CurrenciesHint": "The currencies that generated treasure is added to. Each one needs a name and the actor value it is stored at.",
             "CurrencyLabel": "Name",
-            "CurrencyPath": "Actor value, such as system.currency.gp",
+            "CurrencyPath": "Actor value",
             "AddCurrency": "Add Currency",
             "DeleteCurrency": "Delete Currency",
             "Tier": "Tier",
-            "From": "From",
-            "To": "To",
+            "WhenAttributeIs": "When {attribute} is",
+            "WhenAttributeIsUnset": "When the actor attribute is",
+            "From": "Lowest value",
+            "To": "up to",
             "NoLimit": "No limit",
             "Roll": "Roll",
             "AddTier": "Add Tier",
@@ -39,12 +34,43 @@
             "AddRow": "Add Row",
             "DeleteRow": "Delete Row",
             "NoTiers": "There are no tiers yet. Add a tier to start generating currency.",
+            "MustMatchAll": "Required Checks",
+            "MustMatchAllHint": "An actor must pass every one of these to receive currency. With none, nothing is required.",
+            "MustMatchAny": "Any of These Checks",
+            "MustMatchAnyHint": "An actor must also pass at least one of these. Use this to accept several creature types. With none, nothing extra is required.",
+            "NoRequiredChecks": "There are no required checks. Nothing is required of an actor.",
+            "NoOptionalChecks": "There are no checks here. Nothing extra is required of an actor.",
+            "FilterPath": "Actor value",
+            "FilterPathPlaceholder": "Actor value",
+            "FilterOperator": "Comparison",
+            "FilterValue": "Value",
+            "FilterValuePlaceholder": "Value to compare against",
+            "AddFilter": "Add Check",
+            "DeleteFilter": "Delete Check",
+            "Chance": "Chance",
+            "ChanceOfNothing": {
+                "Name": "Chance of No Currency",
+                "Hint": "The percent chance that no currency is generated, even for an actor that passes every check."
+            },
+            "Operators": {
+                "eq": "is",
+                "ne": "is not",
+                "lt": "is less than",
+                "lte": "is at most",
+                "gt": "is greater than",
+                "gte": "is at least",
+                "contains": "contains",
+                "startsWith": "starts with",
+                "matches": "matches pattern",
+                "exists": "exists"
+            },
             "Reset": "Reset to Defaults",
             "ResetTitle": "Reset Treasure Table",
             "ResetContent": "Replace the entire treasure table with the defaults for this game system? Nothing is saved until you press Save Changes.",
             "Saved": "Treasure table saved",
             "Errors": {
                 "CurrencyBlank": "Each currency needs a name and an actor value.",
+                "FilterBlank": "Each check needs an actor value.",
                 "InvalidFormula": "\"{formula}\" is not a valid roll formula.",
                 "InvalidRange": "Each row needs a roll range with the start no higher than the end.",
                 "InvalidTierRange": "Each tier needs a lowest value no higher than its highest value."
@@ -54,7 +80,7 @@
             "TreasureMenu": {
                 "Name": "Treasure Table",
                 "Label": "Configure Treasure Table",
-                "Hint": "Set up which actor value picks a treasure tier, the rolls that are made, and the currencies that are filled in."
+                "Hint": "Set up which actor value picks a treasure tier, the rolls that are made, the currencies that are filled in, and which actors receive currency."
             },
             "Enabled": {
                 "Name": "Enabled",
@@ -63,14 +89,6 @@
             "ShowChatMessage": {
                 "Name": "Show Chat Message",
                 "Hint": "If enabled, a chat message will be created any time currency is generated."
-            },
-            "CreatureTypes": {
-                "Name": "Creature Types",
-                "Hint": "These are the types of creatures that will generate currency, separated via semi-colons. They are compared against the creature type attributes set in the treasure table menu. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity"
-            },
-            "ChanceOfNoCurrency": {
-                "Name": "Chance of No Currency",
-                "Hint": "This is the percent chance that no money will be generated for a token."
             }
         }
     }

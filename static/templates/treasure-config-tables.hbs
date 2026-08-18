@@ -5,15 +5,28 @@
                 <legend>{{localize "PocketChange.TreasureConfig.Tier"}}</legend>
 
                 <div class="treasure-tier-range">
-                    <label>{{localize "PocketChange.TreasureConfig.From"}}</label>
-                    <input type="number" name="tiers.{{tierIndex}}.min" value="{{tier.min}}" step="any" />
-                    <label>{{localize "PocketChange.TreasureConfig.To"}}</label>
+                    <span class="treasure-tier-label">
+                        {{#if @root.attributePath}}
+                            {{localize "PocketChange.TreasureConfig.WhenAttributeIs" attribute=@root.attributePath}}
+                        {{else}}
+                            {{localize "PocketChange.TreasureConfig.WhenAttributeIsUnset"}}
+                        {{/if}}
+                    </span>
+                    <input
+                        type="number"
+                        name="tiers.{{tierIndex}}.min"
+                        value="{{tier.min}}"
+                        step="any"
+                        aria-label="{{localize 'PocketChange.TreasureConfig.From'}}"
+                    />
+                    <span class="treasure-tier-joiner">{{localize "PocketChange.TreasureConfig.To"}}</span>
                     <input
                         type="number"
                         name="tiers.{{tierIndex}}.max"
                         value="{{tier.max}}"
                         step="any"
                         placeholder="{{localize 'PocketChange.TreasureConfig.NoLimit'}}"
+                        aria-label="{{localize 'PocketChange.TreasureConfig.To'}}"
                     />
                     <button
                         type="button"

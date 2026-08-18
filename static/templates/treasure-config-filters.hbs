@@ -1,0 +1,123 @@
+<div class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    <div class="treasure-scroll">
+        <fieldset>
+            <legend>{{localize "PocketChange.TreasureConfig.MustMatchAll"}}</legend>
+            <p class="hint">{{localize "PocketChange.TreasureConfig.MustMatchAllHint"}}</p>
+
+            <ol class="filter-list plain">
+                {{#each filters.all as |filter filterIndex|}}
+                    <li class="filter-row">
+                        <input
+                            type="text"
+                            name="filters.all.{{filterIndex}}.path"
+                            value="{{filter.path}}"
+                            placeholder="{{localize 'PocketChange.TreasureConfig.FilterPathPlaceholder'}}"
+                            aria-label="{{localize 'PocketChange.TreasureConfig.FilterPath'}}"
+                        />
+                        <select
+                            name="filters.all.{{filterIndex}}.operator"
+                            aria-label="{{localize 'PocketChange.TreasureConfig.FilterOperator'}}"
+                        >
+                            {{selectOptions @root.operators selected=filter.operator}}
+                        </select>
+                        <input
+                            type="text"
+                            name="filters.all.{{filterIndex}}.value"
+                            value="{{filter.value}}"
+                            placeholder="{{localize 'PocketChange.TreasureConfig.FilterValuePlaceholder'}}"
+                            aria-label="{{localize 'PocketChange.TreasureConfig.FilterValue'}}"
+                        />
+                        <button
+                            type="button"
+                            class="icon"
+                            data-action="deleteFilter"
+                            data-filter-group="all"
+                            data-filter-index="{{filterIndex}}"
+                            data-tooltip
+                            aria-label="{{localize 'PocketChange.TreasureConfig.DeleteFilter'}}"
+                        >
+                            <i class="fa-solid fa-trash" inert></i>
+                        </button>
+                    </li>
+                {{else}}
+                    <li class="no-filters">{{localize "PocketChange.TreasureConfig.NoRequiredChecks"}}</li>
+                {{/each}}
+            </ol>
+
+            <button type="button" data-action="addFilter" data-filter-group="all">
+                <i class="fa-solid fa-plus" inert></i>
+                {{localize "PocketChange.TreasureConfig.AddFilter"}}
+            </button>
+        </fieldset>
+
+        <fieldset>
+            <legend>{{localize "PocketChange.TreasureConfig.MustMatchAny"}}</legend>
+            <p class="hint">{{localize "PocketChange.TreasureConfig.MustMatchAnyHint"}}</p>
+
+            <ol class="filter-list plain">
+                {{#each filters.any as |filter filterIndex|}}
+                    <li class="filter-row">
+                        <input
+                            type="text"
+                            name="filters.any.{{filterIndex}}.path"
+                            value="{{filter.path}}"
+                            placeholder="{{localize 'PocketChange.TreasureConfig.FilterPathPlaceholder'}}"
+                            aria-label="{{localize 'PocketChange.TreasureConfig.FilterPath'}}"
+                        />
+                        <select
+                            name="filters.any.{{filterIndex}}.operator"
+                            aria-label="{{localize 'PocketChange.TreasureConfig.FilterOperator'}}"
+                        >
+                            {{selectOptions @root.operators selected=filter.operator}}
+                        </select>
+                        <input
+                            type="text"
+                            name="filters.any.{{filterIndex}}.value"
+                            value="{{filter.value}}"
+                            placeholder="{{localize 'PocketChange.TreasureConfig.FilterValuePlaceholder'}}"
+                            aria-label="{{localize 'PocketChange.TreasureConfig.FilterValue'}}"
+                        />
+                        <button
+                            type="button"
+                            class="icon"
+                            data-action="deleteFilter"
+                            data-filter-group="any"
+                            data-filter-index="{{filterIndex}}"
+                            data-tooltip
+                            aria-label="{{localize 'PocketChange.TreasureConfig.DeleteFilter'}}"
+                        >
+                            <i class="fa-solid fa-trash" inert></i>
+                        </button>
+                    </li>
+                {{else}}
+                    <li class="no-filters">{{localize "PocketChange.TreasureConfig.NoOptionalChecks"}}</li>
+                {{/each}}
+            </ol>
+
+            <button type="button" data-action="addFilter" data-filter-group="any">
+                <i class="fa-solid fa-plus" inert></i>
+                {{localize "PocketChange.TreasureConfig.AddFilter"}}
+            </button>
+        </fieldset>
+
+        <fieldset>
+            <legend>{{localize "PocketChange.TreasureConfig.Chance"}}</legend>
+
+            <div class="form-group">
+                <label>{{localize "PocketChange.TreasureConfig.ChanceOfNothing.Name"}}</label>
+                <div class="form-fields">
+                    <input
+                        type="number"
+                        name="filters.chanceOfNothing"
+                        value="{{filters.chanceOfNothing}}"
+                        min="0"
+                        max="100"
+                        step="1"
+                    />
+                    <span class="units">%</span>
+                </div>
+                <p class="hint">{{localize "PocketChange.TreasureConfig.ChanceOfNothing.Hint"}}</p>
+            </div>
+        </fieldset>
+    </div>
+</div>

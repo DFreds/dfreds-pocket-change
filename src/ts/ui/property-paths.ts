@@ -22,6 +22,11 @@ interface WalkableField {
     fields?: Record<string, WalkableField>;
     /** Present on array, set and typed object fields */
     element?: WalkableField;
+    /**
+     * The fixed set of keys a typed object field is created with, when it
+     * declares one. Either a list of keys or an object keyed by them.
+     */
+    initialKeys?: string[] | Record<string, unknown> | null;
 }
 
 /** Guards against a schema that refers to itself, and against silly path lengths. */
@@ -33,6 +38,14 @@ function isWalkable(value: unknown): value is WalkableField {
     return typeof value === "object" && value !== null;
 }
 
+/** The fixed keys a typed object field declares, if it declares any. */
+function declaredKeys(field: WalkableField): string[] {
+    const keys = field.initialKeys;
+    if (!keys) return [];
+
+    return Array.isArray(keys) ? keys : Object.keys(keys);
+}
+
 /**
  * Add every path inside a schema field to `into`.
  *
@@ -41,7 +54,9 @@ function isWalkable(value: unknown): value is WalkableField {
  *
  * Array and typed object fields contribute their own path but are not descended
  * into: what is underneath them is addressed by index or by arbitrary key, so
- * `items.element.name` is not a path anybody can usefully type.
+ * `items.element.name` is not a path anybody can usefully type. The exception is
+ * a typed object that declares its keys up front, such as a currency mapping,
+ * where every key is known and worth offering.
  */
 function collectSchemaPaths(field: WalkableField, prefix: string, into: Set<string>, depth = 0): void {
     if (depth > MAX_DEPTH) return;
@@ -50,6 +65,15 @@ function collectSchemaPaths(field: WalkableField, prefix: string, into: Set<stri
     // only its children. Nested calls re-add a path the parent already recorded, which
     // a set makes harmless.
     if (prefix) into.add(prefix);
+
+    for (const key of declaredKeys(field)) {
+        const path = prefix ? `${prefix}.${key}` : key;
+        into.add(path);
+
+        // Each entry is the element field, so a mapping of objects still offers
+        // what is inside one of them
+        if (isWalkable(field.element)) collectSchemaPaths(field.element, path, into, depth + 1);
+    }
 
     const fields = field.fields;
     if (!fields) return;

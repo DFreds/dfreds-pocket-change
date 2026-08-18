@@ -9,8 +9,6 @@ class Settings {
     // Settings keys
     #ENABLED = "enabled";
     #SHOW_CHAT_MESSAGE = "showChatMessage";
-    #CREATURE_TYPES = "creatureTypes";
-    #CHANCE_OF_NO_CURRENCY = "chanceOfNoCurrency";
     #TREASURE_TABLE = "treasureTable";
 
     // Menu keys
@@ -54,31 +52,6 @@ class Settings {
             default: false,
             type: Boolean,
         });
-
-        game.settings.register(MODULE_ID, this.#CREATURE_TYPES, {
-            name: "PocketChange.Settings.CreatureTypes.Name",
-            hint: "PocketChange.Settings.CreatureTypes.Hint",
-            scope: "world",
-            config: true,
-            default: "Humanoid",
-            type: String,
-        });
-
-        game.settings.register(MODULE_ID, this.#CHANCE_OF_NO_CURRENCY, {
-            name: "PocketChange.Settings.ChanceOfNoCurrency.Name",
-            hint: "PocketChange.Settings.ChanceOfNoCurrency.Hint",
-            scope: "world",
-            config: true,
-            default: 0.25,
-            type: new foundry.data.fields.NumberField({
-                required: true,
-                nullable: false,
-                min: 0,
-                max: 1,
-                step: 0.05,
-                initial: 0.25,
-            }),
-        });
     }
 
     #registerNonConfigSettings(): void {
@@ -103,26 +76,6 @@ class Settings {
      */
     get showChatMessage(): boolean {
         return game.settings.get(MODULE_ID, this.#SHOW_CHAT_MESSAGE) as unknown as boolean;
-    }
-
-    /**
-     * Returns the list of creature types that can have currency generated
-     */
-    get creatureTypes(): string[] {
-        const types = game.settings.get(MODULE_ID, this.#CREATURE_TYPES) as unknown as string;
-
-        return types
-            .split(";")
-            .map((type) => type.toLowerCase().trim())
-            .filter((type) => type);
-    }
-
-    /**
-     * Returns a number between 0 and 1, representing the percent chance that
-     * currency will not be generated
-     */
-    get chanceOfNoCurrency(): number {
-        return game.settings.get(MODULE_ID, this.#CHANCE_OF_NO_CURRENCY) as unknown as number;
     }
 
     /**

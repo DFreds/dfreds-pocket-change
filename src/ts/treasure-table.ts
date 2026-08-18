@@ -38,6 +38,61 @@ interface TreasureTier {
 }
 
 /**
+ * The comparison operators a filter can use
+ */
+type FilterOperator = "eq" | "ne" | "lt" | "lte" | "gt" | "gte" | "contains" | "startsWith" | "matches" | "exists";
+
+/**
+ * Every operator, in the order the configuration menu offers them.
+ *
+ * Typed as `FilterOperator[]` so adding an operator to the union without adding
+ * it here is a compile error.
+ */
+const FILTER_OPERATORS: FilterOperator[] = [
+    "eq",
+    "ne",
+    "lt",
+    "lte",
+    "gt",
+    "gte",
+    "contains",
+    "startsWith",
+    "matches",
+    "exists",
+];
+
+/**
+ * A single check against an actor. The actor only receives currency when its
+ * value at the path compares to the value as the operator describes.
+ */
+interface ActorFilter {
+    /** An actor attribute path, such as system.details.cr */
+    path: string;
+    operator: FilterOperator;
+    /** The value to compare against. Ignored by the exists operator */
+    value: string;
+}
+
+/**
+ * How generation decides whether an actor should receive currency at all.
+ *
+ * The two groups work together: an actor has to pass everything in `all`, and
+ * then at least one thing in `any`. That is what lets a table require an NPC
+ * while accepting several creature types.
+ */
+interface FilterConfig {
+    /** Every one of these must match */
+    all: ActorFilter[];
+    /** At least one of these must match. An empty group checks nothing */
+    any: ActorFilter[];
+    /** The percent chance that no currency is generated, from 0 to 100 */
+    chanceOfNothing: number;
+}
+
+/** The two filter groups, for the code that treats them the same way */
+type FilterGroup = "all" | "any";
+
+/**
  * The full configuration for generating treasure
  */
 interface TreasureTableConfig {
@@ -45,13 +100,7 @@ interface TreasureTableConfig {
     attributePath: string;
     /** The roll made to pick a row within a tier */
     selectionFormula: string;
-    /** The actor types that can receive currency. Empty allows every type */
-    actorTypes: string[];
-    /**
-     * The actor attribute paths checked against the creature types setting.
-     * Empty skips the creature type check entirely
-     */
-    typePaths: string[];
+    filters: FilterConfig;
     currencies: CurrencyDefinition[];
     tiers: TreasureTier[];
 }
@@ -65,12 +114,16 @@ interface TreasureTableConfig {
  */
 function normalizeTreasureTable(stored: unknown): TreasureTableConfig {
     const raw = (stored ?? {}) as Partial<TreasureTableConfig>;
+    const filters = (raw.filters ?? {}) as Partial<FilterConfig>;
 
     return {
         attributePath: raw.attributePath ?? "",
         selectionFormula: raw.selectionFormula ?? "1d100",
-        actorTypes: raw.actorTypes ?? [],
-        typePaths: raw.typePaths ?? [],
+        filters: {
+            all: filters.all ?? [],
+            any: filters.any ?? [],
+            chanceOfNothing: filters.chanceOfNothing ?? 0,
+        },
         currencies: raw.currencies ?? [],
         tiers: raw.tiers ?? [],
     };
@@ -92,8 +145,11 @@ function getDefaultTreasureTable(): TreasureTableConfig {
     return {
         attributePath: "",
         selectionFormula: "1d100",
-        actorTypes: [],
-        typePaths: [],
+        filters: {
+            all: [],
+            any: [],
+            chanceOfNothing: 25,
+        },
         currencies: [],
         tiers: [],
     };
@@ -104,8 +160,11 @@ function getDnd5eTreasureTable(): TreasureTableConfig {
     return {
         attributePath: "system.details.cr",
         selectionFormula: "1d100",
-        actorTypes: ["npc"],
-        typePaths: ["system.details.type.value", "system.details.type.subtype", "system.details.type.custom"],
+        filters: {
+            all: [{ path: "type", operator: "eq", value: "npc" }],
+            any: [{ path: "system.details.type.value", operator: "eq", value: "humanoid" }],
+            chanceOfNothing: 25,
+        },
         currencies: [
             { label: "CP", path: "system.currency.cp" },
             { label: "SP", path: "system.currency.sp" },
@@ -171,5 +230,14 @@ function row(
     };
 }
 
-export { getDefaultTreasureTable, normalizeTreasureTable };
-export type { CurrencyDefinition, TreasureRow, TreasureTier, TreasureTableConfig };
+export { FILTER_OPERATORS, getDefaultTreasureTable, normalizeTreasureTable };
+export type {
+    ActorFilter,
+    CurrencyDefinition,
+    FilterConfig,
+    FilterGroup,
+    FilterOperator,
+    TreasureRow,
+    TreasureTier,
+    TreasureTableConfig,
+};

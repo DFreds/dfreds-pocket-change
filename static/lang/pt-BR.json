@@ -5,33 +5,28 @@
             "AppName": "Tabela de Tesouro",
             "ConfigurationTab": "Configuração",
             "RollTablesTab": "Tabelas de Rolagem",
+            "FiltersTab": "Filtros",
             "General": "Geral",
             "AttributePath": {
                 "Name": "Atributo do Ator",
-                "Hint": "O valor do ator usado para escolher um nível. Para dnd5e, este é o nível de desafio em system.details.cr."
+                "Hint": "O valor do ator usado para escolher um nível. Valores mais altos geralmente significam mais tesouro."
             },
             "SelectionFormula": {
                 "Name": "Rolagem de Seleção",
                 "Hint": "A rolagem feita para escolher uma linha dentro de um nível. Cada linha cobre um intervalo de resultados desta rolagem."
             },
-            "ActorTypes": {
-                "Name": "Tipos de Ator",
-                "Hint": "Os tipos de atores que podem receber moeda, separados por ponto e vírgula. Para dnd5e, este é npc. Deixe em branco para permitir todos os tipos."
-            },
-            "TypePaths": {
-                "Name": "Atributos de Tipo de Criatura",
-                "Hint": "Os valores do ator comparados com a configuração Tipos de Criaturas, separados por ponto e vírgula. Deixe em branco para pular a verificação de tipo de criatura."
-            },
             "UnknownPathWarning": "Os atores não parecem ter este valor. Ainda pode ser salvo: alguns valores existem sem estarem listados.",
             "Currencies": "Moedas",
             "CurrenciesHint": "As moedas às quais o tesouro gerado é adicionado. Cada uma precisa de um nome e do valor do ator onde é armazenada.",
             "CurrencyLabel": "Nome",
-            "CurrencyPath": "Valor do ator, como system.currency.gp",
+            "CurrencyPath": "Valor do ator",
             "AddCurrency": "Adicionar Moeda",
             "DeleteCurrency": "Excluir Moeda",
             "Tier": "Nível",
-            "From": "De",
-            "To": "Até",
+            "WhenAttributeIs": "Quando {attribute} for",
+            "WhenAttributeIsUnset": "Quando o atributo do ator for",
+            "From": "Valor mínimo",
+            "To": "até",
             "NoLimit": "Sem limite",
             "Roll": "Rolagem",
             "AddTier": "Adicionar Nível",
@@ -39,12 +34,43 @@
             "AddRow": "Adicionar Linha",
             "DeleteRow": "Excluir Linha",
             "NoTiers": "Ainda não há níveis. Adicione um nível para começar a gerar moeda.",
+            "MustMatchAll": "Verificações Obrigatórias",
+            "MustMatchAllHint": "Um ator precisa passar em todas estas para receber moeda. Sem nenhuma, nada é exigido.",
+            "MustMatchAny": "Qualquer Uma Destas Verificações",
+            "MustMatchAnyHint": "Um ator também precisa passar em pelo menos uma destas. Use isto para aceitar vários tipos de criatura. Sem nenhuma, nada extra é exigido.",
+            "NoRequiredChecks": "Não há verificações obrigatórias. Nada é exigido de um ator.",
+            "NoOptionalChecks": "Não há verificações aqui. Nada extra é exigido de um ator.",
+            "FilterPath": "Valor do ator",
+            "FilterPathPlaceholder": "Valor do ator",
+            "FilterOperator": "Comparação",
+            "FilterValue": "Valor",
+            "FilterValuePlaceholder": "Valor para comparar",
+            "AddFilter": "Adicionar Verificação",
+            "DeleteFilter": "Excluir Verificação",
+            "Chance": "Chance",
+            "ChanceOfNothing": {
+                "Name": "Chance de Não Gerar Moeda",
+                "Hint": "A porcentagem de chance de que nenhuma moeda seja gerada, mesmo para um ator que passa em todas as verificações."
+            },
+            "Operators": {
+                "eq": "é",
+                "ne": "não é",
+                "lt": "é menor que",
+                "lte": "é no máximo",
+                "gt": "é maior que",
+                "gte": "é no mínimo",
+                "contains": "contém",
+                "startsWith": "começa com",
+                "matches": "corresponde ao padrão",
+                "exists": "existe"
+            },
             "Reset": "Restaurar Padrões",
             "ResetTitle": "Restaurar Tabela de Tesouro",
             "ResetContent": "Substituir toda a tabela de tesouro pelos padrões deste sistema de jogo? Nada é salvo até você pressionar Salvar Alterações.",
             "Saved": "Tabela de tesouro salva",
             "Errors": {
                 "CurrencyBlank": "Cada moeda precisa de um nome e de um valor do ator.",
+                "FilterBlank": "Cada verificação precisa de um valor do ator.",
                 "InvalidFormula": "\"{formula}\" não é uma fórmula de rolagem válida.",
                 "InvalidRange": "Cada linha precisa de um intervalo de rolagem com o início não maior que o fim.",
                 "InvalidTierRange": "Cada nível precisa de um valor mínimo não maior que seu valor máximo."
@@ -54,7 +80,7 @@
             "TreasureMenu": {
                 "Name": "Tabela de Tesouro",
                 "Label": "Configurar Tabela de Tesouro",
-                "Hint": "Defina qual valor do ator escolhe um nível de tesouro, as rolagens feitas e as moedas preenchidas."
+                "Hint": "Defina qual valor do ator escolhe um nível de tesouro, as rolagens feitas, as moedas preenchidas e quais atores recebem moeda."
             },
             "Enabled": {
                 "Name": "Habilitado",
@@ -63,14 +89,6 @@
             "ShowChatMessage": {
                 "Name": "Mostrar Mensagem no Chat",
                 "Hint": "Se habilitado, uma mensagem de chat será criada sempre que moeda for gerada."
-            },
-            "CreatureTypes": {
-                "Name": "Tipos de Criaturas",
-                "Hint": "Esses são os tipos de criaturas que gerarão moeda, separados por ponto e vírgula. Eles são comparados com os atributos de tipo de criatura definidos no menu da tabela de tesouro. Deixe em branco para gerar moeda para todos os tipos de criaturas. Exemplo: Humanoide;Aberração;Monstruosidade"
-            },
-            "ChanceOfNoCurrency": {
-                "Name": "Chance de Não Gerar Moeda",
-                "Hint": "Essa é a porcentagem de chance de que nenhuma moeda será gerada para um token."
             }
         }
     }
