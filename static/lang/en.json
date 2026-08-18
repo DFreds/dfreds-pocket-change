@@ -1,16 +1,10 @@
 {
     "PocketChange": {
-        "GenerateCurrency": "Generate Currency",
-        "GenerateCurrencyWarning": "Generate currency for this NPC. Be wary, this will replace all current coins carried by the NPC and cannot be undone.",
         "CurrencyGeneratedFor": "Currency generated for {name}",
         "Settings": {
             "Enabled": {
                 "Name": "Enabled",
                 "Hint": "If enabled, currency will be generated for tokens dropped in scenes."
-            },
-            "ShowCurrencyOnNpcs": {
-                "Name": "Show Currency on NPC sheets",
-                "Hint": "If enabled, currency will be displayed on NPC actor sheets. Currently supports the default actor sheet and Tidy."
             },
             "ShowChatMessage": {
                 "Name": "Show Chat Message",

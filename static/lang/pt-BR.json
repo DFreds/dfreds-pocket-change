@@ -1,16 +1,10 @@
 {
     "PocketChange": {
-        "GenerateCurrency": "Gerar Moeda",
-        "GenerateCurrencyWarning": "Gerar moeda para este NPC. Cuidado, isso irá substituir todas as moedas atuais carregadas pelo NPC e não pode ser desfeito.",
         "CurrencyGeneratedFor": "Moeda gerada para {name}",
         "Settings": {
             "Enabled": {
                 "Name": "Habilitado",
                 "Hint": "Se habilitado, moeda será gerada para tokens soltos em cenas."
-            },
-            "ShowCurrencyOnNpcs": {
-                "Name": "Mostrar Moeda em fichas de NPC",
-                "Hint": "Se habilitado, a moeda será exibida nas fichas de NPCs. Atualmente suporta a ficha de ator padrão e Tidy."
             },
             "ShowChatMessage": {
                 "Name": "Mostrar Mensagem no Chat",

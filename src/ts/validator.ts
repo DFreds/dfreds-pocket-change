@@ -26,14 +26,7 @@ class Validator {
         }
 
         if (this.#isPercentageLower()) {
-            log(
-                "Refuse to generate treasure because it did not pass the percent threshold",
-            );
-            return false;
-        }
-
-        if (this.#isLootSheetNpc5e(tokenDocument)) {
-            log("Refuse to generate treasure for existing loot sheets");
+            log("Refuse to generate treasure because it did not pass the percent threshold");
             return false;
         }
 

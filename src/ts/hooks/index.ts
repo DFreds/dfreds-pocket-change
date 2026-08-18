@@ -1,6 +1,5 @@
 import { CreateToken } from "./create-token.ts";
 import { Init } from "./init.ts";
-import { RenderNpcSheet } from "./render-npc-sheet.ts";
 import { Setup } from "./setup.ts";
 
 interface Listener {
@@ -9,7 +8,7 @@ interface Listener {
 
 const HooksModule: Listener = {
     listen(): void {
-        const listeners: Listener[] = [Init, Setup, CreateToken, RenderNpcSheet];
+        const listeners: Listener[] = [Init, Setup, CreateToken];
 
         for (const listener of listeners) {
             listener.listen();

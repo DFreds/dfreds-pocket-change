@@ -6,7 +6,6 @@ import { MODULE_ID } from "./constants.ts";
 class Settings {
     // Settings keys
     #ENABLED = "enabled";
-    #SHOW_CURRENCY_ON_NPCS = "showCurrencyOnNpcs";
     #SHOW_CHAT_MESSAGE = "showChatMessage";
     #CREATURE_TYPES = "creatureTypes";
     #CHANCE_OF_NO_CURRENCY = "chanceOfNoCurrency";
@@ -23,15 +22,6 @@ class Settings {
         game.settings.register(MODULE_ID, this.#ENABLED, {
             name: "PocketChange.Settings.Enabled.Name",
             hint: "PocketChange.Settings.Enabled.Hint",
-            scope: "world",
-            config: true,
-            default: true,
-            type: Boolean,
-        });
-
-        game.settings.register(MODULE_ID, this.#SHOW_CURRENCY_ON_NPCS, {
-            name: "PocketChange.Settings.ShowCurrencyOnNpcs.Name",
-            hint: "PocketChange.Settings.ShowCurrencyOnNpcs.Hint",
             scope: "world",
             config: true,
             default: true,
@@ -128,16 +118,6 @@ class Settings {
         return game.settings.get(
             MODULE_ID,
             this.#ENABLED,
-        ) as unknown as boolean;
-    }
-
-    /**
-     * Returns true if currency should be displayed on NPC sheets
-     */
-    get showCurrencyOnNpcs(): boolean {
-        return game.settings.get(
-            MODULE_ID,
-            this.#SHOW_CURRENCY_ON_NPCS,
         ) as unknown as boolean;
     }
 
