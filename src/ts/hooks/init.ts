@@ -12,8 +12,8 @@ const Init: Listener = {
             new HandlebarHelpers().register();
 
             (game.modules.get(MODULE_ID) as ThisModule).api = {
-                generateCurrency(actor: Actor) {
-                    return new PocketChange().generateCurrency(actor);
+                generateCurrencyForActor(actor: Actor) {
+                    return new PocketChange().generateCurrencyForActor(actor);
                 },
             };
         });

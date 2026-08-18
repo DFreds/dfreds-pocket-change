@@ -1,7 +1,50 @@
 {
     "PocketChange": {
         "CurrencyGeneratedFor": "Currency generated for {name}",
+        "TreasureConfig": {
+            "AppName": "Treasure Table",
+            "General": "General",
+            "AttributePath": {
+                "Name": "Actor Attribute",
+                "Hint": "The actor value used to pick a tier. For dnd5e, this is the challenge rating at system.details.cr."
+            },
+            "SelectionFormula": {
+                "Name": "Selection Roll",
+                "Hint": "The roll made to pick a row within a tier. Each row covers a range of results from this roll."
+            },
+            "Currencies": "Currencies",
+            "CurrenciesHint": "The currencies that generated treasure is added to. Each one needs a name and the actor value it is stored at.",
+            "CurrencyLabel": "Name",
+            "CurrencyPath": "Actor value, such as system.currency.gp",
+            "AddCurrency": "Add Currency",
+            "DeleteCurrency": "Delete Currency",
+            "Tier": "Tier",
+            "From": "From",
+            "To": "To",
+            "NoLimit": "No limit",
+            "Roll": "Roll",
+            "AddTier": "Add Tier",
+            "DeleteTier": "Delete Tier",
+            "AddRow": "Add Row",
+            "DeleteRow": "Delete Row",
+            "NoTiers": "There are no tiers yet. Add a tier to start generating currency.",
+            "Reset": "Reset to Defaults",
+            "ResetTitle": "Reset Treasure Table",
+            "ResetContent": "Replace the entire treasure table with the defaults for this game system? Nothing is saved until you press Save Changes.",
+            "Saved": "Treasure table saved",
+            "Errors": {
+                "CurrencyBlank": "Each currency needs a name and an actor value.",
+                "InvalidFormula": "\"{formula}\" is not a valid roll formula.",
+                "InvalidRange": "Each row needs a roll range with the start no higher than the end.",
+                "InvalidTierRange": "Each tier needs a lowest value no higher than its highest value."
+            }
+        },
         "Settings": {
+            "TreasureMenu": {
+                "Name": "Treasure Table",
+                "Label": "Configure Treasure Table",
+                "Hint": "Set up which actor value picks a treasure tier, the rolls that are made, and the currencies that are filled in."
+            },
             "Enabled": {
                 "Name": "Enabled",
                 "Hint": "If enabled, currency will be generated for tokens dropped in scenes."

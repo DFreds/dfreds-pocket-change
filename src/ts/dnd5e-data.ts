@@ -1,18 +1,14 @@
-import { StandardCurrency } from "./currency.ts";
-
 /**
  * The subset of the dnd5e NPC system data that this module reads
  */
 interface Dnd5eNpcSystemData {
     details?: {
-        cr?: number | null;
         type?: {
             value?: string;
             subtype?: string;
             custom?: string;
         };
     };
-    currency?: Partial<StandardCurrency>;
 }
 
 /**

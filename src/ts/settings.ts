@@ -1,4 +1,6 @@
 import { MODULE_ID } from "./constants.ts";
+import { getDefaultTreasureTable, TreasureTableConfig } from "./treasure-table.ts";
+import { TreasureConfig } from "./ui/treasure-config.ts";
 
 /**
  * Handles registration and access of settings
@@ -14,11 +16,32 @@ class Settings {
     #USE_ELECTRUM = "useElectrum";
     #USE_GOLD = "useGold";
     #USE_PLATINUM = "usePlatinum";
+    #TREASURE_TABLE = "treasureTable";
+
+    // Menu keys
+    #TREASURE_MENU = "treasureMenu";
 
     /**
      * Register all the settings for the module
      */
     register(): void {
+        this.#registerMenus();
+        this.#registerConfigSettings();
+        this.#registerNonConfigSettings();
+    }
+
+    #registerMenus(): void {
+        game.settings.registerMenu(MODULE_ID, this.#TREASURE_MENU, {
+            name: "PocketChange.Settings.TreasureMenu.Name",
+            label: "PocketChange.Settings.TreasureMenu.Label",
+            hint: "PocketChange.Settings.TreasureMenu.Hint",
+            icon: "fas fa-coins",
+            type: TreasureConfig as any,
+            restricted: true,
+        });
+    }
+
+    #registerConfigSettings(): void {
         game.settings.register(MODULE_ID, this.#ENABLED, {
             name: "PocketChange.Settings.Enabled.Name",
             hint: "PocketChange.Settings.Enabled.Hint",
@@ -115,6 +138,16 @@ class Settings {
         });
     }
 
+    #registerNonConfigSettings(): void {
+        game.settings.register(MODULE_ID, this.#TREASURE_TABLE, {
+            name: "Treasure Table",
+            scope: "world",
+            config: false,
+            default: getDefaultTreasureTable(),
+            type: Object,
+        });
+    }
+
     /**
      * Returns true if currency should be generated on token drop
      */
@@ -182,6 +215,22 @@ class Settings {
      */
     get usePlatinum(): boolean {
         return game.settings.get(MODULE_ID, this.#USE_PLATINUM) as unknown as boolean;
+    }
+
+    /**
+     * Returns the configured treasure table
+     */
+    get treasureTable(): TreasureTableConfig {
+        return game.settings.get(MODULE_ID, this.#TREASURE_TABLE) as unknown as TreasureTableConfig;
+    }
+
+    /**
+     * Saves the treasure table configuration
+     *
+     * @param config - The treasure table configuration to save
+     */
+    async setTreasureTable(config: TreasureTableConfig): Promise<unknown> {
+        return game.settings.set(MODULE_ID, this.#TREASURE_TABLE, config);
     }
 }
 

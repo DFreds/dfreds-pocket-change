@@ -1,7 +1,50 @@
 {
     "PocketChange": {
         "CurrencyGeneratedFor": "Moeda gerada para {name}",
+        "TreasureConfig": {
+            "AppName": "Tabela de Tesouro",
+            "General": "Geral",
+            "AttributePath": {
+                "Name": "Atributo do Ator",
+                "Hint": "O valor do ator usado para escolher um nível. Para dnd5e, este é o nível de desafio em system.details.cr."
+            },
+            "SelectionFormula": {
+                "Name": "Rolagem de Seleção",
+                "Hint": "A rolagem feita para escolher uma linha dentro de um nível. Cada linha cobre um intervalo de resultados desta rolagem."
+            },
+            "Currencies": "Moedas",
+            "CurrenciesHint": "As moedas às quais o tesouro gerado é adicionado. Cada uma precisa de um nome e do valor do ator onde é armazenada.",
+            "CurrencyLabel": "Nome",
+            "CurrencyPath": "Valor do ator, como system.currency.gp",
+            "AddCurrency": "Adicionar Moeda",
+            "DeleteCurrency": "Excluir Moeda",
+            "Tier": "Nível",
+            "From": "De",
+            "To": "Até",
+            "NoLimit": "Sem limite",
+            "Roll": "Rolagem",
+            "AddTier": "Adicionar Nível",
+            "DeleteTier": "Excluir Nível",
+            "AddRow": "Adicionar Linha",
+            "DeleteRow": "Excluir Linha",
+            "NoTiers": "Ainda não há níveis. Adicione um nível para começar a gerar moeda.",
+            "Reset": "Restaurar Padrões",
+            "ResetTitle": "Restaurar Tabela de Tesouro",
+            "ResetContent": "Substituir toda a tabela de tesouro pelos padrões deste sistema de jogo? Nada é salvo até você pressionar Salvar Alterações.",
+            "Saved": "Tabela de tesouro salva",
+            "Errors": {
+                "CurrencyBlank": "Cada moeda precisa de um nome e de um valor do ator.",
+                "InvalidFormula": "\"{formula}\" não é uma fórmula de rolagem válida.",
+                "InvalidRange": "Cada linha precisa de um intervalo de rolagem com o início não maior que o fim.",
+                "InvalidTierRange": "Cada nível precisa de um valor mínimo não maior que seu valor máximo."
+            }
+        },
         "Settings": {
+            "TreasureMenu": {
+                "Name": "Tabela de Tesouro",
+                "Label": "Configurar Tabela de Tesouro",
+                "Hint": "Defina qual valor do ator escolhe um nível de tesouro, as rolagens feitas e as moedas preenchidas."
+            },
             "Enabled": {
                 "Name": "Habilitado",
                 "Hint": "Se habilitado, moeda será gerada para tokens soltos em cenas."

@@ -1,11 +1,11 @@
-import { Currency, StandardCurrency } from "./currency.ts";
-import { getDnd5eSystemData } from "./dnd5e-data.ts";
+import { CurrencyAmount, CurrencyStore } from "./currency-store.ts";
 import log from "./logger.ts";
 import { Settings } from "./settings.ts";
+import { TreasureRow, TreasureTier } from "./treasure-table.ts";
 import { Validator } from "./validator.ts";
 
 /**
- * Handles generating currency for tokens
+ * Handles generating currency for actors using the configured treasure table
  */
 class PocketChange {
     #settings: Settings;
@@ -29,158 +29,94 @@ class PocketChange {
 
         log("Generating treasure");
 
-        const currency = this.generateCurrency(actor);
-        await actor.update({ "system.currency": currency });
+        await this.generateCurrencyForActor(actor);
     }
 
     /**
-     * Generates currency for the provided actor based on its challenge rating
+     * Generates currency for the provided actor using the configured treasure
+     * table and applies it to the actor
      *
-     * @param actor - The actor to base the coin generation off of
-     * @returns The generated currency
+     * @param actor - The actor to generate currency for
      */
-    generateCurrency(actor: Actor): StandardCurrency {
-        let currency: Currency;
+    async generateCurrencyForActor(actor: Actor): Promise<void> {
+        const store = await this.#generateCurrency(actor);
+        if (!store) return;
 
-        if (this.#isWithinChallengeRating(actor, 0, 4)) {
-            currency = this.#treasureForChallengeRating0to4(actor);
-        } else if (this.#isWithinChallengeRating(actor, 5, 10)) {
-            currency = this.#treasureForChallengeRating5to10(actor);
-        } else if (this.#isWithinChallengeRating(actor, 11, 16)) {
-            currency = this.#treasureForChallengeRating11to16(actor);
-        } else {
-            currency = this.#treasureForChallengeRating17andUp(actor);
-        }
+        await actor.update(store.buildUpdate());
 
-        currency.convertCurrencies();
-
-        const converted = currency.convertToStandardCurrency();
         if (this.#settings.showChatMessage) {
-            this.#showChatMessage(actor, converted);
+            this.#showChatMessage(actor, store.describe());
+        }
+    }
+
+    async #generateCurrency(actor: Actor): Promise<CurrencyStore | null> {
+        const config = this.#settings.treasureTable;
+
+        if (!config.attributePath || config.currencies.length === 0) {
+            log("No treasure table is configured for this system");
+            return null;
         }
 
-        return converted;
-    }
-
-    #isWithinChallengeRating(actor: Actor, lowerCr: number, upperCr: number): boolean {
-        const cr = getDnd5eSystemData(actor).details?.cr ?? 0;
-        return cr >= lowerCr && cr <= upperCr;
-    }
-
-    #treasureForChallengeRating0to4(actor: Actor): Currency {
-        const currency = new Currency(actor);
-        const roll = this.#rollDice("1d100");
-
-        if (roll >= 1 && roll <= 30) {
-            currency.addCopper(this.#rollDice("5d6"));
-        } else if (roll >= 31 && roll <= 60) {
-            currency.addSilver(this.#rollDice("4d6"));
-        } else if (roll >= 61 && roll <= 70) {
-            currency.addElectrum(this.#rollDice("3d6"));
-        } else if (roll >= 71 && roll <= 95) {
-            currency.addGold(this.#rollDice("3d6"));
-        } else {
-            currency.addPlatinum(this.#rollDice("1d6"));
+        const tier = this.#findTier(actor, config.attributePath);
+        if (!tier) {
+            log("No tier matches the actor's attribute value");
+            return null;
         }
 
-        return currency;
-    }
-
-    #treasureForChallengeRating5to10(actor: Actor): Currency {
-        const currency = new Currency(actor);
-        const roll = this.#rollDice("1d100");
-
-        if (roll >= 1 && roll <= 30) {
-            currency.addCopper(this.#rollDice("4d6*100"));
-            currency.addElectrum(this.#rollDice("1d6*10"));
-        } else if (roll >= 31 && roll <= 60) {
-            currency.addSilver(this.#rollDice("6d6*10"));
-            currency.addGold(this.#rollDice("2d6*10"));
-        } else if (roll >= 61 && roll <= 70) {
-            currency.addElectrum(this.#rollDice("3d6*10"));
-            currency.addGold(this.#rollDice("2d6*10"));
-        } else if (roll >= 71 && roll <= 95) {
-            currency.addGold(this.#rollDice("4d6*10"));
-        } else {
-            currency.addGold(this.#rollDice("2d6*10"));
-            currency.addPlatinum(this.#rollDice("3d6"));
+        const row = await this.#pickRow(tier, config.selectionFormula);
+        if (!row) {
+            log("No row matches the selection roll");
+            return null;
         }
 
-        return currency;
-    }
-
-    #treasureForChallengeRating11to16(actor: Actor): Currency {
-        const currency = new Currency(actor);
-        const roll = this.#rollDice("1d100");
-
-        if (roll >= 1 && roll <= 20) {
-            currency.addSilver(this.#rollDice("4d6*100"));
-            currency.addGold(this.#rollDice("1d6*100"));
-        } else if (roll >= 21 && roll <= 35) {
-            currency.addElectrum(this.#rollDice("1d6*100"));
-            currency.addGold(this.#rollDice("1d6*100"));
-        } else if (roll >= 36 && roll <= 75) {
-            currency.addGold(this.#rollDice("2d6*100"));
-            currency.addPlatinum(this.#rollDice("1d6*10"));
-        } else {
-            currency.addGold(this.#rollDice("2d6*100"));
-            currency.addPlatinum(this.#rollDice("2d6*10"));
+        const store = new CurrencyStore(actor, config);
+        for (const [currencyIndex, formula] of row.formulas.entries()) {
+            if (!formula) continue;
+            store.add(currencyIndex, await this.#rollDice(formula));
         }
 
-        return currency;
+        store.convertDisabledDenominations();
+
+        return store;
     }
 
-    #treasureForChallengeRating17andUp(actor: Actor): Currency {
-        const currency = new Currency(actor);
-        const roll = this.#rollDice("1d100");
+    #findTier(actor: Actor, attributePath: string): TreasureTier | null {
+        const rawValue = foundry.utils.getProperty(actor, attributePath);
+        const value = typeof rawValue === "number" ? rawValue : 0;
 
-        if (roll >= 1 && roll <= 15) {
-            currency.addElectrum(this.#rollDice("2d6*1000"));
-            currency.addGold(this.#rollDice("8d6*100"));
-        } else if (roll >= 16 && roll <= 55) {
-            currency.addGold(this.#rollDice("1d6*1000"));
-            currency.addPlatinum(this.#rollDice("1d6*100"));
-        } else {
-            currency.addGold(this.#rollDice("1d6*1000"));
-            currency.addPlatinum(this.#rollDice("2d6*100"));
-        }
-
-        return currency;
+        return (
+            this.#settings.treasureTable.tiers.find(
+                (tier) => value >= tier.min && (tier.max === null || value <= tier.max),
+            ) ?? null
+        );
     }
 
-    #rollDice(formula: string): number {
-        const roll = new Roll(formula).evaluateSync();
+    async #pickRow(tier: TreasureTier, selectionFormula: string): Promise<TreasureRow | null> {
+        const roll = await this.#rollDice(selectionFormula);
+
+        return tier.rows.find((row) => roll >= row.rangeStart && roll <= row.rangeEnd) ?? null;
+    }
+
+    async #rollDice(formula: string): Promise<number> {
+        const roll = await new Roll(formula).evaluate();
         return roll.total;
     }
 
-    #showChatMessage(actor: Actor, currency: StandardCurrency): void {
+    #showChatMessage(actor: Actor, amounts: CurrencyAmount[]): void {
         ChatMessage.create({
             whisper: game.users.filter((user) => user.isGM).map((gm) => gm.id),
             flavor: game.i18n.localize("PocketChange.CurrencyGeneratedFor", {
                 name: actor.name,
             }),
-            content: this.#currencyToString(currency),
+            content: this.#currencyToString(amounts),
         });
     }
 
-    #currencyToString(currency: StandardCurrency): string {
-        return `
-        <table>
-          <tr>
-            <th>PP</th>
-            <th>GP</th>
-            <th>EP</th>
-            <th>SP</th>
-            <th>CP</th>
-          </tr>
-          <tr>
-            <td>${currency.pp}</td>
-            <td>${currency.gp}</td>
-            <td>${currency.ep}</td>
-            <td>${currency.sp}</td>
-            <td>${currency.cp}</td>
-        </table>
-        `;
+    #currencyToString(amounts: CurrencyAmount[]): string {
+        const headers = amounts.map((amount) => `<th>${amount.label}</th>`).join("");
+        const values = amounts.map((amount) => `<td>${amount.amount}</td>`).join("");
+
+        return `<table><tr>${headers}</tr><tr>${values}</tr></table>`;
     }
 }
 

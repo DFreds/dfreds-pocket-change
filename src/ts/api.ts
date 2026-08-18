@@ -1,5 +1,4 @@
 import type Module from "@client/packages/module.d.mts";
-import { StandardCurrency } from "./currency.ts";
 
 interface ThisModule extends Module {
     api: ThisApi;
@@ -7,12 +6,13 @@ interface ThisModule extends Module {
 
 interface ThisApi {
     /**
-     * Generates currency for the provided actor based on its challenge rating
+     * Generates currency for the provided actor using the configured treasure
+     * table and applies it to the actor
      *
-     * @param actor - The actor to base the coin generation off of
-     * @returns The generated currency
+     * @param actor - The actor to generate currency for
+     * @returns A promise that resolves when the currency has been applied
      */
-    generateCurrency(actor: Actor): StandardCurrency;
+    generateCurrencyForActor(actor: Actor): Promise<void>;
 }
 
 export { type ThisModule, type ThisApi };

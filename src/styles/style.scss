@@ -1,3 +1,76 @@
-.dfreds-pocket-change {
-    font-size: large;
+.dfreds-pocket-change-treasure-config {
+    .treasure-config-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .treasure-currency-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+
+        input[name$=".label"] {
+            flex: 0 0 6rem;
+        }
+
+        input[name$=".path"] {
+            flex: 1;
+        }
+    }
+
+    .treasure-tier-range {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+
+        label {
+            flex: none;
+        }
+
+        input {
+            flex: 0 0 5rem;
+        }
+
+        button {
+            margin-left: auto;
+        }
+    }
+
+    .treasure-rows {
+        margin: 0 0 0.5rem;
+
+        th {
+            text-align: center;
+        }
+
+        td {
+            padding: 0.125rem 0.25rem;
+        }
+
+        .treasure-roll-header {
+            width: 7.5rem;
+        }
+
+        .treasure-delete-header {
+            width: 2rem;
+        }
+    }
+
+    .treasure-roll-range {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        input {
+            flex: 1;
+            text-align: center;
+        }
+    }
+
+    button.icon {
+        flex: none;
+    }
 }
