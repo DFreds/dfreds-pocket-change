@@ -2,6 +2,7 @@ import type { ApplicationClosingOptions, ApplicationConfiguration } from "@clien
 import type { HandlebarsRenderOptions } from "@client/applications/api/_module.mjs";
 import { MODULE_ID } from "../constants.ts";
 import { Settings } from "../settings.ts";
+import { bindPathInput } from "./path-autocomplete.ts";
 import {
     CurrencyDefinition,
     getDefaultTreasureTable,
@@ -86,6 +87,18 @@ class TreasureConfig extends HandlebarsApplicationMixin(
         super._onClose(options);
     }
 
+    protected override async _onRender(context: object, options: HandlebarsRenderOptions): Promise<void> {
+        await super._onRender(context, options);
+
+        const pathInputs = this.element.querySelectorAll<HTMLInputElement>(
+            'input[name="attributePath"], input[name="typePaths"], input[name$=".path"]',
+        );
+
+        for (const input of pathInputs) {
+            bindPathInput(input);
+        }
+    }
+
     protected override async _preparePartContext(
         partId: string,
         context: Record<string, unknown>,
@@ -107,6 +120,8 @@ class TreasureConfig extends HandlebarsApplicationMixin(
         return Object.assign(context, {
             attributePath: this.#config.attributePath,
             selectionFormula: this.#config.selectionFormula,
+            actorTypes: this.#config.actorTypes.join("; "),
+            typePaths: this.#config.typePaths.join("; "),
             currencies: this.#config.currencies,
             tiers: this.#config.tiers,
             buttons: [
@@ -252,6 +267,8 @@ class TreasureConfig extends HandlebarsApplicationMixin(
 
         this.#config.attributePath = String(expanded.attributePath ?? "");
         this.#config.selectionFormula = String(expanded.selectionFormula ?? "");
+        this.#config.actorTypes = this.#toList(expanded.actorTypes);
+        this.#config.typePaths = this.#toList(expanded.typePaths);
         this.#config.currencies = this.#toArray(expanded.currencies).map((currency): CurrencyDefinition => {
             const data = currency as Record<string, unknown>;
             return {
@@ -286,6 +303,17 @@ class TreasureConfig extends HandlebarsApplicationMixin(
         return Object.entries(value)
             .sort(([a], [b]) => Number(a) - Number(b))
             .map(([, entry]) => entry);
+    }
+
+    /**
+     * Converts a semicolon-separated input value into a list of trimmed,
+     * non-empty entries
+     */
+    #toList(value: unknown): string[] {
+        return String(value ?? "")
+            .split(";")
+            .map((entry) => entry.trim())
+            .filter((entry) => entry);
     }
 
     #findValidationError(config: TreasureTableConfig): string | null {

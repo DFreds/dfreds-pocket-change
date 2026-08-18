@@ -115,6 +115,16 @@
     button.icon {
         flex: none;
     }
+
+    input.unknown-path {
+        border-color: var(--color-level-warning-border, var(--color-warm-2));
+    }
+}
+
+// Core renders the menu at the top level, so it sits outside the window's block
+#autocomplete.dfreds-pocket-change-paths {
+    max-height: 20rem;
+    overflow-y: auto;
 }
 
 table.pocket-change-currency {

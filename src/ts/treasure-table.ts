@@ -45,8 +45,35 @@ interface TreasureTableConfig {
     attributePath: string;
     /** The roll made to pick a row within a tier */
     selectionFormula: string;
+    /** The actor types that can receive currency. Empty allows every type */
+    actorTypes: string[];
+    /**
+     * The actor attribute paths checked against the creature types setting.
+     * Empty skips the creature type check entirely
+     */
+    typePaths: string[];
     currencies: CurrencyDefinition[];
     tiers: TreasureTier[];
+}
+
+/**
+ * Fills in any fields missing from a stored treasure table, such as one saved
+ * by an older version of the module
+ *
+ * @param stored - The stored treasure table value
+ * @returns A treasure table with every field present
+ */
+function normalizeTreasureTable(stored: unknown): TreasureTableConfig {
+    const raw = (stored ?? {}) as Partial<TreasureTableConfig>;
+
+    return {
+        attributePath: raw.attributePath ?? "",
+        selectionFormula: raw.selectionFormula ?? "1d100",
+        actorTypes: raw.actorTypes ?? [],
+        typePaths: raw.typePaths ?? [],
+        currencies: raw.currencies ?? [],
+        tiers: raw.tiers ?? [],
+    };
 }
 
 /**
@@ -65,6 +92,8 @@ function getDefaultTreasureTable(): TreasureTableConfig {
     return {
         attributePath: "",
         selectionFormula: "1d100",
+        actorTypes: [],
+        typePaths: [],
         currencies: [],
         tiers: [],
     };
@@ -75,6 +104,8 @@ function getDnd5eTreasureTable(): TreasureTableConfig {
     return {
         attributePath: "system.details.cr",
         selectionFormula: "1d100",
+        actorTypes: ["npc"],
+        typePaths: ["system.details.type.value", "system.details.type.subtype", "system.details.type.custom"],
         currencies: [
             { label: "CP", path: "system.currency.cp" },
             { label: "SP", path: "system.currency.sp" },
@@ -140,5 +171,5 @@ function row(
     };
 }
 
-export { getDefaultTreasureTable };
+export { getDefaultTreasureTable, normalizeTreasureTable };
 export type { CurrencyDefinition, TreasureRow, TreasureTier, TreasureTableConfig };

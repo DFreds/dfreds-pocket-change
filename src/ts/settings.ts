@@ -1,5 +1,5 @@
 import { MODULE_ID } from "./constants.ts";
-import { getDefaultTreasureTable, TreasureTableConfig } from "./treasure-table.ts";
+import { getDefaultTreasureTable, normalizeTreasureTable, TreasureTableConfig } from "./treasure-table.ts";
 import { TreasureConfig } from "./ui/treasure-config.ts";
 
 /**
@@ -12,10 +12,6 @@ class Settings {
     #CREATURE_TYPES = "creatureTypes";
     #CHANCE_OF_NO_CURRENCY = "chanceOfNoCurrency";
     #CURRENCY_MULTIPLIER = "currencyMultiplier";
-    #USE_SILVER = "useSilver";
-    #USE_ELECTRUM = "useElectrum";
-    #USE_GOLD = "useGold";
-    #USE_PLATINUM = "usePlatinum";
     #TREASURE_TABLE = "treasureTable";
 
     // Menu keys
@@ -100,42 +96,6 @@ class Settings {
                 initial: 1,
             }),
         });
-
-        game.settings.register(MODULE_ID, this.#USE_SILVER, {
-            name: "PocketChange.Settings.UseSilver.Name",
-            hint: "PocketChange.Settings.UseSilver.Hint",
-            scope: "world",
-            config: true,
-            default: true,
-            type: Boolean,
-        });
-
-        game.settings.register(MODULE_ID, this.#USE_ELECTRUM, {
-            name: "PocketChange.Settings.UseElectrum.Name",
-            hint: "PocketChange.Settings.UseElectrum.Hint",
-            scope: "world",
-            config: true,
-            default: true,
-            type: Boolean,
-        });
-
-        game.settings.register(MODULE_ID, this.#USE_GOLD, {
-            name: "PocketChange.Settings.UseGold.Name",
-            hint: "PocketChange.Settings.UseGold.Hint",
-            scope: "world",
-            config: true,
-            default: true,
-            type: Boolean,
-        });
-
-        game.settings.register(MODULE_ID, this.#USE_PLATINUM, {
-            name: "PocketChange.Settings.UsePlatinum.Name",
-            hint: "PocketChange.Settings.UsePlatinum.Hint",
-            scope: "world",
-            config: true,
-            default: true,
-            type: Boolean,
-        });
     }
 
     #registerNonConfigSettings(): void {
@@ -190,38 +150,10 @@ class Settings {
     }
 
     /**
-     * Returns true if silver can be used
-     */
-    get useSilver(): boolean {
-        return game.settings.get(MODULE_ID, this.#USE_SILVER) as unknown as boolean;
-    }
-
-    /**
-     * Returns true if electrum can be used
-     */
-    get useElectrum(): boolean {
-        return game.settings.get(MODULE_ID, this.#USE_ELECTRUM) as unknown as boolean;
-    }
-
-    /**
-     * Returns true if gold can be used
-     */
-    get useGold(): boolean {
-        return game.settings.get(MODULE_ID, this.#USE_GOLD) as unknown as boolean;
-    }
-
-    /**
-     * Returns true if platinum can be used
-     */
-    get usePlatinum(): boolean {
-        return game.settings.get(MODULE_ID, this.#USE_PLATINUM) as unknown as boolean;
-    }
-
-    /**
      * Returns the configured treasure table
      */
     get treasureTable(): TreasureTableConfig {
-        return game.settings.get(MODULE_ID, this.#TREASURE_TABLE) as unknown as TreasureTableConfig;
+        return normalizeTreasureTable(game.settings.get(MODULE_ID, this.#TREASURE_TABLE));
     }
 
     /**

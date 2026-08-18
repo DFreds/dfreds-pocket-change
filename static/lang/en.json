@@ -14,6 +14,15 @@
                 "Name": "Selection Roll",
                 "Hint": "The roll made to pick a row within a tier. Each row covers a range of results from this roll."
             },
+            "ActorTypes": {
+                "Name": "Actor Types",
+                "Hint": "The types of actors that can receive currency, separated by semi-colons. For dnd5e, this is npc. Leave it blank to allow every type."
+            },
+            "TypePaths": {
+                "Name": "Creature Type Attributes",
+                "Hint": "The actor values compared against the Creature Types setting, separated by semi-colons. Leave it blank to skip the creature type check."
+            },
+            "UnknownPathWarning": "Actors do not appear to have this value. It can still be saved: some values exist without being listed.",
             "Currencies": "Currencies",
             "CurrenciesHint": "The currencies that generated treasure is added to. Each one needs a name and the actor value it is stored at.",
             "CurrencyLabel": "Name",
@@ -57,7 +66,7 @@
             },
             "CreatureTypes": {
                 "Name": "Creature Types",
-                "Hint": "These are the types of creatures that will generate currency, separated via semi-colons. This will match on their type, subtype, and custom type. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity"
+                "Hint": "These are the types of creatures that will generate currency, separated via semi-colons. They are compared against the creature type attributes set in the treasure table menu. Leave it blank to generate currency for all types of creatures. Example: Humanoid;Aberration;Monstrosity"
             },
             "ChanceOfNoCurrency": {
                 "Name": "Chance of No Currency",
@@ -66,22 +75,6 @@
             "CurrencyMultiplier": {
                 "Name": "Currency Multiplier",
                 "Hint": "This multiplies the generated currency by the given number."
-            },
-            "UseSilver": {
-                "Name": "Use Silver",
-                "Hint": "If enabled, generated currency could include silver. Copper is always included."
-            },
-            "UseElectrum": {
-                "Name": "Use Electrum",
-                "Hint": "If enabled, generated currency could include electrum. Copper is always included."
-            },
-            "UseGold": {
-                "Name": "Use Gold",
-                "Hint": "If enabled, generated currency could include gold. Copper is always included."
-            },
-            "UsePlatinum": {
-                "Name": "Use Platinum",
-                "Hint": "If enabled, generated currency could include platinum. Copper is always included."
             }
         }
     }

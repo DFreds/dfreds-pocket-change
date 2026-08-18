@@ -43,44 +43,6 @@ class CurrencyStore {
     }
 
     /**
-     * Converts currencies down a denomination if they are not enabled in the
-     * settings. This only applies to the standard dnd5e denominations.
-     *
-     * Example: Platinum converts to gold, which converts to electrum, if both
-     * platinum and gold are disabled.
-     */
-    convertDisabledDenominations(): void {
-        if (!this.#settings.usePlatinum) {
-            this.#convertDown("pp", "gp", 10);
-        }
-
-        if (!this.#settings.useGold) {
-            this.#convertDown("gp", "ep", 2);
-        }
-
-        if (!this.#settings.useElectrum) {
-            this.#convertDown("ep", "sp", 5);
-        }
-
-        if (!this.#settings.useSilver) {
-            this.#convertDown("sp", "cp", 10);
-        }
-    }
-
-    #convertDown(fromKey: string, toKey: string, rate: number): void {
-        const fromIndex = this.#findDenomination(fromKey);
-        const toIndex = this.#findDenomination(toKey);
-        if (fromIndex === -1 || toIndex === -1) return;
-
-        this.#amounts[toIndex] += this.#amounts[fromIndex] * rate;
-        this.#amounts[fromIndex] = 0;
-    }
-
-    #findDenomination(key: string): number {
-        return this.#config.currencies.findIndex((currency) => currency.path.endsWith(`.${key}`));
-    }
-
-    /**
      * Builds the actor update data for the current totals
      *
      * @returns An object mapping each currency path to its new total

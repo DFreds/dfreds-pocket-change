@@ -14,6 +14,15 @@
                 "Name": "Rolagem de Seleção",
                 "Hint": "A rolagem feita para escolher uma linha dentro de um nível. Cada linha cobre um intervalo de resultados desta rolagem."
             },
+            "ActorTypes": {
+                "Name": "Tipos de Ator",
+                "Hint": "Os tipos de atores que podem receber moeda, separados por ponto e vírgula. Para dnd5e, este é npc. Deixe em branco para permitir todos os tipos."
+            },
+            "TypePaths": {
+                "Name": "Atributos de Tipo de Criatura",
+                "Hint": "Os valores do ator comparados com a configuração Tipos de Criaturas, separados por ponto e vírgula. Deixe em branco para pular a verificação de tipo de criatura."
+            },
+            "UnknownPathWarning": "Os atores não parecem ter este valor. Ainda pode ser salvo: alguns valores existem sem estarem listados.",
             "Currencies": "Moedas",
             "CurrenciesHint": "As moedas às quais o tesouro gerado é adicionado. Cada uma precisa de um nome e do valor do ator onde é armazenada.",
             "CurrencyLabel": "Nome",
@@ -57,7 +66,7 @@
             },
             "CreatureTypes": {
                 "Name": "Tipos de Criaturas",
-                "Hint": "Esses são os tipos de criaturas que gerarão moeda, separados por ponto e vírgula. Isso corresponderá ao tipo, subtipo e tipo personalizado delas. Deixe em branco para gerar moeda para todos os tipos de criaturas. Exemplo: Humanoide;Aberração;Monstruosidade"
+                "Hint": "Esses são os tipos de criaturas que gerarão moeda, separados por ponto e vírgula. Eles são comparados com os atributos de tipo de criatura definidos no menu da tabela de tesouro. Deixe em branco para gerar moeda para todos os tipos de criaturas. Exemplo: Humanoide;Aberração;Monstruosidade"
             },
             "ChanceOfNoCurrency": {
                 "Name": "Chance de Não Gerar Moeda",
@@ -66,22 +75,6 @@
             "CurrencyMultiplier": {
                 "Name": "Multiplicador de Moeda",
                 "Hint": "Isso multiplica a moeda gerada pelo número dado."
-            },
-            "UseSilver": {
-                "Name": "Usar Prata",
-                "Hint": "Se habilitado, a moeda gerada poderá incluir prata. O cobre é sempre incluído."
-            },
-            "UseElectrum": {
-                "Name": "Usar Electrum",
-                "Hint": "Se habilitado, a moeda gerada poderá incluir electrum. O cobre é sempre incluído."
-            },
-            "UseGold": {
-                "Name": "Usar Ouro",
-                "Hint": "Se habilitado, a moeda gerada poderá incluir ouro. O cobre é sempre incluído."
-            },
-            "UsePlatinum": {
-                "Name": "Usar Platina",
-                "Hint": "Se habilitado, a moeda gerada poderá incluir platina. O cobre é sempre incluído."
             }
         }
     }

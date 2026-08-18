@@ -75,8 +75,6 @@ class PocketChange {
             store.add(currencyIndex, await this.#rollDice(formula));
         }
 
-        store.convertDisabledDenominations();
-
         return store;
     }
 

@@ -1,4 +1,3 @@
-import { getDnd5eSystemData } from "./dnd5e-data.ts";
 import log from "./logger.ts";
 import { Settings } from "./settings.ts";
 
@@ -37,13 +36,13 @@ class Validator {
             return false;
         }
 
-        if (actor.type !== "npc") {
-            log("Refuse to generate treasure for non-npc actors");
+        if (!this.#isMatchingActorType(actor)) {
+            log("Refuse to generate treasure for non-matching actor type");
             return false;
         }
 
-        if (!this.#isMatchingType(actor)) {
-            log("Refuse to generate treasure for non-matching type");
+        if (!this.#isMatchingCreatureType(actor)) {
+            log("Refuse to generate treasure for non-matching creature type");
             return false;
         }
 
@@ -64,22 +63,33 @@ class Validator {
         return Math.random() < this.#settings.chanceOfNoCurrency;
     }
 
-    #isMatchingType(actor: Actor): boolean {
+    #isMatchingActorType(actor: Actor): boolean {
+        const actorTypes = this.#settings.treasureTable.actorTypes;
+
+        // Handle no configured actor types by always saying they are valid
+        if (actorTypes.length === 0) return true;
+
+        return actorTypes.includes(actor.type);
+    }
+
+    #isMatchingCreatureType(actor: Actor): boolean {
         const creatureTypes = this.#settings.creatureTypes;
 
         // Handle blank creature types by always saying they are valid
         if (creatureTypes.length === 0) return true;
 
-        const typeData = getDnd5eSystemData(actor).details?.type;
+        const typePaths = this.#settings.treasureTable.typePaths;
 
-        let actorType = typeData?.value?.toLowerCase().trim();
-        const actorSubtype = typeData?.subtype?.toLowerCase().trim();
+        // With nowhere to read a creature type from, nothing can be excluded
+        if (typePaths.length === 0) return true;
 
-        if (actorType === "custom") {
-            actorType = typeData?.custom?.toLowerCase().trim();
-        }
+        const actorValues = typePaths
+            .map((path) => foundry.utils.getProperty(actor, path))
+            .filter((value): value is string => typeof value === "string")
+            .map((value) => value.toLowerCase().trim())
+            .filter((value) => value);
 
-        return creatureTypes.some((type) => actorType?.startsWith(type) || actorSubtype?.startsWith(type));
+        return creatureTypes.some((type) => actorValues.some((value) => value.startsWith(type)));
     }
 }
 
