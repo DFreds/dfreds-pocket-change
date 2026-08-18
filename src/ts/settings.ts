@@ -52,12 +52,14 @@ class Settings {
             scope: "world",
             config: true,
             default: 0.25,
-            range: {
+            type: new foundry.data.fields.NumberField({
+                required: true,
+                nullable: false,
                 min: 0,
                 max: 1,
                 step: 0.05,
-            },
-            type: Number,
+                initial: 0.25,
+            }),
         });
 
         game.settings.register(MODULE_ID, this.#CURRENCY_MULTIPLIER, {
@@ -66,12 +68,14 @@ class Settings {
             scope: "world",
             config: true,
             default: 1,
-            range: {
+            type: new foundry.data.fields.NumberField({
+                required: true,
+                nullable: false,
                 min: 0,
                 max: 2,
                 step: 0.1,
-            },
-            type: Number,
+                initial: 1,
+            }),
         });
 
         game.settings.register(MODULE_ID, this.#USE_SILVER, {
@@ -115,30 +119,21 @@ class Settings {
      * Returns true if currency should be generated on token drop
      */
     get enabled(): boolean {
-        return game.settings.get(
-            MODULE_ID,
-            this.#ENABLED,
-        ) as unknown as boolean;
+        return game.settings.get(MODULE_ID, this.#ENABLED) as unknown as boolean;
     }
 
     /**
      * Returns true if a chat message should be displayed for dropped tokens
      */
     get showChatMessage(): boolean {
-        return game.settings.get(
-            MODULE_ID,
-            this.#SHOW_CHAT_MESSAGE,
-        ) as unknown as boolean;
+        return game.settings.get(MODULE_ID, this.#SHOW_CHAT_MESSAGE) as unknown as boolean;
     }
 
     /**
      * Returns the list of creature types that can have currency generated
      */
     get creatureTypes(): string[] {
-        const types = game.settings.get(
-            MODULE_ID,
-            this.#CREATURE_TYPES,
-        ) as unknown as string;
+        const types = game.settings.get(MODULE_ID, this.#CREATURE_TYPES) as unknown as string;
 
         return types
             .split(";")
@@ -151,60 +146,42 @@ class Settings {
      * currency will not be generated
      */
     get chanceOfNoCurrency(): number {
-        return game.settings.get(
-            MODULE_ID,
-            this.#CHANCE_OF_NO_CURRENCY,
-        ) as unknown as number;
+        return game.settings.get(MODULE_ID, this.#CHANCE_OF_NO_CURRENCY) as unknown as number;
     }
 
     /**
      * Returns the amount to multiply generated currency by
      */
     get currencyMultiplier(): number {
-        return game.settings.get(
-            MODULE_ID,
-            this.#CURRENCY_MULTIPLIER,
-        ) as unknown as number;
+        return game.settings.get(MODULE_ID, this.#CURRENCY_MULTIPLIER) as unknown as number;
     }
 
     /**
      * Returns true if silver can be used
      */
     get useSilver(): boolean {
-        return game.settings.get(
-            MODULE_ID,
-            this.#USE_SILVER,
-        ) as unknown as boolean;
+        return game.settings.get(MODULE_ID, this.#USE_SILVER) as unknown as boolean;
     }
 
     /**
      * Returns true if electrum can be used
      */
     get useElectrum(): boolean {
-        return game.settings.get(
-            MODULE_ID,
-            this.#USE_ELECTRUM,
-        ) as unknown as boolean;
+        return game.settings.get(MODULE_ID, this.#USE_ELECTRUM) as unknown as boolean;
     }
 
     /**
      * Returns true if gold can be used
      */
     get useGold(): boolean {
-        return game.settings.get(
-            MODULE_ID,
-            this.#USE_GOLD,
-        ) as unknown as boolean;
+        return game.settings.get(MODULE_ID, this.#USE_GOLD) as unknown as boolean;
     }
 
     /**
      * Returns true if platinum can be used
      */
     get usePlatinum(): boolean {
-        return game.settings.get(
-            MODULE_ID,
-            this.#USE_PLATINUM,
-        ) as unknown as boolean;
+        return game.settings.get(MODULE_ID, this.#USE_PLATINUM) as unknown as boolean;
     }
 }
 

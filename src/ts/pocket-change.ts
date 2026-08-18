@@ -1,4 +1,5 @@
 import { Currency, StandardCurrency } from "./currency.ts";
+import { getDnd5eSystemData } from "./dnd5e-data.ts";
 import log from "./logger.ts";
 import { Settings } from "./settings.ts";
 import { Validator } from "./validator.ts";
@@ -20,14 +21,16 @@ class PocketChange {
      *
      * @param tokenDocument - The token document for the dropped actor
      */
-    populateTreasureForToken(tokenDocument: TokenDocument): Promise<unknown> | undefined {
+    async populateTreasureForToken(tokenDocument: TokenDocument): Promise<void> {
+        const actor = tokenDocument.actor;
+        if (!actor) return;
+
         if (!this.#validator.shouldAutoGenerateCurrency(tokenDocument)) return;
 
         log("Generating treasure");
 
-        const actor = tokenDocument.actor;
         const currency = this.generateCurrency(actor);
-        return actor.update({ "system.currency": currency });
+        await actor.update({ "system.currency": currency });
     }
 
     /**
@@ -59,12 +62,8 @@ class PocketChange {
         return converted;
     }
 
-    #isWithinChallengeRating(
-        actor: Actor,
-        lowerCr: number,
-        upperCr: number,
-    ): boolean {
-        const cr = actor.system.details.cr;
+    #isWithinChallengeRating(actor: Actor, lowerCr: number, upperCr: number): boolean {
+        const cr = getDnd5eSystemData(actor).details?.cr ?? 0;
         return cr >= lowerCr && cr <= upperCr;
     }
 
@@ -150,18 +149,14 @@ class PocketChange {
     }
 
     #rollDice(formula: string): number {
-        const roll = new Roll(formula);
-        roll.evaluateSync();
+        const roll = new Roll(formula).evaluateSync();
         return roll.total;
     }
 
     #showChatMessage(actor: Actor, currency: StandardCurrency): void {
         ChatMessage.create({
-            user: game.userId,
-            whisper: game.users
-                .filter((user) => user.isGM)
-                .map((gm) => gm.id),
-            flavor: game.i18n.format("PocketChange.CurrencyGeneratedFor", {
+            whisper: game.users.filter((user) => user.isGM).map((gm) => gm.id),
+            flavor: game.i18n.localize("PocketChange.CurrencyGeneratedFor", {
                 name: actor.name,
             }),
             content: this.#currencyToString(currency),

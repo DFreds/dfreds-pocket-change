@@ -1,3 +1,4 @@
+import { getDnd5eSystemData } from "./dnd5e-data.ts";
 import { Settings } from "./settings.ts";
 
 interface StandardCurrency {
@@ -29,11 +30,12 @@ class Currency {
     constructor(actor: Actor) {
         this.#settings = new Settings();
 
-        this.#cp = actor.system?.currency?.cp?.value || 0;
-        this.#sp = actor.system?.currency?.sp?.value || 0;
-        this.#ep = actor.system?.currency?.ep?.value || 0;
-        this.#gp = actor.system?.currency?.gp?.value || 0;
-        this.#pp = actor.system?.currency?.pp?.value || 0;
+        const currency = getDnd5eSystemData(actor).currency;
+        this.#cp = currency?.cp ?? 0;
+        this.#sp = currency?.sp ?? 0;
+        this.#ep = currency?.ep ?? 0;
+        this.#gp = currency?.gp ?? 0;
+        this.#pp = currency?.pp ?? 0;
     }
 
     /**

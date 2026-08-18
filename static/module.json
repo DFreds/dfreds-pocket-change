@@ -8,7 +8,7 @@
         "verified": 14,
         "maximum": 14
     },
-    "esmodules": ["vendor.mjs", "dfreds-pocket-change.mjs"],
+    "esmodules": ["dfreds-pocket-change.mjs"],
     "scripts": [],
     "styles": ["styles/dfreds-pocket-change.css"],
     "packs": [],

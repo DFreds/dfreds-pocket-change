@@ -3,9 +3,9 @@ import { Listener } from "./index.ts";
 
 const CreateToken: Listener = {
     listen(): void {
-        Hooks.on("createToken", (tokenDocument: TokenDocument) => {
+        Hooks.on("createToken" as any, async (tokenDocument: TokenDocument) => {
             const pocketChange = new PocketChange();
-            pocketChange.populateTreasureForToken(tokenDocument);
+            await pocketChange.populateTreasureForToken(tokenDocument);
         });
     },
 };
