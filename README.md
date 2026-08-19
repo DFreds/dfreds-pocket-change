@@ -48,7 +48,7 @@
 - Set a percent chance that no currency is generated at all
 - Works with any game system, with autocomplete for actor values
 - Comes set up with the DMG Individual Treasure tables by Challenge Rating on dnd5e
-- Optionally announces what was generated in a chat message to GMs
+- Optionally reports the rolls and the resulting currency in a chat message to GMs
 
 ## Getting Started
 

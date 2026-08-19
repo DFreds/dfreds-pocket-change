@@ -1,6 +1,10 @@
 {
     "PocketChange": {
         "CurrencyGeneratedFor": "Moeda gerada para {name}",
+        "RollResults": "Resultados das Rolagens",
+        "SelectionRollLine": "Rolou {formula} e obteve {total}",
+        "CurrencyRollLine": "{label}: rolou {formula} e obteve {total}",
+        "NothingRolled": "Esse resultado não cria nenhuma moeda",
         "GenerateCurrency": "Gerar Moeda",
         "GenerateCurrencyWarning": "Rolar nova moeda para {name}? Isso substitui a moeda que já está carregando e não pode ser desfeito.",
         "TreasureConfig": {

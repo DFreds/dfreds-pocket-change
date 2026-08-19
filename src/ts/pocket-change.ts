@@ -1,8 +1,23 @@
 import { CurrencyAmount, CurrencyStore } from "./currency-store.ts";
 import log from "./logger.ts";
 import { Settings } from "./settings.ts";
-import { TreasureRow, TreasureTier } from "./treasure-table.ts";
+import { TreasureTier } from "./treasure-table.ts";
 import { Validator } from "./validator.ts";
+
+/** One currency formula that was rolled, and what it came to */
+interface CurrencyRoll {
+    label: string;
+    formula: string;
+    total: number;
+}
+
+/** Everything one generation produced, so the chat message can report it */
+interface GenerationResult {
+    store: CurrencyStore;
+    selectionFormula: string;
+    selectionTotal: number;
+    rolls: CurrencyRoll[];
+}
 
 /**
  * Handles generating currency for actors using the configured treasure table
@@ -42,17 +57,17 @@ class PocketChange {
      * is thrown away rather than added to
      */
     async generateCurrencyForActor(actor: Actor, { replace = false } = {}): Promise<void> {
-        const store = await this.#generateCurrency(actor, replace);
-        if (!store) return;
+        const result = await this.#generateCurrency(actor, replace);
+        if (!result) return;
 
-        await actor.update(store.buildUpdate());
+        await actor.update(result.store.buildUpdate());
 
         if (this.#settings.showChatMessage) {
-            this.#showChatMessage(actor, store.describe());
+            this.#showChatMessage(actor, result);
         }
     }
 
-    async #generateCurrency(actor: Actor, replace: boolean): Promise<CurrencyStore | null> {
+    async #generateCurrency(actor: Actor, replace: boolean): Promise<GenerationResult | null> {
         const config = this.#settings.treasureTable;
 
         if (!config.attributePath || config.currencies.length === 0) {
@@ -66,19 +81,34 @@ class PocketChange {
             return null;
         }
 
-        const row = await this.#pickRow(tier, config.selectionFormula);
+        const selection = await this.#rollDice(config.selectionFormula);
+        const row = tier.rows.find((row) => selection >= row.rangeStart && selection <= row.rangeEnd);
         if (!row) {
             log("No row matches the selection roll");
             return null;
         }
 
         const store = new CurrencyStore(actor, config, { startFromNothing: replace });
+        const rolls: CurrencyRoll[] = [];
+
         for (const [currencyIndex, formula] of row.formulas.entries()) {
             if (!formula) continue;
-            store.add(currencyIndex, await this.#rollDice(formula));
+
+            const total = await this.#rollDice(formula);
+            store.add(currencyIndex, total);
+            rolls.push({
+                label: config.currencies[currencyIndex]?.label ?? "",
+                formula,
+                total,
+            });
         }
 
-        return store;
+        return {
+            store,
+            selectionFormula: config.selectionFormula,
+            selectionTotal: selection,
+            rolls,
+        };
     }
 
     #findTier(actor: Actor, attributePath: string): TreasureTier | null {
@@ -92,25 +122,46 @@ class PocketChange {
         );
     }
 
-    async #pickRow(tier: TreasureTier, selectionFormula: string): Promise<TreasureRow | null> {
-        const roll = await this.#rollDice(selectionFormula);
-
-        return tier.rows.find((row) => roll >= row.rangeStart && roll <= row.rangeEnd) ?? null;
-    }
-
     async #rollDice(formula: string): Promise<number> {
         const roll = await new Roll(formula).evaluate();
         return roll.total;
     }
 
-    #showChatMessage(actor: Actor, amounts: CurrencyAmount[]): void {
+    #showChatMessage(actor: Actor, result: GenerationResult): void {
         ChatMessage.create({
             whisper: game.users.filter((user) => user.isGM).map((gm) => gm.id),
             flavor: game.i18n.localize("PocketChange.CurrencyGeneratedFor", {
                 name: actor.name,
             }),
-            content: this.#currencyToString(amounts),
+            content: this.#rollsToString(result) + this.#currencyToString(result.store.describe()),
         });
+    }
+
+    #rollsToString({ selectionFormula, selectionTotal, rolls }: GenerationResult): string {
+        const lines = [
+            game.i18n.localize("PocketChange.SelectionRollLine", {
+                formula: selectionFormula,
+                total: selectionTotal,
+            }),
+            ...rolls.map((roll) =>
+                game.i18n.localize("PocketChange.CurrencyRollLine", {
+                    label: roll.label,
+                    formula: roll.formula,
+                    total: roll.total,
+                }),
+            ),
+        ];
+
+        // Nothing was rolled for any currency, so say so rather than showing an
+        // empty space under the selection roll
+        if (rolls.length === 0) {
+            lines.push(game.i18n.localize("PocketChange.NothingRolled"));
+        }
+
+        const summary = game.i18n.localize("PocketChange.RollResults");
+        const body = lines.map((line) => `<div>${line}</div>`).join("");
+
+        return `<details class="pocket-change-rolls"><summary>${summary}</summary>${body}</details>`;
     }
 
     #currencyToString(amounts: CurrencyAmount[]): string {

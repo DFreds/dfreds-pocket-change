@@ -1,6 +1,10 @@
 {
     "PocketChange": {
         "CurrencyGeneratedFor": "Currency generated for {name}",
+        "RollResults": "Roll Results",
+        "SelectionRollLine": "Rolled {formula} and got {total}",
+        "CurrencyRollLine": "{label}: rolled {formula} and got {total}",
+        "NothingRolled": "That result creates no currency",
         "GenerateCurrency": "Generate Currency",
         "GenerateCurrencyWarning": "Roll new currency for {name}? This replaces the currency they are already carrying and cannot be undone.",
         "TreasureConfig": {
