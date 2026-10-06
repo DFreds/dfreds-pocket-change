@@ -4,7 +4,6 @@ const Setup: Listener = {
     listen(): void {
         Hooks.once("setup", () => {
             if (BUILD_MODE === "development") {
-                console.log("BUILD_MODE is development");
                 CONFIG.debug.hooks = true;
             }
         });
