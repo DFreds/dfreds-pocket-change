@@ -49,8 +49,8 @@ class Validator {
             return false;
         }
 
-        if (!game.user.isGM) {
-            log("Refuse to generate treasure on the behest of mere players");
+        if (!game.users.activeGM?.isSelf) {
+            log("Refuse to generate treasure unless this user is the active GM");
             return false;
         }
 
