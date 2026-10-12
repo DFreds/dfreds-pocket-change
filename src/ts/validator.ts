@@ -1,5 +1,5 @@
 import { passesFilters } from "./filters.ts";
-import log from "./logger.ts";
+import { log } from "./logger.ts";
 import { Settings } from "./settings.ts";
 
 /**

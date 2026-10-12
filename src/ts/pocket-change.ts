@@ -1,5 +1,5 @@
 import { CurrencyAmount, CurrencyStore } from "./currency-store.ts";
-import log from "./logger.ts";
+import { log } from "./logger.ts";
 import { Settings } from "./settings.ts";
 import { TreasureTier } from "./treasure-table.ts";
 import { Validator } from "./validator.ts";
