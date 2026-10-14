@@ -111,7 +111,7 @@ const config = Vite.defineConfig(({ command, mode }): Vite.UserConfig => {
             port: 30001,
             open: false,
             proxy: {
-                "^(?!/modules/dfreds-pocket-change/)":
+                [`^(?!/modules/${MODULE_ID}/)`]:
                     "http://localhost:30000/",
                 "/socket.io": {
                     target: "ws://localhost:30000",
