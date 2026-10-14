@@ -136,7 +136,7 @@ function deleteLockFilePlugin(): Vite.Plugin {
                 outDir,
                 `${MODULE_ID}.lock`,
             );
-            fs.rmSync(lockFile);
+            fs.rmSync(lockFile, { force: true });
         },
     };
 }
