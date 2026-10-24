@@ -112,8 +112,8 @@ class PocketChange {
     }
 
     #findTier(actor: Actor, attributePath: string): TreasureTier | null {
-        const rawValue = foundry.utils.getProperty(actor, attributePath);
-        const value = typeof rawValue === "number" ? rawValue : 0;
+        const value = foundry.utils.getProperty(actor, attributePath);
+        if (typeof value !== "number") return null;
 
         return (
             this.#settings.treasureTable.tiers.find(
