@@ -75,7 +75,7 @@ class PocketChange {
             return null;
         }
 
-        const tier = this.#findTier(actor, config.attributePath);
+        const tier = this.#findTier(actor, config.attributePath, config.tiers);
         if (!tier) {
             log("No tier matches the actor's attribute value");
             return null;
@@ -115,15 +115,11 @@ class PocketChange {
         };
     }
 
-    #findTier(actor: Actor, attributePath: string): TreasureTier | null {
+    #findTier(actor: Actor, attributePath: string, tiers: TreasureTier[]): TreasureTier | null {
         const value = foundry.utils.getProperty(actor, attributePath);
         if (typeof value !== "number") return null;
 
-        return (
-            this.#settings.treasureTable.tiers.find(
-                (tier) => value >= tier.min && (tier.max === null || value <= tier.max),
-            ) ?? null
-        );
+        return tiers.find((tier) => value >= tier.min && (tier.max === null || value <= tier.max)) ?? null;
     }
 
     async #rollDice(formula: string): Promise<number | null> {
