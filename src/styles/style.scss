@@ -67,53 +67,55 @@
         }
     }
 
-    // Each cell already holds a bordered input, so those boxes are what separate
-    // the rows. Core stripes every table body row, which tints the gaps behind
-    // half the inputs and reads as a banding fault, so the striping is dropped.
     .treasure-rows {
-        width: 100%;
-        margin: 0 0 0.5rem;
-        border-collapse: collapse;
-        background: none;
+        margin: 0;
+        padding: 0;
 
-        tbody tr,
-        tbody tr:nth-child(even),
-        tbody tr:nth-child(odd) {
-            background: none;
+        thead,
+        tbody {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        tr {
+            flex-wrap: nowrap;
+            gap: 2px;
+            border: 1px solid transparent;
+        }
+
+        th,
+        td {
+            justify-content: center;
+            padding: 4px 0;
         }
 
         th {
-            padding: 0.25rem 0.25rem 0.4rem;
-            text-align: center;
-            font-weight: bold;
-            color: var(--color-form-hint);
-            font-size: var(--font-size-11, 0.6875rem);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        // A mid grey at low opacity, so the rule shows up on a light or dark window
-        thead tr {
-            border-bottom: 1px solid rgba(127, 127, 127, 0.5);
-        }
-
-        td {
-            padding: 0.2rem 0.25rem;
-            text-align: center;
-            background: none;
+            font-weight: 600;
         }
 
         input {
             text-align: center;
         }
 
-        .treasure-roll-header {
-            width: 8rem;
+        .treasure-add {
+            flex: 0 0 32px;
+            padding-left: 4px;
         }
 
-        .treasure-delete-header,
-        .treasure-delete-cell {
-            width: 2.25rem;
+        .treasure-roll {
+            flex: 0 0 120px;
+            gap: 2px;
+
+            .dash {
+                flex: none;
+            }
+        }
+
+        .treasure-delete {
+            flex: 0 0 32px;
         }
     }
 
@@ -147,16 +149,6 @@
     .no-filters {
         padding: 0.5rem;
         color: var(--color-form-hint);
-    }
-
-    .treasure-roll-range {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-
-        input {
-            flex: 1;
-        }
     }
 
     button.icon {

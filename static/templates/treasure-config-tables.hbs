@@ -40,36 +40,45 @@
                     </button>
                 </div>
 
-                <table class="treasure-rows">
+                <table class="treasure-rows flexcol">
                     <thead>
-                        <tr>
-                            <th class="treasure-roll-header">{{localize "PocketChange.TreasureConfig.Roll"}}</th>
+                        <tr class="flexrow">
+                            <th class="treasure-add flexrow">
+                                <button
+                                    type="button"
+                                    class="inline-control icon fa-solid fa-plus"
+                                    data-action="addRow"
+                                    data-tier-index="{{tierIndex}}"
+                                    data-tooltip
+                                    aria-label="{{localize 'PocketChange.TreasureConfig.AddRow'}}"
+                                ></button>
+                            </th>
+                            <th class="treasure-roll flexrow">{{localize "PocketChange.TreasureConfig.Roll"}}</th>
                             {{#each ../currencies as |currency|}}
-                                <th>{{currency.label}}</th>
+                                <th class="flexrow">{{currency.label}}</th>
                             {{/each}}
-                            <th class="treasure-delete-header"></th>
+                            <th class="treasure-delete flexrow"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {{#each tier.rows as |row rowIndex|}}
-                            <tr>
-                                <td class="treasure-roll-cell">
-                                    <div class="treasure-roll-range">
-                                        <input
-                                            type="number"
-                                            name="tiers.{{tierIndex}}.rows.{{rowIndex}}.rangeStart"
-                                            value="{{row.rangeStart}}"
-                                        />
-                                        <span>&ndash;</span>
-                                        <input
-                                            type="number"
-                                            name="tiers.{{tierIndex}}.rows.{{rowIndex}}.rangeEnd"
-                                            value="{{row.rangeEnd}}"
-                                        />
-                                    </div>
+                            <tr class="flexrow">
+                                <td class="treasure-add flexrow"></td>
+                                <td class="treasure-roll flexrow">
+                                    <input
+                                        type="number"
+                                        name="tiers.{{tierIndex}}.rows.{{rowIndex}}.rangeStart"
+                                        value="{{row.rangeStart}}"
+                                    />
+                                    <span class="dash">-</span>
+                                    <input
+                                        type="number"
+                                        name="tiers.{{tierIndex}}.rows.{{rowIndex}}.rangeEnd"
+                                        value="{{row.rangeEnd}}"
+                                    />
                                 </td>
                                 {{#each row.formulas as |formula currencyIndex|}}
-                                    <td>
+                                    <td class="flexrow">
                                         <input
                                             type="text"
                                             name="tiers.{{tierIndex}}.rows.{{rowIndex}}.formulas.{{currencyIndex}}"
@@ -77,28 +86,21 @@
                                         />
                                     </td>
                                 {{/each}}
-                                <td class="treasure-delete-cell">
+                                <td class="treasure-delete flexrow">
                                     <button
                                         type="button"
-                                        class="icon"
+                                        class="inline-control icon fa-solid fa-trash"
                                         data-action="deleteRow"
                                         data-tier-index="{{tierIndex}}"
                                         data-row-index="{{rowIndex}}"
                                         data-tooltip
                                         aria-label="{{localize 'PocketChange.TreasureConfig.DeleteRow'}}"
-                                    >
-                                        <i class="fa-solid fa-trash" inert></i>
-                                    </button>
+                                    ></button>
                                 </td>
                             </tr>
                         {{/each}}
                     </tbody>
                 </table>
-
-                <button type="button" data-action="addRow" data-tier-index="{{tierIndex}}">
-                    <i class="fa-solid fa-plus" inert></i>
-                    {{localize "PocketChange.TreasureConfig.AddRow"}}
-                </button>
             </fieldset>
         {{/each}}
 
