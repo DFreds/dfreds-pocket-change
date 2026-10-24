@@ -1,5 +1,5 @@
 import { CurrencyAmount, CurrencyStore } from "./currency-store.ts";
-import { log } from "./logger.ts";
+import { error, log } from "./logger.ts";
 import { Settings } from "./settings.ts";
 import { TreasureTier } from "./treasure-table.ts";
 import { Validator } from "./validator.ts";
@@ -82,6 +82,8 @@ class PocketChange {
         }
 
         const selection = await this.#rollDice(config.selectionFormula);
+        if (selection === null) return null;
+
         const row = tier.rows.find((row) => selection >= row.rangeStart && selection <= row.rangeEnd);
         if (!row) {
             log("No row matches the selection roll");
@@ -95,6 +97,8 @@ class PocketChange {
             if (!formula) continue;
 
             const total = await this.#rollDice(formula);
+            if (total === null) return null;
+
             store.add(currencyIndex, total);
             rolls.push({
                 label: config.currencies[currencyIndex]?.label ?? "",
@@ -122,9 +126,16 @@ class PocketChange {
         );
     }
 
-    async #rollDice(formula: string): Promise<number> {
-        const roll = await new Roll(formula).evaluate();
-        return roll.total;
+    async #rollDice(formula: string): Promise<number | null> {
+        try {
+            const roll = await new Roll(formula).evaluate();
+            return roll.total;
+        } catch (err) {
+            const message = game.i18n.localize("PocketChange.TreasureConfig.Errors.InvalidFormula", { formula });
+            error(`${message} ${err}`);
+            ui.notifications.error(message);
+            return null;
+        }
     }
 
     #showChatMessage(actor: Actor, result: GenerationResult): void {
